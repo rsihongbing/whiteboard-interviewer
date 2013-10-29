@@ -1,0 +1,59 @@
+From Terminal:
+1. Connect/SSH to attu or cubist 
+2. Type in : mysql -p -u dannych -h cubist dannych_cse403
+3. Type in the password: U6dPvb2m
+4. Now you can type in queries since you are already in the database
+
+From Web: 
+1. Open your browser
+2. Type into your url address: cubist.cs.washington.edu/phpmyadmin/
+*3 If you haven’t log into UW then you need to provide your username and password 
+4. Click ‘Proceed’
+5. Type in ‘dannych’ as username and ‘U6dPvb2m’ as password when promted
+6. Now you are in phpMyAdmin which is control panel for MySQL
+7. To choose our database click ‘dannych_cse403’ or ‘_403’ on the left panel
+8. The left panel is now changed to list of tables inside the database
+9. To run a query choose ‘SQL’ at top
+10. Now you can run a query by clicking ‘Go’ button
+
+List of queries:
+
+-- if you are connecting using terminal maybe you might want to do this
+-- show all tables in the database
+show tables;
+
+-- list all scheduled interviews
+select * from interviews;
+
+-- see the participants of a specific interview
+select i.title as Title, u1.name as Interviewer, u2.name as Interviewee
+from participants p
+join users u1 on p.interviewer_id = u1.id
+join users u2 on p.interviewee_id = u2.id
+join interviews i on i.id = p.interview_id 
+where i.title = "test interview 1"; 
+
+-- see the scheduled plan
+select i.title as Title, s.date_prepared as Schedule
+from participants p
+join schedules s on p.interview_id = s.interview_id
+join interviews i on i.id = p.interview_id 
+where i.title = "test interview 1";
+
+
+-- see the validation key 
+select i.title as Title, v.password as Password
+from participants p
+join validations v on v.interview_id = p.interview_id
+join interviews i on i.id = p.interview_id 
+where i.title = "test interview 1"; 
+
+-- see the participants’ email of a specific interview
+select i.title as Title, u1.email as Interviewer, u2.email as Interviewee
+from participants p
+join users u1 on p.interviewer_id = u1.id
+join users u2 on p.interviewee_id = u2.id
+join interviews i on i.id = p.interview_id 
+where i.title = "test interview 1"; 
+
+
