@@ -16,7 +16,7 @@ c. Source control and build process instructions
 		 install PHP, MySQL, and Apache Server.
 	2) Start the server and MySQL if they haven't started.
 	3) Go to your server's directory and create a folder for our project.
-  4) Go to https://github.com/alsoallison/whiteboard-interviewer/tree/master/files
+  4) Go to https://github.com/ctjong/whiteboard-interviewer/tree/master/files
   5) Download setup.sh, setup.sql, and user.sql and put them in the project directory
   6) Open the terminal, and go to the project directory
 	7) Run 'mysql -u root < user.sql' if your mysql root account doesn't use password or
