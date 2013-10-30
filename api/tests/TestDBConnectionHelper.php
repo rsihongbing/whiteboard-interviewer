@@ -30,6 +30,10 @@ class TestDBConnectionHelper extends UnitTestCase {
 		$quotedString = "result=" . DBConnectionHelper::quoteString($string);
 		$this->assertEqual("result='Nice'", $quotedString);
 	}
+	
+	function testNullQuote() {
+		$this->assertEqual("''", DBConnectionHelper::quoteString(null));
+	}
 }
 
 ?>

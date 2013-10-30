@@ -1,5 +1,5 @@
 <?php
-    include 'QueryHelper.php';
+    require_once '../Utils/QueryHelper.php';
 
 	$helper = new QueryHelper();
 	
