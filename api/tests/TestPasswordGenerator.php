@@ -1,6 +1,11 @@
 <?php
 require_once 'simpletest/autorun.php';
 require_once '../Utils/PasswordGenerator.php';
+
+/**
+ * 
+ * @author ynamara
+ */
 class TestPasswordGenerator extends UnitTestCase {
 	function testPasswordDefaultLength() {
 		for ($i = 0; $i < 100; $i++) {

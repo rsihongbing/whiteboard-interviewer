@@ -1,6 +1,10 @@
 <?php
 require_once 'simpletest/autorun.php';
 require_once '../Utils/DBConnectionHelper.php';
+
+/**
+ * @author ynamara
+ */
 class TestDBConnectionHelper extends UnitTestCase {
 	function setUp() {
 		DBConnectionHelper::initialize();
