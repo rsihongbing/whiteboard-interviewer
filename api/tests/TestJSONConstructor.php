@@ -13,7 +13,7 @@ class TestJSONConstructor extends UnitTestCase {
 		$this->assertEqual("Yosan Namara", $json["name"]);
 	}
 	
-	function testGetSessionInfoFails() {
+	function testGetSessionInfoDNE() {
 		$var = new JSONConstructor();
 		$json = json_decode($var->getSessionInfo("bla bla bla bla"), true);
 		$this->assertEqual(0, $json["code"]);
