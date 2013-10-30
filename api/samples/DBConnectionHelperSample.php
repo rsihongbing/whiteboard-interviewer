@@ -1,5 +1,5 @@
 <?php 
-	include '../Utils/DBConnectionHelper.php';
+	require_once '../Utils/DBConnectionHelper.php';
 ?>
 
 <!DOCTYPE html>

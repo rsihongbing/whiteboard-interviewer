@@ -1,12 +1,11 @@
 <?php
-
-include_once 'DBConnectionHelper.php';
+require_once 'DBConnectionHelper.php';
 
 class QueryHelper {
 	
 	public function __construct() 
 	{
-		
+		DBConnectionHelper::initialize();
 	}
 	
 	/**
@@ -16,7 +15,6 @@ class QueryHelper {
 	 */
 	private function execute($query) 
 	{
-		DBConnectionHelper::initialize();
 		if ( ! is_null($query) ) {
 			return DBConnectionHelper::executeQuery($query);
 		}
@@ -29,8 +27,52 @@ class QueryHelper {
 	 */
 	private function quote($text) 
 	{
-		DBConnectionHelper::initialize();
 		return DBConnectionHelper::quoteString($text);
+	}
+	
+	
+	/**
+	 * Retrieves the session information for the given $interviews_id.
+	 * 
+	 * @param string $interviews_id
+	 * 	the interview id
+	 * @param mixed $out
+	 * 	output parameter, type varies depending on return value.
+	 * @return number
+	 * 	-1 if exception occurs. $out will be set to the exception's message
+	 * 	0 if session for the given id is not found
+	 * 	1 if session is found and valid, the returned row will be set to $out
+	 * 	2 if session is found but expired, the returned row will be set to $out
+	 */
+	public function getSessionInfo($interviews_id, &$out) {
+		$interviews_id = $this->quote($interviews_id);
+		$query = 
+		"select i.title, u.name, u.gender, u.email, u.phone, u.affiliation, s.date_prepared, v.password, p.interviewer_id, p.interviewee_id
+from interviews i, participants p, users u, schedules s, validations v
+where i.id = $interviews_id and p.interview_id = i.id and v.interview_id = i.id
+and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
+		try {
+			$rows = $this->execute($query)->fetchAll(PDO::FETCH_ASSOC);
+			$rowsLen = count($rows);
+			
+			switch ($rowsLen) {
+				case 0:
+					// $interviews_id does not exists
+					return 0;
+				case 1:
+					$out = $rows[0];
+					$today = date("Y-m-d H:i:s");
+					$interviewDate = $rows[0]["date_prepared"];
+					return ($interviewDate < $today) ? 2: 1;
+				default:
+					// Weird things happen here...
+					throw new Exception("Assertion failed, check database schema's integrity");
+				
+			}
+		} catch (Exception $ex) {
+			$out = $ex->getMessage();
+			return -1;
+		}
 	}
 	
 	/**
