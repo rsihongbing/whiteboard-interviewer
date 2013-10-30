@@ -2,17 +2,21 @@
 require_once 'simpletest/autorun.php';
 require_once '../Utils/MailSender.php';
 
+/**
+ * @author ynamara
+ */
 class TestMailSender extends UnitTestCase {
-// 	function testSendEmailToEveryone() {
-// 		$this->assertTrue(MailSender::sendEmail(
-// 				"claramoore@speakeasy.net,
-// 				 tuanvo@uw.edu,
-// 				dannych@uw.edu,
-// 				ctjong@uw.edu,
-// 				ynamara@cs.washington.edu,
-// 				rsihongbing@gmail.com", "Email controller test", "Hello kids!\nThis email is sent from cubist"));
-// 	}
+	function testSendEmailToEveryone() {
+		$this->assertTrue(MailSender::sendEmail(
+				"claramoore@speakeasy.net,
+				 tuanvo@uw.edu,
+				dannych@uw.edu,
+				ctjong@uw.edu,
+				ynamara@cs.washington.edu,
+				rsihongbing@gmail.com", "Email controller test", "Hello kids!\nThis email is sent from cubist"));
+	}
 	
+	// Shameful copy-paste from the internet...
 	function testSendHTMLEmail() {
 		$message = <<<EOF
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head><title></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=320, target-densitydpi=device-dpi">
