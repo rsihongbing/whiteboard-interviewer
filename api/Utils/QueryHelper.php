@@ -45,7 +45,6 @@ class QueryHelper {
 	public function create_session( $interview_title, $interview_date, $interview_password, $interviewer_id, $interviewee_id )
 	{
 		$interview_id = $this->add_interview($interview_title, $interview_date, $interview_password);
-		echo $interview_id;
 		
 		// create relation to the interview and the participants
 		$query = "INSERT INTO `dannych_cse403`.`participants`(`interview_id`,`interviewer_id`,`interviewee_id`) VALUES($interview_id, $interviewer_id, $interviewee_id)";
