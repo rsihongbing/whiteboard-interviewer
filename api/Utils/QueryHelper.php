@@ -13,7 +13,7 @@ class QueryHelper {
 	 * @param String $query
 	 * @return PDOStatement
 	 */
-	private function execute($query) 
+	public function execute($query) 
 	{
 		if ( ! is_null($query) ) {
 			return DBConnectionHelper::executeQuery($query);
@@ -22,12 +22,15 @@ class QueryHelper {
 	
 	/**
 	 * 
-	 * @param unknown $text
-	 * @return string
+	 * @param String $text
+	 * @return 
+	 * 	string that has been quoted
+	 *  such that quote(foo) returns "foo" but quote(NULL) = NULL
 	 */
-	private function quote($text) 
+	public function quote($text) 
 	{
-		return DBConnectionHelper::quoteString($text);
+		
+		return is_null($text) ? 'NULL' : DBConnectionHelper::quoteString($text);
 	}
 	
 	
@@ -48,9 +51,9 @@ class QueryHelper {
 		$interviews_id = $this->quote($interviews_id);
 		$query = 
 		"select i.title, u.name, u.gender, u.email, u.phone, u.affiliation, s.date_prepared, v.password, p.interviewer_id, p.interviewee_id
-from interviews i, participants p, users u, schedules s, validations v
-where i.id = $interviews_id and p.interview_id = i.id and v.interview_id = i.id
-and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
+		from interviews i, participants p, users u, schedules s, validations v
+		where i.id = $interviews_id and p.interview_id = i.id and v.interview_id = i.id
+		and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 		try {
 			$rows = $this->execute($query)->fetchAll(PDO::FETCH_ASSOC);
 			$rowsLen = count($rows);
@@ -77,12 +80,19 @@ and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 	
 	/**
 	 * 
-	 * @param unknown $interview_title
-	 * @param unknown $interview_date
-	 * @param unknown $interview_password
-	 * @param unknown $interviewer_id
-	 * @param unknown $interviewee_id
-	 * @return unknown
+	 * @param String $interview_title
+	 * 	Interview title can be anything and duplicates
+	 * @param Date $interview_date
+	 * 	Date and time to held the interview
+	 * @param String $interview_password
+	 * 	password for the interview
+	 * @param int $interviewer_id
+	 *  interviewer id that will be assigned as the interview for this interview
+	 * @param int $interviewee_id
+	 * 	interviewee id that will be interviewed in this interview session
+	 * 
+	 * @return interview_id 
+	 *  return the interview id that has been scheduled
 	 */
 	public function create_session( $interview_title, $interview_date, $interview_password, $interviewer_id, $interviewee_id )
 	{
@@ -91,7 +101,6 @@ and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 		// create relation to the interview and the participants
 		$query = "INSERT INTO `dannych_cse403`.`participants`(`interview_id`,`interviewer_id`,`interviewee_id`) VALUES($interview_id, $interviewer_id, $interviewee_id)";
 		$this->execute($query);
-		
 		
 		return $interview_id;
 	}
@@ -105,21 +114,22 @@ and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 	 * @param unknown $phone
 	 * @param unknown $affiliation
 	 */
-	public function add_user($fname, $lname, $email, $gender, $phone, $affiliation)
+	public function add_user($name = NULL , $email, $gender = NULL, $phone = NULL, $affiliation = NULL)
 	{
-		$fname = $this->quote($fname);
-		$lname = $this->quote($lname);
+		$name =  $this->quote($name);
 		$email = $this->quote($email);
 		$gender= $this->quote($gender);
 		$phone = $this->quote($phone);
 		$affiliation = $this->quote($affiliation);
 	
-		$query = "INSERT INTO `dannych_cse403`.`users` (`fname`, `lname`, `gender`, `email`, `phone`, `affiliation`) VALUES ($fname, $lname, $gender, $email, $phone, $affiliation)";
+		$query = "INSERT INTO `dannych_cse403`.`users` (`name`, `gender`, `email`, `phone`, `affiliation`) VALUES ($name, $gender, $email, $phone, $affiliation)";
 	
 		if ( $this->email_isNotRegistered($email) ) {
 			// not registered
 			// insert the new user to database
 			$this->execute($query);
+			$query = "SELECT LAST_INSERT_ID() as id";
+			$id = $this->execute($query)->fetchAll()[0]['id'];
 		} else {
 			// given email exists
 			// - mistyped, send to somebody else ? solution : create email verification to accept the interview.
@@ -127,11 +137,37 @@ and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 	
 			// - really exists ? ok skip
 		}
+		
+		return $id;
+	}
 	
-		// email is unique for every user
-		$query = "select id from users where email = $email";
-		$user_id = $this->execute($query);
-		return $user_id->fetchAll()[0]['id'];
+	/**
+	 * 
+	 * @param int $user_id
+	 */
+	public function drop_user($user_id)
+	{
+		$query = "DELETE FROM `dannych_cse403`.`users` where id = $user_id";
+		$this->execute($query);
+	}
+	
+	/**
+	 * 
+	 * @param int $interview_id
+	 */
+	public function drop_session($interview_id)
+	{
+		$query = "DELETE FROM `dannych_cse403`.`participants` where interview_id = $interview_id";
+		$this->execute($query);
+		
+		$query = "DELETE FROM `dannych_cse403`.`validations` where interview_id = $interview_id";
+		$this->execute($query);
+		
+		$query = "DELETE FROM `dannych_cse403`.`schedules` where interview_id = $interview_id";
+		$this->execute($query);
+		
+		$query = "DELETE FROM `dannych_cse403`.`interviews` where id = $interview_id";
+		$this->execute($query);
 	}
 	
 	/**
@@ -146,16 +182,22 @@ and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 		$date_scheduled = $this->quote($date_scheduled);
 		$password = $this->quote($password);
 	
-		$query = "INSERT INTO `dannych_cse403`.`interviews` (`title`,`date_scheduled`,`password`) VALUES($title,$date_scheduled,$password)";
+		// store the interview title
+		$query = "INSERT INTO `dannych_cse403`.`interviews` (`title`) VALUES($title)";
 		$this->execute($query);
-	
-		// how do we uniquely identify an interview?
-		// we want user to freely choose the title
-		// - just use the one time password
-		$query = "select id from interviews where title = $title and password = $password";
-		$interview_id = $this->execute($query);
-	
-		return $interview_id->fetchAll()[0]['id'];
+		
+		$query = "SELECT LAST_INSERT_ID() as id";
+		$id = $this->execute($query)->fetchAll()[0]['id'];
+		
+		// store the schedule
+		$query = "INSERT INTO `dannych_cse403`.`schedules` (`interview_id`,`date_prepared`) VALUES($id,$date_scheduled)";
+		$this->execute($query);
+		
+		// store the password
+		$query = "INSERT INTO `dannych_cse403`.`validations` (`interview_id`,`password`) VALUES($id,$password)";
+		$this->execute($query);
+		
+		return $id;
 	}
 
 	/**
@@ -183,6 +225,16 @@ and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
 		$result = $this->execute($query);
 	
 		return $result->fetchAll()[0]['num'] == 0;
+	}
+	
+	/**
+	 * notes: documentation said that this will not resulted into race condition
+	 * 
+	 * @return integer that is an auto generated id from the last query before this
+	 */
+	private function get_lastInsertedId() {
+		$query = "SELECT LAST_INSERT_ID() as id";
+		return $this->execute($query)->fetchAll()[0]['id'];
 	}
 } 
 ?>
