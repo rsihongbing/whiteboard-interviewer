@@ -53,7 +53,7 @@ class QueryHelper {
 		"select i.title, u.name, u.gender, u.email, u.phone, u.affiliation, s.date_prepared, v.password, p.interviewer_id, p.interviewee_id
 		from interviews i, participants p, users u, schedules s, validations v
 		where i.id = $interviews_id and p.interview_id = i.id and v.interview_id = i.id
-		and u.id = p.interviewee_id and s.interview_id = p.interviewer_id;";
+		and u.id = p.interviewee_id and s.interview_id = i.id;";
 		try {
 			$rows = $this->execute($query)->fetchAll(PDO::FETCH_ASSOC);
 			$rowsLen = count($rows);
