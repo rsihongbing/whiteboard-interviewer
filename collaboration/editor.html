@@ -29,12 +29,12 @@
   <div id="container"></div>
 
   <script>
-    var ref = new Firebase('https://whiteboard-interviewer.firebaseIO.com');
+    var ref = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor');
 
     //// Create CodeMirror (with line numbers and the JavaScript mode).
     var codeMirror = CodeMirror(document.getElementById('container'), {
       lineNumbers: true,
-	  lineWrapping: true,
+      lineWrapping: true,
       mode: 'javascript'
     });
 
