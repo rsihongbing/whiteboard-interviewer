@@ -4412,8 +4412,6 @@ firepad.Firepad = (function(global) {
       this.firepadWrapper_.className += ' firepad-richtext firepad-with-toolbar';
     }
 
-    this.addPoweredByLogo_();
-
     // Now that we've mucked with CodeMirror, refresh it.
     this.codeMirror_.refresh();
 
@@ -4911,13 +4909,6 @@ firepad.Firepad = (function(global) {
         return info;
       }
     });
-  };
-
-  Firepad.prototype.addPoweredByLogo_ = function() {
-    var poweredBy = utils.elt('a', null, { 'class': 'powered-by-firepad'} );
-    poweredBy.setAttribute('href', 'http://www.firepad.io/');
-    poweredBy.setAttribute('target', '_blank');
-    this.firepadWrapper_.appendChild(poweredBy)
   };
 
   Firepad.prototype.initializeKeyMap_ = function() {
