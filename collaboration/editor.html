@@ -7,7 +7,8 @@
 
   <!-- Include CodeMirror and its JavaScript mode file -->
   <script src="codemirror/lib/codemirror.js"></script>
-  <script src="codemirror/mode/javascript/javascript.js"></script>
+  <script src="codemirror/addon/edit/matchbrackets.js"></script>
+  <script src="codemirror/mode/clike/clike.js"></script>
   <link rel="stylesheet" href="codemirror/lib/codemirror.css" />
 
   <!-- Include Firepad -->
@@ -29,13 +30,14 @@
   <div id="container"></div>
 
   <script>
-    var ref = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor');
+    var ref = new Firebase('https://whiteboard-interviewer.firebaseIO.com');
 
     //// Create CodeMirror (with line numbers and the JavaScript mode).
     var codeMirror = CodeMirror(document.getElementById('container'), {
       lineNumbers: true,
-      lineWrapping: true,
-      mode: 'javascript'
+	  lineWrapping: true,
+	  matchBrackets: true,
+	  mode: "text/x-csharp"
     });
 
     //// Create Firepad (with rich text toolbar and shortcuts enabled).
