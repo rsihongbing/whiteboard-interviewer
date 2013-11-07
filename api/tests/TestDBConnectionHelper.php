@@ -10,7 +10,6 @@ class TestDBConnectionHelper extends UnitTestCase {
 		DBConnectionHelper::initialize();
 	}
 	
-	
 	function testPullSingleRecord() {
 		$query = "select * from interviews limit 1";
 		$rows = DBConnectionHelper::executeQuery($query)->fetchAll();
@@ -18,7 +17,7 @@ class TestDBConnectionHelper extends UnitTestCase {
 	}
 	
 	function testGoodQuoteString() {
-		$query = "select * from interviews where id = " . DBConnectionHelper::quoteString("1");
+		$query = "select * from interviews where url = " . DBConnectionHelper::quoteString("a46qwr803na24");
 		$rows = DBConnectionHelper::executeQuery($query)->fetchAll();
 		$this->assertEqual(1, count($rows));
 	}
