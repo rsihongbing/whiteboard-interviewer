@@ -1,138 +1,67 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <!-- Include Firebase -->
-  <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+<meta charset="utf-8" />
+<script src="https://cdn.firebase.com/v0/firebase.js"></script>
+<script src="codemirror/lib/codemirror.js"></script>
+<script src="codemirror/mode/meta.js"></script>
+<script id="langScript" src="codemirror/mode/clike/clike.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link rel="stylesheet" href="codemirror/lib/codemirror.css" />
+<script src="firepad.js"></script>
+<link rel="stylesheet" href="firepad.css" />
+<script src="example-helper.js"></script>
 
-  <!-- Include CodeMirror and its JavaScript mode file -->
-  <script src="codemirror/lib/codemirror.js"></script>
-  <script src="codemirror/addon/edit/matchbrackets.js"></script>
-  <script src="codemirror/mode/clike/clike.js"></script>
-  <link rel="stylesheet" href="codemirror/lib/codemirror.css" />
-
-  <!-- Include Firepad -->
-  <script src="firepad.js"></script>
-  <link rel="stylesheet" href="firepad.css" />
-
-  <style>
-    html { height: 100%; }
-    body { margin: 0; height: 100%; position: relative; }
-    /* Height / width / positioning can be customized for your use case.
-       For demo purposes, we make firepad fill the entire browser. 
-    .firepad {
-      position: absolute; left: 0; top: 0; bottom: 0; right: 0; height: auto;
-    }
-    */
-  </style>
-
-  <!-- highlight.js -->
-  <link rel="stylesheet" href="http://yandex.st/highlightjs/7.4/styles/default.min.css">
-  <script src="http://yandex.st/highlightjs/7.4/highlight.min.js"></script>
-
-  <!-- jquery -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<style>
+html { height: 100%; }
+body { margin: 0; height: 100%; position: relative; }
+</style>
 
 </head>
 
 <body>
 
 
+<div id="firepad-container"></div>
 
+<script>
 
-  <pre><div id="highlight" contentEditable=true>
+function initFirepad(languageMode, languageMime, containerId){
+  var scriptSrc = "codemirror/mode/" + languageMode + "/" + languageMode + ".js";
+  $("#langScript").attr("src", scriptSrc);
+  $.getScript(scriptSrc);
+  $("#" + containerId).html("");
+  var firepadRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor2');
+  var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
+  var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {richTextToolbar: true});
+  $(".firepad-toolbar").append("<div class='firepad-btn-group'>Language Mode : <select id='languages'></select></div>");
+  var active = 0;
+  $.each(CodeMirror.modeInfo, function (index, value){
+    $("#languages").append("<option id='lang" + index + "' value='" + index + "'> " + value.name + " </option>");
+    if(value.mime === languageMime) active = index;
+  });
+  $("#lang" + active).attr("selected", "selected");
+  $("#languages").change(langChanged);
+}
 
-    public static void main(String[] args){
-    String str = "test";
-    }
+function langChanged(){
+  var langId = $("#languages").val();
+  var langMode = CodeMirror.modeInfo[langId].mode;
+  var langMime = CodeMirror.modeInfo[langId].mime;
+  initFirepad(langMode, langMime, "firepad-container");
+}
 
+$(document).ready(function(){
+  CodeMirror.modeInfo.sort(function(a,b){
+    var aName = a.name.toLowerCase();
+    var bName = b.name.toLowerCase(); 
+    return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+  });
+  initFirepad("clike", "text/x-java", "firepad-container" );
+}); 
 
-  </div></pre>
-
-  <button id="highlightBtn">Highlight</button>
-
-  <div id="container"></div>
-
-  <script>
-
-    function getCaretPos(){
-    var savedRange;
-    if(window.getSelection && window.getSelection().rangeCount > 0) //FF,Chrome,Opera,Safari,IE9+
-    {
-    savedRange = window.getSelection().getRangeAt(0).cloneRange();
-    }
-    else if(document.selection)//IE 8 and lower
-    { 
-    savedRange = document.selection.createRange();
-    }
-    return savedRange;
-    }
-
-    function restoreSelection(savedRange){
-    isInFocus = true;
-    document.getElementById("highlight").focus();
-    if (savedRange != null) {
-    if (window.getSelection)//non IE and there is already a selection
-    {
-    var s = window.getSelection();
-    if (s.rangeCount > 0) 
-    s.removeAllRanges();
-    s.addRange(savedRange);
-    }
-    else if (document.createRange)//non IE and no selection
-    {
-    window.getSelection().addRange(savedRange);
-    }
-    else if (document.selection)//IE
-    {
-    savedRange.select();
-    }
-    }
-    }
-
-    $("#highlightBtn").click(function(){
-    hljs.highlightBlock(document.getElementById("highlight"));
-    hljs.highlightBlock(document.getElementById("container"));
-    initContainer();
-    });
-
-    $("#highlight").bind("input propertychange", function(e){    
-    console.log("-----------------------------------------------------");
-    var el = document.getElementById("highlight");
-    var range = window.getSelection().getRangeAt(0).cloneRange();
-    var range2 = document.createRange();
-    var offset = range.endOffset;
-    console.log(offset);
-    hljs.highlightBlock(el);
-    console.log(range2);
-    range2.setStart(el.childNodes[0], offset);
-    console.log(range2);
-    var sel = window.getSelection();
-    console.log(range2);
-    sel.removeAllRanges();
-    console.log(range2);
-    sel.addRange(range2);
-    });
-    
-    function initContainer(){
-    var ref = new Firebase('https://whiteboard-interviewer.firebaseIO.com');
-    //// Create CodeMirror (with line numbers and the JavaScript mode).
-    var codeMirror = CodeMirror(document.getElementById('container'), {
-    lineNumbers: true,
-    lineWrapping: true,
-    matchBrackets: true,
-    mode: "text/x-csharp"
-    });
-    //// Create Firepad (with rich text toolbar and shortcuts enabled).
-    var firepad = Firepad.fromCodeMirror(ref, codeMirror,
-    { richTextToolbar: true, richTextShortcuts: true });
-    }
-
-    initContainer();
-
-  </script>
-
+</script>
 
 </body>
-</html>
 
+</html>
