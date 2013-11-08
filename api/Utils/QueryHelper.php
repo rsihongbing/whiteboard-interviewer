@@ -81,16 +81,24 @@ class QueryHelper {
 	/**
 	 * 
 	 * @param varchar(50) $url
-	 * @return multitype:
-	 * 		all columns from interview that correspondent to the given url
+	 * @return 
+	 *  NULL if given url is not exist,
+	 * 	multitype: all columns from interview that correspondent to the given url
 	 */
-	public function get_session($url) {
-		
-		// TODO: check url
-		
+	public function get_session($url) {		
 		$url = $this->quote($url);
 		$query = "SELECT * from interviews where url = $url";
-		return $this->execute($query)->fetchAll()[0];
+		
+		$results = $this->execute($query)->fetchAll();
+		
+		switch (count($results)) {
+			case 0 :
+				return NULL;
+			case 1 :
+				return $results[0];
+			default:
+				return NULL;	
+		}
 	}
 	
 	/**
@@ -103,189 +111,216 @@ class QueryHelper {
 	 * @param varchar(30) $interviewee_email
 	 * @param varchar(50) $interviewee_password
 	 * @param String $interview_date
+	 * 
 	 * @return boolean
 	 * 		whether session creation is a success or a failure
 	 */
-	public function create_session($url, $interview_title, $interview_description, $interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $interview_date )
+	public function create_session($url, $interview_title = NULL, $interview_description = NULL, $interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $interview_date )
 	{	
-		$url = $this->quote($url);
-		$interview_title = $this->quote($interview_title);
-		$interview_description = $this->quote($interview_description);
-		$interviewee_password = $this->quote($interviewee_password);
-		$interviewer_password = $this->quote($interviewer_password);
-		$interview_date = $this->quote($interview_date);
-		
-		// TODO: check url, interviewer & interviewee pwd, interviewee_id/pwd != interviewer_id/pwd
-		
-		$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
-		$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
-		
-		// create the tuple
-		$query = "INSERT INTO `dannych_cse403c`.`interviews`
-				  (`url`,`title`,`description`,`interviewer_id`,`interviewer_password`,`interviewee_id`,`interviewee_password`,`date_scheduled`) 
-				  VALUES($url, $interview_title, $interview_description, $interviewer_id, $interviewer_password, $interviewee_id, $interviewee_password, $interview_date)";
-		$this->execute($query);
-		
-		return true;
-	}
-	
-	
-	/**
-	 *
-	 * @param varchar(50) $pwd
-	 * @return boolean
-	 * 		false if exists same url in the table
-	 *      true otherwise
-	 */
-	public function check_url($url)
-	{
-		$query = "SELECT url from interviews";
-		$results = $this->execute($query)->fetchAll();
-		
-		foreach ($results as $result)
-		{
-			if( $result['url'] == $url )
-				return false;			
-		}
-		return true;
-	}
-	
-	/**
-	 * 
-	 * @param varchar(50) $pwd
-	 * @return boolean 
-	 * 		false if exists same password in the table
-	 *      true otherwise
-	 */
-	public function check_password($pwd)
-	{
-		$query = "SELECT interviewer_password as password from interviews UNION SELECT interviewee_password as password from interviews";
-		$results = $this->execute($query)->fetchAll();
-		
-		foreach ($results as $result)
-		{
-			if( $result['password'] == $pwd )
-				return false;
-		}
-		return true;
-	}
-	
-	// TODO: create check email?
-	
-	/**
-	 * 
-	 * @param varchar(25) $name
-	 * @param varchar(30) $email
-	 * @param varchar(1) $gender
-	 * @param varchar(15) $phone
-	 * 
-	 * @effect 
-	 * 		add user to the database if same person has not exist in the database which is identified by the email
-	 * 
-	 * @return
-	 * 		true if success, false same email exists
-	 */
-	public function add_user($name = NULL , $email, $gender = NULL, $phone = NULL)
-	{
-		$name =  $this->quote($name);
-		$email = $this->quote($email);
-		$gender= $this->quote($gender);
-		$phone = $this->quote($phone);
-	
-		$query = "INSERT INTO `dannych_cse403c`.`users` (`name`, `gender`, `email`, `phone`) VALUES ($name, $gender, $email, $phone)";
-	
-		if ( $this->email_isNotRegistered($email) ) {
-			// not registered
-			// insert the new user to database
+		try {
+			
+			$url = $this->quote($url);
+			$interview_title = $this->quote($interview_title);
+			$interview_description = $this->quote($interview_description);
+			$interviewee_password = $this->quote($interviewee_password);
+			$interviewer_password = $this->quote($interviewer_password);
+			$interview_date = $this->quote($interview_date);
+			
+			// validate the given parameter
+			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password);
+			
+			$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
+			$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
+			
+			// create the tuple
+			$query = "INSERT INTO `dannych_cse403c`.`interviews`
+					  (`url`,`title`,`description`,`interviewer_id`,`interviewer_password`,`interviewee_id`,`interviewee_password`,`date_scheduled`) 
+					  VALUES($url, $interview_title, $interview_description, $interviewer_id, $interviewer_password, $interviewee_id, $interviewee_password, $interview_date)";
 			$this->execute($query);
-		} else {
-			// given email exists
-			// - mistyped, send to somebody else ? solution : create email verification to accept the interview.
-			// 		Yes or No, and interview will be automaticly deleted without any response from either particpant at scheduled time
-	
-			// - really exists ? ok skip
+			
+		} catch (Exception $e) {
+			
 			return false;
 		}
 		
 		return true;
 	}
 	
-	
 	/**
 	 * 
-	 * @param varchar(30) $email
-	 * @return multitype:
-	 * 		user information that has the given email
+	 * @param varchar(50) $url
+	 * @param varchar(30) $interviewer_email
+	 * @param varchar(50) $interviewer_password
+	 * @param varchar(30) $interviewee_email
+	 * @param varchar(50) $interviewee_password
+	 * 
+	 * @throws Exception
 	 */
-	public function find_user_by_email($email) 
-	{
-		$email = $this->quote($email);
+	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password) {
+		if ($this->check_url($url) )
+			throw new Exception("Same URL exists in the database");
 		
-		// TODO: email not found
+		if ($interviewee_email == $interviewer_email)
+			throw new Exception("Interviewer's email and interviewee email cannot be the same");
 		
-		// email is unique so that it will only return one tuple			
-		$query = "SELECT * FROM users where email = $email";
-		$result = $this->execute($query)->fetchAll()[0];
-			
-		return $result;
+		if ($interviewee_password == $interviewer_password)
+			throw new Exception("Interviewer's password and interviewee's password cannot be the same");
+		
+		if ($this->check_password($interviewee_password))
+			throw new Exception("Interviewee's password already exists");
+		
+		if ($this->check_password($interviewer_password)) 
+			throw new Exception("Interviewer's password already exists");
 	}
 	
 	/**
-	 * 
+	 *
+	 * @param varchar(25) $name
+	 * @param varchar(30) $email
+	 * @param varchar(1) $gender
+	 * @param varchar(15) $phone
+	 *
+	 * @effect
+	 * 		add user to the database if same person has not exist in the database which is identified by the email
+	 *
+	 * @return
+	 * 		true if success, false same email exists
+	 */
+	public function add_user($name = NULL , $email, $gender = NULL, $phone = NULL)
+	{
+		try {
+			$name =  $this->quote($name);
+			$email = $this->quote($email);
+			$gender= $this->quote($gender);
+			$phone = $this->quote($phone);
+			
+			$query = "INSERT INTO `dannych_cse403c`.`users` (`name`, `gender`, `email`, `phone`) VALUES ($name, $gender, $email, $phone)";
+			
+			if ( $this->check_email($email) ) {
+				return false;
+			}
+			
+			$this->execute($query);
+		} catch (Exception $e) {
+
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 *
 	 * @param int $user_id
-	 * 
+	 *
 	 * @effect
 	 * 		delete user with the corresponding id from the database
 	 */
 	public function drop_user($user_id)
 	{
-		// TODO: check user_id
-		
+		// no need to check url
+		// mySQL will do this job and not throw exception if it is not in the table
+	
 		$query = "DELETE FROM `dannych_cse403c`.`users` where id = $user_id";
+		$this->execute($query);
+	}
+	
+	/**
+	 *
+	 * @param varchar(50) $url
+	 *
+	 * @effect
+	 * 		delete an interview session which identified with the given url
+	 */
+	public function drop_session($url)
+	{
+		// no need to check url
+		// mySQL will do this job and not throw exception if it is not in the table
+	
+		$url = $this->quote($url);
+		$query = "DELETE FROM `dannych_cse403c`.`interviews` where url = $url";
 		$this->execute($query);
 	}
 	
 	/**
 	 * 
 	 * @param varchar(50) $url
-	 * 
-	 * @effect
-	 * 		delete an interview session which identified with the given url
+	 * @return number;
+	 * 	0 means same url does not exist,
+	 *  1 means same url exists,
+	 *  otherwise database integrity failure 
 	 */
-	public function drop_session($url)
-	{		
-		// TODO: check url
-		
+	public function check_url($url)
+	{
 		$url = $this->quote($url);
-		$query = "DELETE FROM `dannych_cse403c`.`interviews` where url = $url";
-		$this->execute($query);
+		$query = "SELECT * from interviews where url = $url";
+		$results = $this->execute($query)->fetchAll();
+		
+		return count($results);
 	}
-
+	
+	/**
+	 * 
+	 * @param varchar(50) $pwd
+	 * 	password to be checked in the database
+	 * 
+	 * @return number;
+	 * 	0 means same password does not exist,
+	 *  1 means same password exists,
+	 *  otherwise database integrity failure 
+	 */
+	public function check_password($pwd)
+	{
+		$pwd = $this->quote($pwd);
+		$query = "SELECT a.* FROM (SELECT interviewer_password as password from interviews UNION SELECT interviewee_password as password from interviews) a where a.password = $pwd";
+		$results = $this->execute($query)->fetchAll();
+		
+		return count($results);
+	}
+	
 	/**
 	 * 
 	 * @param varchar(30) $email
-	 * @return boolean
+	 * 	user' email that to be check in the database
+	 * 
+	 * @return number;
+	 * 	0 means given email does not exist,
+	 *  1 means given email exists,
+	 *  otherwise database integrity failure
 	 */
-	private function email_isNotRegistered($email)
+	public function check_email($email)
 	{
-		//TODO: check email
-		
 		$email = $this->quote($email);
-		$query = "SELECT COUNT(*) as num from users where email = $email";
-		$result = $this->execute($query);
+		$query = "SELECT * from users where email = $email";
+		$results = $this->execute($query)->fetchAll();
 	
-		// 0 rows means no matching email
-		return $result->fetchAll()[0]['num'] == 0 ;
+		return count($results);
 	}
 	
 	/**
-	 * notes: documentation said that this will not resulted into race condition
 	 * 
-	 * @return integer that is an auto generated id from the last query before this
+	 * @param varchar(30) $email
+	 * @return 
+	 * 	NULL if give email is not exist	
+	 * 	multitype: user information that has the given email
 	 */
-	private function get_lastInsertedId() {
-		$query = "SELECT LAST_INSERT_ID() as id";
-		return $this->execute($query)->fetchAll()[0]['id'];
+	public function find_user_by_email($email) 
+	{
+		$email = $this->quote($email);
+		
+		// email is unique so that it will only return one tuple			
+		$query = "SELECT * FROM users where email = $email";
+		$results = $this->execute($query)->fetchAll();
+		
+		switch (count($results)) {
+			case 0:
+				return NULL;
+			case 1:
+				return $results[0];
+			default:
+				// strange database
+				return NULL;
+		}
 	}
 } 
 ?>

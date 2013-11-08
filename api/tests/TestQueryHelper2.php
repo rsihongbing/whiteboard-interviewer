@@ -7,12 +7,35 @@ class QueryHelperTest extends UnitTestCase {
 	function testCheck() {
 		$helper = new QueryHelper();
 
-		$this->assertFalse($helper->check_url("a46qwr803na24"));
-		$this->assertTrue($helper->check_url("asdasdasd"));
+		$this->assertEqual($helper->check_url("a46qwr803na24"),1);
+		$this->assertEqual($helper->check_url("asdasdasd"),0);
 
-		$this->assertFalse($helper->check_password("gj37hadnkds"));
-		$this->assertFalse($helper->check_password("asd2135jrtk"));
-		$this->assertTrue($helper->check_password("asdasd"));
+		$this->assertEqual($helper->check_password("gj37hadnkds"),1);
+		$this->assertEqual($helper->check_password("asd2135jrtk"),1);
+		$this->assertEqual($helper->check_password("asdasd"),0);
+		
+		$this->assertEqual($helper->check_email("dannych@uw.edu"),1);
+		$this->assertEqual($helper->check_email("asdasdasd@asd.aw"),0);
+	}
+	
+	function testSessionValidationInfo() {
+		$helper = new QueryHelper();
+		
+		// existing url
+		$this->assertFalse($helper->create_session('a46qwr803na24', 'asd', 'asdasd' , 'test@asd.com', 'asdasdasd', 'test1@asd.com', 'qwerqwer', date("Y-m-d H:i:s", strtotime("+1 day")) ) );
+		
+		// same interviewer/ee emails
+		$this->assertFalse($helper->create_session('asdasdasdw41241', 'asd', 'asdasd' , 'test@asd.com', 'asdasdasd', 'test@asd.com', 'qwerqwer', date("Y-m-d H:i:s", strtotime("+1 day")) ) );
+		
+		// same interviewer/ee password
+		$this->assertFalse($helper->create_session('asdasdasdw41241', 'asd', 'asdasd' , 'test@asd.com', 'asdasdasd', 'test1@asd.com', 'asdasdasd', date("Y-m-d H:i:s", strtotime("+1 day")) ) );
+		
+		// existing interviewer password
+		$this->assertFalse($helper->create_session('asdasdasdw41241', 'asd', 'asdasd' , 'test@asd.com', 'gj37hadnkds', 'test1@asd.com', 'qwerqwer', date("Y-m-d H:i:s", strtotime("+1 day")) ) );
+	
+		// existing interviewee password
+		$this->assertFalse($helper->create_session('asdasdasdw41241', 'asd', 'asdasd' , 'test@asd.com', 'asdasdasd', 'test1@asd.com', 'asd2135jrtk', date("Y-m-d H:i:s", strtotime("+1 day")) ) );
+		
 	}
 	
 	function testGetUser() {
@@ -21,6 +44,10 @@ class QueryHelperTest extends UnitTestCase {
 		$user = $helper->find_user_by_email('dannych@uw.edu');
 		
 		$this->assertEqual($user['name'], 'Danny Ch');
+		
+		$user = $helper->find_user_by_email('daasdnnych@uw.edu');
+		
+		$this->assertNull($user);
 	}
 
 
@@ -29,7 +56,7 @@ class QueryHelperTest extends UnitTestCase {
 			
 		// add new user
 		$num_rows_before = $this->tcount($helper, "users");
-		$user_id = $helper->add_user('Test', 'test@yahooo.com', NULL , '4254637474');
+		$helper->add_user('Test', 'test@yahooo.com', NULL , '4254637474');
 		$num_rows_after = $this->tcount($helper, "users");
 			
 		// check that numer of rows increases
@@ -47,14 +74,18 @@ class QueryHelperTest extends UnitTestCase {
 		$num_rows_after_after = $this->tcount($helper, "users");
 			
 		$this->assertEqual($num_rows_after , $num_rows_after_after + 1);
+		
+		// reset the auto increment
+		$num_rows_before += 1;
+		$helper->execute("ALTER TABLE `users` AUTO_INCREMENT $num_rows_before");
 	}
 
 	function testAddandDropSession() {
 		$helper = new QueryHelper();
-
+		$time = date("Y-m-d H:i:s", strtotime("+1 day"));
 		// add new session
 		$num_interview_rows_before = $this->tcount($helper, "interviews");
-		$interview_url = $helper->create_session('vrabstd7', 'Waddap', 'Testing', 'dannych@uw.edu' , 'asdu4w97vny',  'ynamara@uw.edu' , '89uwn5by98', date("Y-m-d H:i:s", strtotime("+1 day")) );
+		$helper->create_session('vrabstd7', 'Waddap', 'Testing', 'dannych@uw.edu' , 'asdu4w97vny',  'ynamara@uw.edu' , '89uwn5by98', $time );
 
 
 		$num_interview_rows_after = $this->tcount($helper, "interviews");
@@ -72,11 +103,11 @@ class QueryHelperTest extends UnitTestCase {
 		$this->assertEqual($session['interviewer_password'],'asdu4w97vny' );
 		$this->assertEqual($session['interviewee_id'],2 );
 		$this->assertEqual($session['interviewee_password'],'89uwn5by98' );
-		$this->assertEqual($session['date_scheduled'], date("Y-m-d H:i:s", strtotime("+1 day")) );
+		$this->assertEqual($session['date_scheduled'], $time );
 		
 		
 		// drop seession
-		$helper->drop_session($interview_url);
+		$helper->drop_session('vrabstd7');
 	}
 
 	private function tcount($helper,$table) {
