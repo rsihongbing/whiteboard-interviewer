@@ -48,12 +48,16 @@ class QueryHelper {
 	 * 	2 if session is found but expired, the returned row will be set to $out
 	 */
 	public function getSessionInfo($url, &$out) {
-		$interviews_id = $this->quote($interviews_id);
+		$url = $this->quote($url);
 		$query = 
-		"select i.title, u.name, u.gender, u.email, u.phone, u.affiliation, s.date_prepared, v.password, p.interviewer_id, p.interviewee_id
-		from interviews i, participants p, users u, schedules s, validations v
-		where i.id = $interviews_id and p.interview_id = i.id and v.interview_id = i.id
-		and u.id = p.interviewee_id and s.interview_id = i.id;";
+		"select i.title, i.description, i.date_created, i.date_scheduled, 
+				u1.id as interviewer_id, u1.name as interviewer_name, u1.email as interviewer_email, u1.gender as interviewer_gender, u1.phone as interviewer_phone, i.interviewer_password,
+				u2.id as interviewee_id, u2.name as interviewee_name, u2.email as interviewee_email, u2.gender as interviewee_gender, u2.phone as interviewee_phone, i.interviewee_password
+		from interviews i 
+		join users u1 on i.interviewer_id = u1.id
+		join users u2 on i.interviewee_id = u2.id
+		where i.url = $url;";
+		
 		try {
 			$rows = $this->execute($query)->fetchAll(PDO::FETCH_ASSOC);
 			$rowsLen = count($rows);
@@ -65,7 +69,7 @@ class QueryHelper {
 				case 1:
 					$out = $rows[0];
 					$today = date("Y-m-d H:i:s");
-					$interviewDate = $rows[0]["date_prepared"];
+					$interviewDate = $rows[0]["date_scheduled"];
 					return ($interviewDate < $today) ? 2: 1;
 				default:
 					// Weird things happen here...
