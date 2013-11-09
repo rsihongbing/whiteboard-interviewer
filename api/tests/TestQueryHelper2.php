@@ -7,7 +7,7 @@ class QueryHelperTest extends UnitTestCase {
 	function testCheck() {
 		$helper = new QueryHelper();
 
-		$this->assertEqual($helper->check_url("a46qwr803na24"),1);
+		$this->assertEqual($helper->check_url('a46qwr803na24'),1);
 		$this->assertEqual($helper->check_url("asdasdasd"),0);
 
 		$this->assertEqual($helper->check_password("gj37hadnkds"),1);
@@ -15,27 +15,71 @@ class QueryHelperTest extends UnitTestCase {
 		$this->assertEqual($helper->check_password("asdasd"),0);
 		
 		$this->assertEqual($helper->check_email("dannych@uw.edu"),1);
+		$this->assertEqual($helper->check_email('dannych@uw.edu'),1);
 		$this->assertEqual($helper->check_email("asdasdasd@asd.aw"),0);
 	}
 	
 	function testSessionValidationInfo() {
 		$helper = new QueryHelper();
+		$countr = 0;
 		
 		// existing url
-		$this->assertFalse($helper->create_session('a46qwr803na24', 'tesasdadsat@asd.com', 'test@asd.com', 'asd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ));
+		try {
+			$this->expectException($helper->create_session('a46qwr803na24', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ));
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode() , 0);
+			$countr++;	
+		}
 		
-// 		// same interviewer/ee emails
-// 		$this->assertFalse($helper->create_session('asdasdasdw41241', 'test@asd.com', 'test@asd.com', 'asd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		try {
+	 		// same interviewer/ee emails
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'dannych@uw.edu', 'asd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode(), 1);
+			$countr++;
+		}
 		
-// 		// same interviewer/ee password
-// 		$this->assertFalse($helper->create_session('asdasdasdw41241', 'tesadadt@asd.com', 'test@asd.com', 'asdasd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		try {
+	 		// same interviewer/ee password
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode(), 2);
+			$countr++;
+		}
 		
-// 		// existing interviewer password
-// 		$this->assertFalse($helper->create_session('asdasdasdw41241', 'tesasdadsat@asd.com', 'test@asd.com', 'gj37hadnkds', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
-	
-// 		// existing interviewee password
-// 		$this->assertFalse($helper->create_session('asdasdasdw41241', 'tesasdadsat@asd.com', 'test@asd.com', 'asdasd', 'asd2135jrtk' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		try {
+	 		// existing interviewer password
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'gj37hadnkds', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode(), 4);
+			$countr++;
+		}
 		
+		try {
+	 		// existing interviewee password
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asd2135jrtk' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode(), 3);
+			$countr++;
+		}
+		
+		try {
+			// not exist interviewer email
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'test@uw.edu', 'ynamara@uw.edu', 'asd', 'afwefb' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode(), 5);
+			$countr++;
+		}
+		
+		try {
+			// not exist interviewer email
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'ynamara@uw.edu', 'test2@uw.edu', 'asd', 'afwefb' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+		} catch (Exception $e) {
+			$this->assertEqual( $e->getCode(), 5);
+			$countr++;
+		}
+		
+		$this->assertEqual( $countr, 7);
 	}
 	
 	function testGetUser() {
@@ -85,7 +129,7 @@ class QueryHelperTest extends UnitTestCase {
 		$time = date("Y-m-d H:i:s", strtotime("+1 day"));
 		// add new session
 		$num_interview_rows_before = $this->tcount($helper, "interviews");
-		$helper->create_session('vrabstd7', 'Waddap', 'Testing', 'dannych@uw.edu' , 'asdu4w97vny',  'ynamara@uw.edu' , '89uwn5by98', $time );
+		$helper->create_session('vrabstd7', 'dannych@uw.edu' ,  'ynamara@uw.edu', 'asdu4w97vny' , '89uwn5by98', $time , 'Waddap', 'Testing' );
 
 
 		$num_interview_rows_after = $this->tcount($helper, "interviews");
