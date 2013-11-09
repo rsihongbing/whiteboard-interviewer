@@ -10,7 +10,7 @@ class TestPasswordGenerator extends UnitTestCase {
 	function testPasswordDefaultLength() {
 		for ($i = 0; $i < 100; $i++) {
 			$pwd = PasswordGenerator::generatePassword();
-			$this->assertEqual(30, strlen($pwd));
+			$this->assertEqual(50, strlen($pwd));
 		}
 		
 	}

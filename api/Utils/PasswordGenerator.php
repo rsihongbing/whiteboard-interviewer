@@ -15,12 +15,11 @@ class PasswordGenerator {
 	/**
 	 * Generates random alphanumeric password with the specified length.
 	 * @param number $pwdLen
-	 * 	the desired length of the generated password: the default is 30. The behavior is undefined
-	 * 	when $pwdLen < 0.
+	 * 	the desired length of the generated password. The behavior is undefined when $pwdLen < 0.
 	 * @return string
 	 * 	random alphanumeric string with the specified length.
 	 */
-	public static function generatePassword($pwdLen = 30) {
+	public static function generatePassword($pwdLen = 50) {
 		$result = array();
 		$len = strlen(static::$RANGE) - 1;
 		for ($i = 0; $i < $pwdLen; $i++) {

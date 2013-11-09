@@ -13,60 +13,76 @@ class JSONConstructor {
 	}
 	
 	/**
-	 * Retrives session information for the given id in JSON format.
-	 * 
+	 * Retrieves the session information of $url.
 	 * @param string $url
-	 * 	the interview's url
 	 * @return string
-	 * 	session information in JSON. See specification on GitHub.
+	 * 	JSON string. See GitHub for documentation.
 	 */
 	public function getSessionInfo($url)  {
-		$output;
-		$retVal = $this->queryHelper->getSessionInfo($url, $output);
-		$result = array("code" => $retVal);
-		
-		switch ($retVal) {
-			case -1:
-				$result["message"] = $output;
-				break;
-			case 0:
-				$result["message"] = "The given interviews_url does not exist";
-				break;
-			default:
-				$result["message"] = "Success";
-				foreach ($output as $key => $value) {
-					$result[$key] = $value;
-				}
+		$result = array();
+		$ret = $this->queryHelper->get_session($url);
+		if (is_null($ret)) {
+			$result["code"] = "0";
+			$result["message"] = "The given URL does not exist"; 
+		} else {
+			$result["code"] = "1";
+			$result["message"] = "Success"; 
+			foreach ($ret as $key => $value) {
+				$result[$key] = $value;
+			}
 		}
 		return json_encode($result);
 	}
-	
+
 	/**
-	 * Creates a new interview session.
-	 * 
-	 * @param string $interview_title
-	 * 	the title of the interview
-	 * @param string $interview_date
+	 * Creates an interview session between the given interviewer and interviewee. 
+	 *
+	 * @param string $interviewer_email
+	 * 	the email of the interviewer
+	 * @param string $interviewee_email
+	 * 	the email of the interviewee
+	 * @param string $date_schedule
 	 * 	must be in Y-m-d H:i:s format
-	 * @param string $interview_password
-	 * 	password for the interview session
-	 * @param string $interviewer_id
-	 * 	interviewer's id
-	 * @param string $interviewee_id
-	 * 	interviewee's id
-	 * @return string
-	 * 	JSON object that contains interview_id upon success
+	 * @param string $title
+	 * 	interview's title
+	 * @param string $description
+	 * 	interview's description
 	 */
-	public function createSession($interview_title, $interview_date, $interview_password, 
-			$interviewer_id, $interviewee_id) {
-		// TODO: Not sure what's gonna happen if QueryHelper::create_session fails....
-		$id = $this->queryHelper->create_session($interview_title, $interview_date, $interview_password, $interviewer_id, $interviewee_id);
-		
-		$result = array("code" => 1,
-			"message" => "Success",
-			"interview_id" => $id						
-		);
-		return json_encode($result);
+	public function createSession($interviewer_email, $interviewee_email, $date_scheduled,
+			$title = null, $description = null) {
+		// We need to generate random url, interviewe(r|e) password that hasn't been generated
+		// before.
+		while (true) {
+			$url = PasswordGenerator::generatePassword();
+			$erPwd = PasswordGenerator::generatePassword();
+			$eePwd = PasswordGenerator::generatePassword();
+			
+			try {
+				$this->queryHelper->create_session($url, $interviewer_email, $interviewee_email,
+						$erPwd, $eePwd, $date_scheduled, $title,  $description);
+				// Success, return result
+				$result = array(
+						"code" => "1",
+						"message" => "Success",
+						"url" => $url,
+						"interviewer_password" => $erPwd,
+						"interviewee_password" => $eePwd
+				);
+				return json_encode($result);
+			} catch (Exception $ex) {
+				if ($ex->getCode() == 1) {
+					// Interviewer's and interviewee's email is the same: reject.
+					$result = array(
+							"code" => "0",
+							"message" => "Create session failure",
+							"failure_reason" => $ex->getMessage(),
+							"failure_code" => $ex->getCode()
+					);
+					return json_encode($result);
+				}
+				// Keep trying.
+			}
+		}
 	}
 }
 ?>

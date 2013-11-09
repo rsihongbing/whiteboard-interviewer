@@ -29,57 +29,7 @@ class QueryHelper {
 	 */
 	public function quote($text) 
 	{
-		 
 		return is_null($text) ? 'NULL' : DBConnectionHelper::quoteString($text);
-	}
-	
-	
-	/**
-	 * Retrieves the session information for the given $interviews_id.
-	 * 
-	 * @param string $interviews_id
-	 * 	the interview id
-	 * @param mixed $out
-	 * 	output parameter, type varies depending on return value.
-	 * @return number
-	 * 	-1 if exception occurs. $out will be set to the exception's message
-	 * 	0 if session for the given id is not found
-	 * 	1 if session is found and valid, the returned row will be set to $out
-	 * 	2 if session is found but expired, the returned row will be set to $out
-	 */
-	public function getSessionInfo($url, &$out) {
-		$url = $this->quote($url);
-		$query = 
-		"select i.title, i.description, i.date_created, i.date_scheduled, 
-				u1.id as interviewer_id, u1.name as interviewer_name, u1.email as interviewer_email, u1.gender as interviewer_gender, u1.phone as interviewer_phone, i.interviewer_password,
-				u2.id as interviewee_id, u2.name as interviewee_name, u2.email as interviewee_email, u2.gender as interviewee_gender, u2.phone as interviewee_phone, i.interviewee_password
-		from interviews i 
-		join users u1 on i.interviewer_id = u1.id
-		join users u2 on i.interviewee_id = u2.id
-		where i.url = $url;";
-		
-		try {
-			$rows = $this->execute($query)->fetchAll(PDO::FETCH_ASSOC);
-			$rowsLen = count($rows);
-			
-			switch ($rowsLen) {
-				case 0:
-					// $interviews_id does not exists
-					return 0;
-				case 1:
-					$out = $rows[0];
-					$today = date("Y-m-d H:i:s");
-					$interviewDate = $rows[0]["date_scheduled"];
-					return ($interviewDate < $today) ? 2: 1;
-				default:
-					// Weird things happen here...
-					throw new Exception("Assertion failed, check database schema's integrity");
-				
-			}
-		} catch (Exception $ex) {
-			$out = $ex->getMessage();
-			return -1;
-		}
 	}
 	
 	/**
@@ -92,40 +42,33 @@ class QueryHelper {
 	public function get_session($url) {		
 		$url = $this->quote($url);
 		$query = "SELECT * from interviews where url = $url";
-		
-		$results = $this->execute($query)->fetchAll();
-		
-		switch (count($results)) {
-			case 0 :
-				return NULL;
-			case 1 :
-				return $results[0];
-			default:
-				return NULL;	
-		}
+		$results = $this->execute($query)->fetchAll(PDO::FETCH_ASSOC);
+		return (count($results) == 1) ? $results[0] : null;
 	}
 	
 	/**
 	 * 
 	 * @param varchar(50) $url
-	 * @param varchar(35) $interview_title
-	 * @param String $interview_description
 	 * @param varchar(30) $interviewer_email
 	 * @param varchar(50) $interviewer_password
 	 * @param varchar(30) $interviewee_email
 	 * @param varchar(50) $interviewee_password
+	 * @param varchar(35) $interview_title
+	 * @param String $interview_description
 	 * @param String $interview_date
 	 * 
-	 * @return boolean
-	 * 		whether session creation is a success or a failure
+	 * @throws Exception
 	 */
-	public function create_session($url, $interview_title = NULL, $interview_description = NULL, $interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $interview_date )
+	public function create_session($url, $interviewer_email, $interviewee_email, 
+			$interviewer_password, $interviewee_password, $interview_date,
+			$interview_title = NULL, $interview_description = NULL)
 	{	
 		try {
-			
 			$url = $this->quote($url);
 			$interview_title = $this->quote($interview_title);
 			$interview_description = $this->quote($interview_description);
+			$interviewer_email = $this->quote($interviewer_email);
+			$interviewee_email = $this->quote($interviewee_email);
 			$interviewee_password = $this->quote($interviewee_password);
 			$interviewer_password = $this->quote($interviewer_password);
 			$interview_date = $this->quote($interview_date);
@@ -133,6 +76,7 @@ class QueryHelper {
 			// validate the given parameter
 			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password);
 			
+			// XXX: Crash if email does not exist
 			$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
 			$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
 			
@@ -143,11 +87,8 @@ class QueryHelper {
 			$this->execute($query);
 			
 		} catch (Exception $e) {
-			
-			return false;
+			throw $e;
 		}
-		
-		return true;
 	}
 	
 	/**
@@ -162,19 +103,19 @@ class QueryHelper {
 	 */
 	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password) {
 		if ($this->check_url($url) )
-			throw new Exception("Same URL exists in the database");
+			throw new Exception("Same URL exists in the database", 0);
 		
 		if ($interviewee_email == $interviewer_email)
-			throw new Exception("Interviewer's email and interviewee email cannot be the same");
+			throw new Exception("Interviewer's email and interviewee email cannot be the same", 1);
 		
 		if ($interviewee_password == $interviewer_password)
-			throw new Exception("Interviewer's password and interviewee's password cannot be the same");
+			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
 		
+		// XXX: Why not?
 		if ($this->check_password($interviewee_password))
-			throw new Exception("Interviewee's password already exists");
-		
+			throw new Exception("Interviewee's password already exists", 3);
 		if ($this->check_password($interviewer_password)) 
-			throw new Exception("Interviewer's password already exists");
+			throw new Exception("Interviewer's password already exists", 4);
 	}
 	
 	/**
@@ -190,7 +131,7 @@ class QueryHelper {
 	 * @return
 	 * 		true if success, false same email exists
 	 */
-	public function add_user($name = NULL , $email, $gender = NULL, $phone = NULL)
+	public function add_user($name, $email, $gender = NULL, $phone = NULL)
 	{
 		try {
 			$name =  $this->quote($name);
