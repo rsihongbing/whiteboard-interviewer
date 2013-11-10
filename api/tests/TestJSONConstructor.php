@@ -1,6 +1,7 @@
 <?php
 require_once 'simpletest/autorun.php';
 require_once '../Utils/JSONConstructor.php';
+require_once '../Utils/QueryHelper.php';
 
 class TestJSONConstructor extends UnitTestCase {
 	function testGetSessionInfoJSON() {
@@ -21,6 +22,19 @@ class TestJSONConstructor extends UnitTestCase {
 		$json = json_decode($var->getSessionInfo("bla bla bla bla"), true);
 		$this->assertEqual(0, $json["code"]);
 		$this->assertEqual("The given URL does not exist", $json["message"]);
+	}
+	
+	function createDropSession() {
+		$erEmail = "ynamara@uw.edu";
+		$eeEmail = "dannych@uw.edu";
+		$time = "2013-12-30 00:00:00";
+		$var = new JSONConstructor();
+		$json = json_decode($var->createSession($erEmail, $eeEmail, $time));
+		$this->assertEqual(1, $json["code"]);
+		$this->assertEqual("Success", $json["message"]);
+		
+		$qH = new QueryHelper();
+		$qH->drop_session($json["url"]);
 	}
 }
 

@@ -1,5 +1,6 @@
 <?php
 require_once 'QueryHelper.php';
+require_once 'PasswordGenerator.php';
 
 /**
  * Constructs JSON object that our REST API returns.
@@ -47,11 +48,14 @@ class JSONConstructor {
 	 * 	interview's title
 	 * @param string $description
 	 * 	interview's description
+	 * @return
+	 * 	JSON string. See GitHub for documentation.
 	 */
 	public function createSession($interviewer_email, $interviewee_email, $date_scheduled,
 			$title = null, $description = null) {
 		// We need to generate random url, interviewe(r|e) password that hasn't been generated
 		// before.
+		
 		while (true) {
 			$url = PasswordGenerator::generatePassword();
 			$erPwd = PasswordGenerator::generatePassword();
@@ -61,6 +65,8 @@ class JSONConstructor {
 				$this->queryHelper->create_session($url, $interviewer_email, $interviewee_email,
 						$erPwd, $eePwd, $date_scheduled, $title,  $description);
 				// Success, return result
+				
+				
 				$result = array(
 						"code" => "1",
 						"message" => "Success",
@@ -70,8 +76,9 @@ class JSONConstructor {
 				);
 				return json_encode($result);
 			} catch (Exception $ex) {
-				if ($ex->getCode() == 1) {
-					// Interviewer's and interviewee's email is the same: reject.
+				if ($ex->getCode() == 1 || $ex->getCode() == 5) {
+					// Either interviewer's and interviewee's email is the same, or email hasn't
+					// been registered in the database yet. Reject.
 					$result = array(
 							"code" => "0",
 							"message" => "Create session failure",
