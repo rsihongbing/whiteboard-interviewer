@@ -72,7 +72,6 @@ class QueryHelper {
 			// validate the given parameter
 			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password);
 				
-			// XXX: Crash if email does not exist
 			$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
 			$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
 				
@@ -94,14 +93,21 @@ class QueryHelper {
 	}
 
 	/**
-	 *
+	 * Validate the interview information
+	 * 
 	 * @param varchar(50) $url
 	 * @param varchar(30) $interviewer_email
 	 * @param varchar(50) $interviewer_password
 	 * @param varchar(30) $interviewee_email
 	 * @param varchar(50) $interviewee_password
 	 *
-	 * @throws Exception
+	 * @throws Exception if
+	 * 	<ul>
+	 * 		<li>url already exist in the database</li>
+	 * 		<li>both emails are the same</li>
+	 * 		<li>either email is not in the database</li>
+	 * 		<li>both passwords already exist</li>
+	 * </ul>
 	 */
 	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password) {
 		if ($this->check_url($url) == 1)
@@ -139,7 +145,7 @@ class QueryHelper {
 	 * @return
 	 * 		true if success, false same email exists
 	 */
-	public function add_user($name, $email, $gender = NULL, $phone = NULL)
+	public function add_user($email, $name = NULL, $gender = NULL, $phone = NULL)
 	{
 		try {
 			if ( $this->check_email($email) ) {
@@ -255,8 +261,10 @@ class QueryHelper {
 	/**
 	 *
 	 * @param varchar(30) $email
+	 * 	corresponding email to a user
+	 * 
 	 * @return
-	 * 	NULL if give email is not exist
+	 * 	NULL if give email is not exist or on error in database,
 	 * 	multitype: user information that has the given email
 	 */
 	public function find_user_by_email($email)

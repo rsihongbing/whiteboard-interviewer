@@ -57,9 +57,9 @@ class JSONConstructor {
 		// before.
 		
 		while (true) {
-			$url = PasswordGenerator::generatePassword();
-			$erPwd = PasswordGenerator::generatePassword();
-			$eePwd = PasswordGenerator::generatePassword();
+			$url = $this->generateUrl();
+			$erPwd = $this->generatePassword();
+			$eePwd = $this->generatePassword();
 			
 			try {
 				$this->queryHelper->create_session($url, $interviewer_email, $interviewee_email,
@@ -90,6 +90,71 @@ class JSONConstructor {
 				// Keep trying.
 			}
 		}
+	}
+	
+	/**
+	 * Creates an interview session between the given interviewer and interviewee email 
+	 * without either both were registered. 
+	 * 
+	 * @require
+	 * 	$interviewer_email, $interviewee_email, $date_schedule are well formatted
+	 *
+	 * @param string $interviewer_email
+	 * 	the email of the interviewer
+	 * @param string $interviewee_email
+	 * 	the email of the interviewee
+	 * @param string $date_schedule
+	 * 	must be in Y-m-d H:i:s format
+	 * @param string $title
+	 * 	interview's title
+	 * @param string $description
+	 * 	interview's description
+	 * @return
+	 * 	JSON string. See GitHub for documentation.
+	 */
+	public function quick_createSession($interviewer_email, $interviewee_email, $date_scheduled,
+			$title = null, $description = null) {
+		
+		if($this->queryHelper->check_email($interviewer_email) == 0) {
+			$this->queryHelper->add_user($interviewer_email);
+		}
+		
+		
+		if($this->queryHelper->check_email($interviewee_email) == 0) {
+			$this->queryHelper->add_user($interviewee_email);
+		}
+		
+		return $this->createSession($interviewer_email, $interviewee_email, $date_scheduled, $title, $description);
+	}
+	
+	/**
+	 * Generate random url but unique
+	 * 
+	 * @return string
+	 * 	url that unique in the database
+	 */
+	private function generateUrl() {
+		$url;
+		do{
+			$url = PasswordGenerator::generatePassword();
+		} while ( $this->queryHelper->check_url($url) );
+		
+		return $url;
+	}
+	
+	/**
+	 * Generate random password but unique
+	 * 
+	 * @return string
+	 * 	password that unique in the database
+	 */
+	private function generatePassword() {
+		$pwd;
+		do{
+			$pwd = PasswordGenerator::generatePassword();
+		} while ( $this->queryHelper->check_password($pwd) );
+		
+		return $pwd;
 	}
 }
 ?>

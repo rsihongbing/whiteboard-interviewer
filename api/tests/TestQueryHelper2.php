@@ -100,7 +100,7 @@ class QueryHelperTest extends UnitTestCase {
 			
 		// add new user
 		$num_rows_before = $this->tcount($helper, "users");
-		$helper->add_user('Test', 'test@yahooo.com', NULL , '4254637474');
+		$helper->add_user('test@yahooo.com', 'Test', NULL , '4254637474');
 		$num_rows_after = $this->tcount($helper, "users");
 			
 		// check that numer of rows increases
