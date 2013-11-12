@@ -5,12 +5,15 @@
 	
 	try {
 		// create session
-		$interviewer = $helper->add_user('InterViewer', 'interviewer@test.edu', 'M', "4254638074", 'Interviewer');
-		$interviewee = $helper->add_user('InterViewee', 'interviewee@test.edu', 'F', "4254637065", 'Jobless');
-		$interview = $helper->create_session('Test interview query 1', date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdaw423v4', $interviewer, $interviewee);
+		$helper->add_user('InterViewer', 'interviewer@test.edu', 'M', "4254638074");
+		$helper->add_user('InterViewee', 'interviewee@test.edu', 'F', "4254637065");
+		$interview = $helper->create_session('vrabstd7', 'Testing Interview', 'Testing', 'dannych@uw.edu' , 'asdu4w97vny',  'ynamara@uw.edu' , '89uwn5by98', date("Y-m-d H:i:s", strtotime("+1 day")));
 		
 		// delete created session
-		$helper->drop_session($interview);
+		$interviewer = $helper->find_user_by_email('interviewer@test.edu')['id'];
+		$interviewee = $helper->find_user_by_email('interviewee@test.edu')['id'];
+		
+		$helper->drop_session('vrabstd7');
 		$helper->drop_user($interviewer);
 		$helper->drop_user($interviewee);
 		

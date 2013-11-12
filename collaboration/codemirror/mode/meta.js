@@ -27,7 +27,6 @@ CodeMirror.modeInfo = [
   {name: 'HTML', mime: 'text/html', mode: 'htmlmixed'},
   {name: 'HTTP', mime: 'message/http', mode: 'http'},
   {name: 'JavaScript', mime: 'text/javascript', mode: 'javascript'},
-  {name: 'JSON', mime: 'application/x-json', mode: 'javascript'},
   {name: 'JSON', mime: 'application/json', mode: 'javascript'},
   {name: 'TypeScript', mime: 'application/typescript', mode: 'javascript'},
   {name: 'Jinja2', mime: 'jinja2', mode: 'jinja2'},
@@ -70,7 +69,6 @@ CodeMirror.modeInfo = [
   {name: 'Velocity', mime: 'text/velocity', mode: 'velocity'},
   {name: 'Verilog', mime: 'text/x-verilog', mode: 'verilog'},
   {name: 'XML', mime: 'application/xml', mode: 'xml'},
-  {name: 'HTML', mime: 'text/html', mode: 'xml'},
   {name: 'XQuery', mime: 'application/xquery', mode: 'xquery'},
   {name: 'YAML', mime: 'text/x-yaml', mode: 'yaml'},
   {name: 'Z80', mime: 'text/x-z80', mode: 'z80'}

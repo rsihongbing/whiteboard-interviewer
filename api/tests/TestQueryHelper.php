@@ -3,22 +3,21 @@ require_once 'simpletest/autorun.php';
 require_once '../Utils/QueryHelper.php';
 
 class TestQueryHelper extends UnitTestCase {
-	
-	function testGetSessionInfoFuture() {
-		$var = new QueryHelper();
-		$output;
-		$retVal = $var->getSessionInfo(1, $output);
-		$this->assertEqual(1, $retVal);
-		$this->assertEqual("Yosan Namara", $output["name"]);
-		$this->assertEqual("test interview 1", $output["title"]);
+	function testGetSessionDNE() {
+		$qH = new QueryHelper();
+		$res = $qH->get_session("select * hmmmm yeah");
+		$this->assertNull($res);
 	}
 	
-	function testGetSessionInfoDNE() {
-		$var = new QueryHelper();
-		$output = null;
-		$retVal = $var->getSessionInfo("select *", $out);
-		$this->assertEqual(0, $retVal);
-		$this->assertNull($output);
+	function testGetSession() {
+		$qH = new QueryHelper();
+		$res = $qH->get_session("a46qwr803na24");
+		$this->assertEqual("Test Interview", $res["title"]);
+		$this->assertEqual("To test the database lollol", $res["description"]);
+		$this->assertEqual(1, $res["interviewer_id"]);
+		$this->assertEqual("gj37hadnkds", $res["interviewer_password"]);
+		$this->assertEqual(3, $res["interviewee_id"]);
+		$this->assertEqual("asd2135jrtk", $res["interviewee_password"]);
 	}
 }
 

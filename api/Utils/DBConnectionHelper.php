@@ -5,7 +5,7 @@
  */
 class DBConnectionHelper {
 	/** The name of the DB. */
-	private static $DB_NAME = "dannych_cse403";
+	private static $DB_NAME = "dannych_cse403c";
 	/** The username of the DB. */
 	private static $DB_USERNAME = "dannych";
 	/** The password of the DB. */
