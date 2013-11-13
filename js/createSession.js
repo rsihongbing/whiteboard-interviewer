@@ -6,17 +6,34 @@ $(document).ready(function() {
 	$("#resetBtn").click(resetForm);
 	$("#newBtn").click(reinitializeForm);
 	
+	defaultToday();
+	
+	
+	function defaultToday() {
+		var now = new Date();
+ 
+		var day = ("0" + now.getDate()).slice(-2);
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+		today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+		$('#interviewDate').val(today);
+	}
+	
 	// executed when "Reset" Button is clicked
 	//
 	// clear all the input fields in the create session form
 	function resetForm() {	
 		$("#interviewTitle").val("");
 		$("#interviewDescription").val("");
+		//$("#interviewDescription").html("");
 		$("#interviewDate").val("");
 		
 		// disabled for alpha release
 		//$("#interviewerEmail").val("");
 		//$("#intervieweeEmail").val("");
+		
+		defaultToday();
 	}
 	
 	// executed when "New Session" button is clicked
