@@ -22,7 +22,17 @@
     	</style>
 	</head>
 	<body>
+	
 		<div class="container">
+			<div class="alert alert-danger alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<strong>Update!</strong> Now you can create a session! Just click "Create Session"
+			</div>
+		
+			<div class="alert alert-info alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<strong>Update!</strong> You can see our alpha interview room! Click "Join Session" then "Join"
+			</div>
 			<nav class="navbar navbar-default navbar-inverse" role="navigation">
 			  <!-- Brand and toggle get grouped for better mobile display -->
 			  <div class="navbar-header">
@@ -37,9 +47,8 @@
 			      <li><a href="#">Contact</a></li>
 			    </ul>
 			    <ul class="nav navbar-nav navbar-right">
-			      <li><button type="button" class="btn btn-danger">Create Session</button></li>
+			      <li><button id="main-createBtn" data-toggle="modal" href="#createForm" type="button" class="btn btn-danger">Create Session</button></li>
 			      <li><button data-toggle="modal" href="#myModal" class="btn btn-primary">Join Session</button>
-
 			    </ul>
 			  </div><!-- /.navbar-collapse -->
 			</nav>
@@ -74,20 +83,101 @@
 						<h4 class="modal-title">Enter Session ID</h4>
 					</div>
 					<div class="modal-body">
-						Text Here
+						<div id="joinformarea">
+							<form id="joininterviewform" role="form" action="POST">
+								<div class="form-group">
+									<label for="interviewID">Interview ID</label>
+									<input type="text" class="form-control" id="interviewID" placeholder="Interview ID sent to your email" name="url" value="AlphaSession">
+								</div>
+								
+								<div class="form-group">
+									<label for="interviewPassword">Secret Key</label>
+									<input type="text" class="form-control" id="interviewDescription" placeholder="Secret key sent to your email" name="key" value="anythinggoesin">
+								</div>
+							
+						   </form>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Didn't Receive Any Email?</button>
+						<a type="button" class="btn btn-primary" href="./alpha.html">Join</a>
+						<!--<button type="button" class="btn btn-primary" href="./alpha.html">Join</button>-->
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
+		
+		<!-- Button trigger modal -->
+		<!-- Modal - Triggered by clicking create session -->
+		<div class="modal fade" id="createForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Create Interview Session</h4>
+					</div>
+					<div class="modal-body">
+						
+						<div id="formarea">
+							<form id="interviewform" role="form" action="POST">
+								<div class="form-group">
+									<label for="interviewTitle">Title</label>
+									<input type="text" class="form-control" id="interviewTitle" placeholder="Your Title" name="title" value="Alpha Session">
+								</div>
+								
+								<div class="form-group">
+									<label for="interviewDescription">Description</label>
+									<textarea class="form-control" rows="5" id="interviewDescription" placeholder="Add description" name="description">Don't change the email addresses below, since it will add junks and increase auto increment :) Don't forget to fill the interview date! It's easy thanks to HTML5</textarea>
+								</div>
+							
+								<div class="form-group">
+									<label for="interviewerEmail">Interviewer Email</label>
+									<input type="email" class="form-control" id="interviewerEmail" placeholder="Enter email" name="interviewer_email" value="dannych@uw.edu">
+								</div>
+								
+								<div class="form-group">
+									<label for="intervieweeEmail">Interviewer Email</label>
+									<input type="email" class="form-control" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email" value="ynamara@uw.edu">
+								</div>
+								
+								<div class="form-group">
+									<label for="intervieweDate">Interview date</label>
+									<input type="date" class="form-control" id="interviewDate" name="date_scheduled">
+								</div>
+						   
+						   </form>
+						</div>
+						
+						<div id="resultarea" style="display: none;">
+							<div id="resultloading">
+								LOADING....
+							</div>
+							
+							<p id="resultmessage"></p>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button id="newBtn" type="button" class="btn btn-success" style="display: none;">New Session</button>
+						<button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
+						<button id="createBtn" type="button" class="btn btn-primary">Create</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
+		<div class="navbar navbar-fixed-bottom">
+			
+		</div>
 
 		<!-- Load JS Assets Last, rather than in HEAD. Prevents DOM blocking -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/supersized.min.js"></script>
 		<script src="js/helloworld.js"></script>
+		<script src="js/createSession.js"></script>
 	</body>
+	
 </html>
