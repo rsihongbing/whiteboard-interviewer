@@ -27,21 +27,23 @@ body { margin: 0; height: 100%; position: relative; }
 <script>
 
 function initFirepad(languageMode, languageMime, containerId){
+  console.log(languageMode + " " + languageMime);
   var scriptSrc = "codemirror/mode/" + languageMode + "/" + languageMode + ".js";
   $("#langScript").attr("src", scriptSrc);
-  $.getScript(scriptSrc);
-  $("#" + containerId).html("");
-  var firepadRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor2');
-  var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
-  var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {richTextToolbar: true});
-  $(".firepad-toolbar").append("<div class='firepad-btn-group'>Language Mode : <select id='languages'></select></div>");
-  var active = 0;
-  $.each(CodeMirror.modeInfo, function (index, value){
-    $("#languages").append("<option id='lang" + index + "' value='" + index + "'> " + value.name + " </option>");
-    if(value.mime === languageMime) active = index;
+  $.getScript(scriptSrc, function(){
+    $("#" + containerId).html("");
+    var firepadRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor2');
+    var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
+    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {richTextToolbar: true});
+    $(".firepad-toolbar").append("<div class='firepad-btn-group'>Language Mode : <select id='languages'></select></div>");
+    var active = 0;
+    $.each(CodeMirror.modeInfo, function (index, value){
+      $("#languages").append("<option id='lang" + index + "' value='" + index + "'> " + value.name + " </option>");
+      if(value.mime === languageMime) active = index;
+    });
+    $("#lang" + active).attr("selected", "selected");
+    $("#languages").change(langChanged);
   });
-  $("#lang" + active).attr("selected", "selected");
-  $("#languages").change(langChanged);
 }
 
 function langChanged(){
