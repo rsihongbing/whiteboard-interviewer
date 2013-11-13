@@ -14,14 +14,16 @@
 
 <style>
 html { height: 100%; }
-body { margin: 0; height: 100%; position: relative; }
+body { margin: 0; height: 100%; position: relative; background-color: #DDD; font-family:"Myriad pro", "Calibri", "Sans-serif";}
+#firepad-container{ width: 90%; margin:0 auto;}
+.firepad{ height:500px; }
 </style>
 
 </head>
 
 <body>
 
-
+<div style="margin:5px; text-align:center;">Language Mode : <select id='languages'></select></div>
 <div id="firepad-container"></div>
 
 <script>
@@ -33,15 +35,7 @@ function initFirepad(languageMode, languageMime, containerId){
     $("#" + containerId).html("");
     var firepadRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor2');
     var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
-    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {richTextToolbar: true});
-    $(".firepad-toolbar").append("<div class='firepad-btn-group'>Language Mode : <select id='languages'></select></div>");
-    var active = 0;
-    $.each(CodeMirror.modeInfo, function (index, value){
-      $("#languages").append("<option id='lang" + index + "' value='" + index + "'> " + value.name + " </option>");
-      if(value.mime === languageMime) active = index;
-    });
-    $("#lang" + active).attr("selected", "selected");
-    $("#languages").change(langChanged);
+    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
   });
 }
 
@@ -50,6 +44,20 @@ function langChanged(){
   var langMode = CodeMirror.modeInfo[langId].mode;
   var langMime = CodeMirror.modeInfo[langId].mime;
   initFirepad(langMode, langMime, "firepad-container");
+  focusSelect(langMime);
+}
+
+function initSelect(){
+    $.each(CodeMirror.modeInfo, function (index, value){
+       $("#languages").append("<option id='lang" + index + "' value='" + index + "'> " + value.name + " </option>");
+    });
+    $("#languages").change(langChanged);
+}
+
+function focusSelect(languageMime){
+    var active = 0;
+    $.each(CodeMirror.modeInfo, function (index, value){ if(value.mime === languageMime) active = index; });
+    $("#lang" + active).attr("selected", "selected");
 }
 
 $(document).ready(function(){
@@ -58,8 +66,10 @@ $(document).ready(function(){
     var bName = b.name.toLowerCase(); 
     return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
   });
+  initSelect();
+  focusSelect("text/x-java");
   initFirepad("clike", "text/x-java", "firepad-container" );
-}); 
+});
 
 </script>
 
