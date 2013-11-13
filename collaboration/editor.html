@@ -27,7 +27,6 @@ body { margin: 0; height: 100%; position: relative; }
 <script>
 
 function initFirepad(languageMode, languageMime, containerId){
-  console.log(languageMode + " " + languageMime);
   var scriptSrc = "codemirror/mode/" + languageMode + "/" + languageMode + ".js";
   $("#langScript").attr("src", scriptSrc);
   $.getScript(scriptSrc, function(){
