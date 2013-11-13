@@ -35,7 +35,7 @@
 			<nav class="navbar navbar-default navbar-inverse" role="navigation">
 			  <!-- Brand and toggle get grouped for better mobile display -->
 			  <div class="navbar-header">
-			    <a class="navbar-brand" href="#">Whiteboard Interviewer</a>
+			    <a class="navbar-brand" href="index.html">Whiteboard Interviewer</a>
 			  </div>
 
 			  <!-- Collect the nav links, forms, and other content for toggling -->
@@ -45,11 +45,12 @@
 			      <li><a href="#">Team</a></li>
 			      <li><a href="#">Contact</a></li>
 			    </ul>
-			    <ul class="nav navbar-nav navbar-right">
-			      <li><button type="button" class="btn btn-danger">Create Session</button></li>
+			    <!-- 
+				<ul class="nav navbar-nav navbar-right">
+			      <li><button id="main-createBtn" data-toggle="modal" href="#createForm" type="button" class="btn btn-danger">Create Session</button></li>
 			      <li><button data-toggle="modal" href="#myModal" class="btn btn-primary">Join Session</button>
-
-			    </ul>
+			    </ul> 
+				-->
 			  </div><!-- /.navbar-collapse -->
 			</nav>
 
@@ -154,33 +155,12 @@
 				
 			</div> <!-- /container -->
 		</div><!-- /container -->
-
-		<!-- Button trigger modal -->
-		<!-- Modal - Triggered by clicking join session -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">Enter Session ID</h4>
-					</div>
-					<div class="modal-body">
-						Text Here
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Submit</button>
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
 		
-		
-
 		<!-- Load JS Assets Last, rather than in HEAD. Prevents DOM blocking -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/supersized.min.js"></script>
 		<script src="js/helloworld.js"></script>
+		<script src="js/createSession.js"></script>
 	</body>
 </html>
