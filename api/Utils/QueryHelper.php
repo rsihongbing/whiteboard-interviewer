@@ -1,5 +1,6 @@
 <?php
 require_once 'DBConnectionHelper.php';
+require_once 'InputValidator.php';
 
 class QueryHelper {
 
@@ -129,15 +130,15 @@ class QueryHelper {
 			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
 		
 		// Check the sanity of the given email addresses.
-		if (!static::isEmailValid($interviewer_email)) {
+		if (!InputValidator::isEmailValid($interviewer_email)) {
 			throw new Exception("Invalid interviewer email: $interviewer_email", 6);
 		}
-		if (!static::isEmailValid($interviewee_email)) {
+		if (!InputValidator::isEmailValid($interviewee_email)) {
 			throw new Exception("Invalid interviewee email: $interviewee_email", 6);
 		}
 		
 		// Ensures that the interview date is valid.
-		if (!is_null($date) && !static::isDateValid($date)) {
+		if (!is_null($date) && !InputValidator::isDateValid($date)) {
 			throw new Exception("Invalid date: $date", 6);
 		}
 
@@ -145,41 +146,6 @@ class QueryHelper {
 			throw new Exception("Interviewee's password already exists", 3);
 		if ($this->check_password($interviewer_password) == 1)
 			throw new Exception("Interviewer's password already exists", 4);
-	}
-	
-	/**
-	 * Validates email address.
-	 * 
-	 * @param string $email
-	 * @return boolean
-	 * 	true iff the given email address is valid
-	 */
-	private static function isEmailValid($email) {
-		return !!filter_var($email, FILTER_VALIDATE_EMAIL);
-	}
-	
-	/**
-	 * Ensures that the given date is in the Y-m-d H:i:s format, and it's a future date.
-	 *  
-	 * @param string $date
-	 * @return boolean
-	 * 	true iff the given date is in the right format, and it's a future date.
-	 */
-	private static function isDateValid($date) {
-		$expectedFormat = "Y-m-d H:i:s";
-		$d = DateTime::createFromFormat($expectedFormat, $date);
-		return $d && $d->format($expectedFormat) == $date && static::isFuture($date);
-	}
-	
-	/**
-	 * Ensures that the given date is a future date.
-	 * 
-	 * @param string $date
-	 * @return boolean
-	 * 	true iff the given date happens to be in the future.
-	 */
-	private static function isFuture($date) {
-		return (strtotime($date) > time());
 	}
 
 	/**
