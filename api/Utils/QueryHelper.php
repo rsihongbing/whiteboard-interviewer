@@ -183,6 +183,10 @@ class QueryHelper {
 	}
 
 	/**
+	 * TODO: From Yosan to Danny
+	 * I'm planning to add this to REST. Hence, if this function fails for some reason, we want to
+	 * know why so that we can display the error to the user.
+	 *
 	 *
 	 * @param varchar(25) $name
 	 * @param varchar(30) $email
