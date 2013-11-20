@@ -70,7 +70,7 @@ class QueryHelper {
 			$interview_date = $this->quote($interview_date);
 				
 			// validate the given parameter
-			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password);
+			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $interview_date);
 				
 			$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
 			$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
@@ -100,6 +100,7 @@ class QueryHelper {
 	 * @param varchar(50) $interviewer_password
 	 * @param varchar(30) $interviewee_email
 	 * @param varchar(50) $interviewee_password
+	 * @param string $date optional
 	 *
 	 * @throws Exception if
 	 * 	<ul>
@@ -107,9 +108,11 @@ class QueryHelper {
 	 * 		<li>both emails are the same</li>
 	 * 		<li>either email is not in the database</li>
 	 * 		<li>both passwords already exist</li>
+	 * 		<li>either one of the email is invalid</li>
+	 * 		<li>the given date is not in the right format, or it happens to be in the past</li>
 	 * </ul>
 	 */
-	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password) {
+	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $date = null) {
 		if ($this->check_url($url) == 1)
 			throw new Exception("Same URL exists in the database", 0);
 
@@ -124,12 +127,59 @@ class QueryHelper {
 
 		if ($interviewee_password == $interviewer_password)
 			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
+		
+		// Check the sanity of the given email addresses.
+		if (!static::isEmailValid($interviewer_email)) {
+			throw new Exception("Invalid interviewer email: $interviewer_email", 6);
+		}
+		if (!static::isEmailValid($interviewee_email)) {
+			throw new Exception("Invalid interviewee email: $interviewee_email", 6);
+		}
+		
+		// Ensures that the interview date is valid.
+		if (!is_null($date) && !static::isDateValid($date)) {
+			throw new Exception("Invalid date: $date", 6);
+		}
 
-		// XXX: Why not?
 		if ($this->check_password($interviewee_password) == 1)
 			throw new Exception("Interviewee's password already exists", 3);
 		if ($this->check_password($interviewer_password) == 1)
 			throw new Exception("Interviewer's password already exists", 4);
+	}
+	
+	/**
+	 * Validates email address.
+	 * 
+	 * @param string $email
+	 * @return boolean
+	 * 	true iff the given email address is valid
+	 */
+	private static function isEmailValid($email) {
+		return !!filter_var($email, FILTER_VALIDATE_EMAIL);
+	}
+	
+	/**
+	 * Ensures that the given date is in the Y-m-d H:i:s format, and it's a future date.
+	 *  
+	 * @param string $date
+	 * @return boolean
+	 * 	true iff the given date is in the right format, and it's a future date.
+	 */
+	private static function isDateValid($date) {
+		$expectedFormat = "Y-m-d H:i:s";
+		$d = DateTime::createFromFormat($expectedFormat, $date);
+		return $d && $d->format($expectedFormat) == $date && static::isFuture($date);
+	}
+	
+	/**
+	 * Ensures that the given date is a future date.
+	 * 
+	 * @param string $date
+	 * @return boolean
+	 * 	true iff the given date happens to be in the future.
+	 */
+	private static function isFuture($date) {
+		return (strtotime($date) > time());
 	}
 
 	/**

@@ -76,7 +76,7 @@ class JSONConstructor {
 				);
 				return json_encode($result);
 			} catch (Exception $ex) {
-				if ($ex->getCode() == 1 || $ex->getCode() == 5) {
+				if ($ex->getCode() == 1 || $ex->getCode() == 5 || $ex->getCode() == 6) {
 					// Either interviewer's and interviewee's email is the same, or email hasn't
 					// been registered in the database yet. Reject.
 					$result = array(
