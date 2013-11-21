@@ -138,10 +138,8 @@ class QueryHelper {
 			throw new Exception("Invalid interviewee email: $interviewee_email", 6);
 		}
 		
-		// Ensures that the interview date is valid. //!is_null($date) && 
-		if (!InputValidator::isDateValid($date)) {
-			var_dump($date);
-			var_dump(InputValidator::isDateValid($date));
+		// Ensures that the interview date is valid. 
+		if (!is_null($date) && !InputValidator::isDateValid($date)) {
 			throw new Exception("Invalid date: $date", 6);
 		}
 
