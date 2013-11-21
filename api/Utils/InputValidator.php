@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * A static class that handles validation.  
+ * @author ynamara
+ */
 class InputValidator {
 	/** Ensure non-instantiability */
 	private function __construct() {
