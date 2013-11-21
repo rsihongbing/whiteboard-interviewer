@@ -65,18 +65,19 @@ class QueryHelper {
 			$interview_title = NULL, $interview_description = NULL)
 	{
 		try {
-
-			$interview_title = $this->quote($interview_title);
-			$interview_description = $this->quote($interview_description);
-			$interview_date = $this->quote($interview_date);
-				
 			// validate the given parameter
 			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $interview_date);
 				
 			$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
 			$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
 				
+			// XXX: Quote just before we insert the tuple to the database, otherwise validate_info
+			// will fail due to the extra quotation mark.
+			
 			// create the tuple
+			$interview_title = $this->quote($interview_title);
+			$interview_description = $this->quote($interview_description);
+			$interview_date = $this->quote($interview_date);
 			$interviewer_email = $this->quote($interviewer_email);
 			$interviewee_email = $this->quote($interviewee_email);
 			$interviewee_password = $this->quote($interviewee_password);
@@ -137,8 +138,10 @@ class QueryHelper {
 			throw new Exception("Invalid interviewee email: $interviewee_email", 6);
 		}
 		
-		// Ensures that the interview date is valid.
-		if (!is_null($date) && !InputValidator::isDateValid($date)) {
+		// Ensures that the interview date is valid. //!is_null($date) && 
+		if (!InputValidator::isDateValid($date)) {
+			var_dump($date);
+			var_dump(InputValidator::isDateValid($date));
 			throw new Exception("Invalid date: $date", 6);
 		}
 
