@@ -9,6 +9,10 @@
     	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     	<link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
 
+        <!-- User List -->
+        <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+        <script src="collaboration/userList.js"></script>  
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 		<script src="http://simplewebrtc.com/latest.js"></script>
 		<script src="collaboration/video.js"></script>
@@ -76,7 +80,7 @@
 								<div id="remotes"></div>
 		 					</div>    
 						</div>
-                        <div class="row" id="presenceDiv"></div>
+                        <div class="row" id="presenceDiv">Active User:<br/></div>
 					</div>
 
 					<iframe class="col-sm-8" id="textEditor" src="collaboration/editor.html" scrolling="no" width=100%></iframe>
