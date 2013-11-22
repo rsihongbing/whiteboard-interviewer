@@ -146,7 +146,7 @@ class QueryHelper {
 		
 		// Ensures that the interview date is valid. 
 		if (!is_null($date) && !InputValidator::isDateValid($date)) {
-			throw new Exception("Invalid date: $date", 7);
+			throw new Exception("Invalid date: $date", 6);
 		}
 
 
