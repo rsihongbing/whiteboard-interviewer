@@ -8,12 +8,23 @@ require_once '../Utils/MailSender.php';
 class TestMailSender extends UnitTestCase {
 	function testSendEmailToEveryone() {
 		$this->assertTrue(MailSender::sendEmail(
-				"claramoore@speakeasy.net,
-				 tuanvo@uw.edu,
+				"tuanvo@uw.edu,
 				dannych@uw.edu,
 				ctjong@uw.edu,
 				ynamara@cs.washington.edu,
-				rsihongbing@gmail.com", "Email controller test", "Hello kids!\nThis email is sent from cubist"));
+				rsihongbing@gmail.com", "Email controller test", "Sorry to bother, testing email"));
+	}
+	
+	function testNotifyInterview() {
+		$erEmail =
+				"tuanvo@uw.edu,
+				dannych@uw.edu,
+				ctjong@uw.edu,
+				ynamara@cs.washington.edu,
+				rsihongbing@gmail.com";
+		$time = date("Y-m-d H:i:s", strtotime("+1 day"));
+		$url = "http://cubist.cs.washington.edu/~ynamara/beta.html?url=NL7zd7BNGBLTzb3UgxxUsBjYAc1xmWy0ywoBsQfZhQJHSCrZ0P&pid=KigU6HXY59Kt08Pfz8WFY4mxB50TUPzwYGgUd4I94jsTh80H7L";
+		$this->assertTrue(MailSender::notifyInterview($erEmail, $time, $url));
 	}
 	
 	// Shameful copy-paste from the internet...
@@ -415,8 +426,8 @@ body, td { font-family: HelveticaNeue, sans-serif; }
 	</tr>
 </tbody></table></body></html>
 EOF;
-		$this->assertTrue(MailSender::sendEmail("claramoore@speakeasy.net,
-				 tuanvo@uw.edu,
+		$this->assertTrue(MailSender::sendEmail(
+				"tuanvo@uw.edu,
 				dannych@uw.edu,
 				ctjong@uw.edu,
 				ynamara@cs.washington.edu,
