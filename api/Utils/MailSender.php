@@ -1,6 +1,8 @@
 <?php
+require_once 'Template.php';
+
 /**
- * A Static class that abstracts email sending process.  
+ * A Static class that abstracts email sending process.
  * @author ynamara
  */
 class MailSender {
@@ -15,8 +17,41 @@ class MailSender {
 	}
 
 	/**
+	 * Sends the interview sessions' URL to the users.
+	 * @param string $mailTo
+	 * 	must be a valid email address
+	 * @param string $interviewDate
+	 * 	must be a valid date
+	 * @param string $interviewURL
+	 * 	must be a valid URL
+	 * @return boolean
+	 * 	true upon success, false otherwise.
+	 */
+	public static function notifyInterview($mailTo, $interviewDate, $interviewURL) {
+		// Convert SQL date to a more user-friendly format.
+		$interviewDay = date("l, F d, Y", strtotime($interviewDate));
+		$interviewTime = date("g:i:s a", strtotime($interviewDate));
+
+		// Inject the desired values to our template. Note that order matters.
+		$message = Template::getNotifyInterview();
+		
+		
+		$replacePatterns = array();
+		$replacePatterns[0] = '/\{date\}/' ;
+		$replacePatterns[1] = '/\{url\}/' ;
+
+		$replacementValue = array();
+		$replacementValue[0] = $interviewDay . " at " . $interviewTime;
+		$replacementValue[1] = $interviewURL;
+
+		$message = preg_replace($replacePatterns, $replacementValue, $message);
+		
+		return static::sendEmail($mailTo, "Whiteboard Interviewer: Your Interview Schedule", $message);
+	}
+
+	/**
 	 * Sends email.
-	 * 
+	 *
 	 * @param string $to
 	 * 	email destination. Multiple destination can be separated with a comma.
 	 * @param string $subject
@@ -39,3 +74,4 @@ class MailSender {
 	}
 }
 ?>
+
