@@ -121,15 +121,21 @@ class QueryHelper {
 		if ($interviewee_email == $interviewer_email)
 			throw new Exception("Interviewer's email and interviewee email cannot be the same", 1);
 
+		if ($interviewee_password == $interviewer_password)
+			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
+
+		if ($this->check_password($interviewee_password) == 1)
+			throw new Exception("Interviewee's password already exists", 3);
+
+		if ($this->check_password($interviewer_password) == 1)
+			throw new Exception("Interviewer's password already exists", 4);
+
 		if ($this->check_email($interviewee_email) == 0)
 			throw new Exception("No such email: $interviewee_email registered",5);
 
 		if ($this->check_email($interviewer_email) == 0)
 			throw new Exception("No such email: $interviewer_email registered",5);
 
-		if ($interviewee_password == $interviewer_password)
-			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
-		
 		// Check the sanity of the given email addresses.
 		if (!InputValidator::isEmailValid($interviewer_email)) {
 			throw new Exception("Invalid interviewer email: $interviewer_email", 6);
@@ -140,21 +146,13 @@ class QueryHelper {
 		
 		// Ensures that the interview date is valid. 
 		if (!is_null($date) && !InputValidator::isDateValid($date)) {
-			throw new Exception("Invalid date: $date", 6);
+			throw new Exception("Invalid date: $date", 7);
 		}
 
-		if ($this->check_password($interviewee_password) == 1)
-			throw new Exception("Interviewee's password already exists", 3);
-		if ($this->check_password($interviewer_password) == 1)
-			throw new Exception("Interviewer's password already exists", 4);
+
 	}
 
 	/**
-	 * TODO: From Yosan to Danny
-	 * I'm planning to add this to REST. Hence, if this function fails for some reason, we want to
-	 * know why so that we can display the error to the user.
-	 *
-	 *
 	 * @param varchar(25) $name
 	 * @param varchar(30) $email
 	 * @param varchar(1) $gender
@@ -163,14 +161,18 @@ class QueryHelper {
 	 * @effect
 	 * 		add user to the database if same person has not exist in the database which is identified by the email
 	 *
-	 * @return
-	 * 		true if success, false same email exists
+	 * @throw
+	 * 		Exception when email is not valid
 	 */
 	public function add_user($email, $name = NULL, $gender = NULL, $phone = NULL)
 	{
 		try {
+			if (!InputValidator::isEmailValid($email)) {
+				throw new Exception("Invalid email: $interviewee_email", 6);
+			}
+
 			if ( $this->check_email($email) ) {
-				return false;
+				throw new Exception("Existing email: $email", 8);
 			}
 			
 			$name =  $this->quote($name);
@@ -180,15 +182,10 @@ class QueryHelper {
 				
 			$query = "INSERT INTO `dannych_cse403c`.`users` (`name`, `gender`, `email`, `phone`) VALUES ($name, $gender, $email, $phone)";
 				
-			
-				
 			$this->execute($query);
 		} catch (Exception $e) {
-
-			return false;
+			throw $e;
 		}
-
-		return true;
 	}
 
 	/**
