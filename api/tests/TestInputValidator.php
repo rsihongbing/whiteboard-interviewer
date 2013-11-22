@@ -22,25 +22,25 @@ class TestInputValdator extends UnitTestCase {
 	}
 	
 	function testFuture() {
-		$this->assertTrue(InputValidator::isFutureOrNow(date("Y-m-d", strtotime("+1 day"))));
-		$this->assertTrue(InputValidator::isFutureOrNow(date("Y-m-d", strtotime("+0 day"))));
+		$this->assertTrue(InputValidator::isFuture(date("Y-m-d H:i:s", strtotime("+1 day"))));
 	}
 	
 	function testNotFuture() {
-		$this->assertFalse(InputValidator::isFutureOrNow(date("Y-m-d", strtotime("-1 day"))));
+		$this->assertFalse(InputValidator::isFuture(date("Y-m-d H:i:s", strtotime("-1 day"))));
+		$this->assertFalse(InputValidator::isFuture(date("Y-m-d H:i:s", strtotime("+0 day"))));
 	}
 	
 	function testDateInvalid() {
 		$this->assertFalse(InputValidator::isDateValid("hello"));
 		$this->assertFalse(InputValidator::isDateValid("01/01/2020"));
 		$this->assertFalse(InputValidator::isDateValid("1234/12/12"));
-		$this->assertFalse(InputValidator::isDateValid(date("Y-m-d", strtotime("-1 day"))));
+		$this->assertFalse(InputValidator::isFuture(date("Y-m-d H:i:s", strtotime("-1 day"))));
+		$this->assertFalse(InputValidator::isFuture(date("Y-m-d H:i:s", strtotime("+0 day"))));
 	}
 	
 	function testDateValid() {
-		$this->assertTrue(InputValidator::isDateValid(date("Y-m-d", strtotime("+0 day"))));
-		$this->assertTrue(InputValidator::isDateValid(date("Y-m-d", strtotime("+1 day"))));
-		$var = date("Y-m-d", strtotime("+1 day"));
+		$this->assertTrue(InputValidator::isDateValid(date("Y-m-d H:i:s", strtotime("+1 day"))));
+		$var = date("Y-m-d H:i:s", strtotime("+1 day"));
 		$this->assertTrue($var);
 	}
 }
