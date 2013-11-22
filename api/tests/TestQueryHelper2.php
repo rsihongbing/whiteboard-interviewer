@@ -25,7 +25,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		// existing url
 		try {
-			$this->expectException($helper->create_session('a46qwr803na24', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asdasd' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ));
+			$this->expectException($helper->create_session('a46qwr803na24', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ));
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode() , 0);
 			$countr++;	
@@ -33,7 +33,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		try {
 	 		// same interviewer/ee emails
-			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'dannych@uw.edu', 'asd', 'asdasd' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'dannych@uw.edu', 'asd', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode(), 1);
 			$countr++;
@@ -41,7 +41,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		try {
 	 		// same interviewer/ee password
-			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asd' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode(), 2);
 			$countr++;
@@ -49,7 +49,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		try {
 	 		// existing interviewer password
-			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'gj37hadnkds', 'asdasd' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'gj37hadnkds', 'asdasd' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode(), 4);
 			$countr++;
@@ -57,7 +57,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		try {
 	 		// existing interviewee password
-			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asd2135jrtk' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'dannych@uw.edu', 'ynamara@uw.edu', 'asd', 'asd2135jrtk' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode(), 3);
 			$countr++;
@@ -65,7 +65,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		try {
 			// not exist interviewer email
-			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'test@uw.edu', 'ynamara@uw.edu', 'asd', 'afwefb' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'test@uw.edu', 'ynamara@uw.edu', 'asd', 'afwefb' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode(), 5);
 			$countr++;
@@ -73,7 +73,7 @@ class QueryHelperTest extends UnitTestCase {
 		
 		try {
 			// not exist interviewer email
-			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'ynamara@uw.edu', 'test2@uw.edu', 'asd', 'afwefb' , date("Y-m-d", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
+			$this->assertFalse($helper->create_session('asdfqwer123423fasd', 'ynamara@uw.edu', 'test2@uw.edu', 'asd', 'afwefb' , date("Y-m-d H:i:s", strtotime("+1 day")), 'asdasdasd', 'qwerqwer' ) );
 		} catch (Exception $e) {
 			$this->assertEqual( $e->getCode(), 5);
 			$countr++;
@@ -126,7 +126,7 @@ class QueryHelperTest extends UnitTestCase {
 
 	function testAddandDropSession() {
 		$helper = new QueryHelper();
-		$time = date("Y-m-d", strtotime("+1 day"));
+		$time = date("Y-m-d H:i:s", strtotime("+1 day"));
 		// add new session
 		$num_interview_rows_before = $this->tcount($helper, "interviews");
 		$helper->create_session('vrabstd7', 'dannych@uw.edu' ,  'ynamara@uw.edu', 'asdu4w97vny' , '89uwn5by98', $time , 'Waddap', 'Testing' );
@@ -147,7 +147,7 @@ class QueryHelperTest extends UnitTestCase {
 		$this->assertEqual($session['interviewer_password'],'asdu4w97vny' );
 		$this->assertEqual($session['interviewee_id'],2 );
 		$this->assertEqual($session['interviewee_password'],'89uwn5by98' );
-		$this->assertEqual(date("Y-m-d",strtotime($session['date_scheduled'])), $time );
+		$this->assertEqual(date("Y-m-d H:i:s",strtotime($session['date_scheduled'])), $time );
 		
 		
 		// drop seession

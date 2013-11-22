@@ -161,15 +161,23 @@ $(document).ready(function() {
 	 *
 	 * this function does the real work of checking the syntax
 	 */
-	function checkDateValue(date) {
-		if (date == null || date == "")
+	function checkDateValue(datetime) {
+		if (datetime == null || datetime == "")
 			return false;
 
-		var pattern = new RegExp(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
-		var inputs = date.split("-");
-		var now = new Date();
+		var dateAndTime = parseDateTime(datetime);
 
-		return inputs[0] >= now.getFullYear() && inputs[1] >= now.getMonth() && inputs[2] >= now.getDate() && pattern.test(date);
+		if (dateAndTime == null)
+			return false;
+
+		var now = new Date();
+		var input = new Date(dateAndTime[1],dateAndTime[2],dateAndTime[3],dateAndTime[4],dateAndTime[5]);
+
+		return  input.getTime() >= now.getTime() ;
+	}
+
+	function parseDateTime(datetime) {
+		return datetime.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})/);
 	}
 
 	/**
@@ -177,11 +185,9 @@ $(document).ready(function() {
  	 */
 	function defaultToday() {
 		var now = new Date();
- 
-		var day = ("0" + now.getDate()).slice(-2);
-		var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
-		today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+		var today = now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate()+"T"
+			+ now.getHours()+":"+now.getMinutes();
 
 		return today;
 	}
@@ -255,7 +261,22 @@ $(document).ready(function() {
 	 * perform the request data from the web server
 	 */
 	function jqueryFetchRequest() {
-		$.post("api/REST.php", $("#interviewform").serialize(), jqueryShowResponse)
+		var interviewTitle = encodeURI($('#interviewTitle').val());
+		var interviewDescription = encodeURI($('#interviewDescription').val());
+		var interviewerEmail = encodeURI($('#interviewerEmail').val());
+		var intervieweeEmail = encodeURI($('#intervieweeEmail').val());
+
+		var raw = parseDateTime($('#interviewDate').val());
+
+		var interviewDate = encodeURI(raw[1]+"-"+raw[2]+"-"+raw[3]+" "+raw[4]+":"+raw[5]+":"+"00");
+
+		var parameter = 'title=' + interviewTitle
+			+ '&description=' + interviewDescription
+			+ '&interviewer_email=' + interviewerEmail
+			+ '&interviewee_email=' + intervieweeEmail
+			+ '&date_scheduled=' + interviewDate;
+
+		$.post('api/REST.php', parameter, jqueryShowResponse)
 			.fail(jqueryShowFailure);
 	}
 	
