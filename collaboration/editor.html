@@ -15,8 +15,8 @@
 <style>
 html { height: 100%; }
 body { margin: 0; height: 100%; position: relative; background-color: #DDD; font-family:"Myriad pro", "Calibri", "Sans-serif";}
-#firepad-container{ width: 90%; margin:0 auto;}
-.firepad{ height:500px; }
+#editor-container{ width: 90%; margin:0 auto;}
+.editor{ height:500px; }
 </style>
 
 </head>
@@ -24,18 +24,20 @@ body { margin: 0; height: 100%; position: relative; background-color: #DDD; font
 <body>
 
 <div style="margin:5px; text-align:center;">Language Mode : <select id='languages'></select></div>
-<div id="firepad-container"></div>
+<div id="editor-container"></div>
 
 <script>
 
-function initFirepad(languageMode, languageMime, containerId){
+function initEditor(languageMode, languageMime, containerId){
   var scriptSrc = "codemirror/mode/" + languageMode + "/" + languageMode + ".js";
   $("#langScript").attr("src", scriptSrc);
   $.getScript(scriptSrc, function(){
     $("#" + containerId).html("");
-    var firepadRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor2');
+    var room = "" + (window.location != window.parent.location) ? document.referrer: document.location;
+    room = room.substring(room.indexOf('?'), room.indexOf('&'));
+    var editorRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor/' + room);
     var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
-    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
+    var editor = Firepad.fromCodeMirror(editorRef, codeMirror);
   });
 }
 
@@ -43,7 +45,7 @@ function langChanged(){
   var langId = $("#languages").val();
   var langMode = CodeMirror.modeInfo[langId].mode;
   var langMime = CodeMirror.modeInfo[langId].mime;
-  initFirepad(langMode, langMime, "firepad-container");
+  initEditor(langMode, langMime, "editor-container");
   focusSelect(langMime);
 }
 
@@ -68,7 +70,7 @@ $(document).ready(function(){
   });
   initSelect();
   focusSelect("text/x-java");
-  initFirepad("clike", "text/x-java", "firepad-container" );
+  initEditor("clike", "text/x-java", "editor-container" );
 });
 
 </script>

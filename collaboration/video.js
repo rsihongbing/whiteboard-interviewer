@@ -1,5 +1,5 @@
 //grab the room from the URL
-var room = 'hello';//location.search;// && location.search.split('?')[1];
+var room = location.search.split('&')[0];
 
 // create our webrtc connection
 var webrtc = new SimpleWebRTC({
