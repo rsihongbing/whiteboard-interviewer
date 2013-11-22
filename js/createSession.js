@@ -1,14 +1,180 @@
+/**
+ * This JavaScript control the animation and behavior in the "Create Sesion" modal
+ * 
+ * @author dannych
+ */
+(function( $ ){
 $(document).ready(function() {
 
-	// assign event listener to corresponding button
-	// inside the create session window
-	$("#createBtn").click(submitForm);
+	/**
+	 * Assign event hander to their corresponding object
+	 */
+
+	// buttons event
+	$("#createBtn").click(checkForm);
 	$("#resetBtn").click(resetForm);
 	$("#newBtn").click(reinitializeForm);
 	
-	defaultToday();
+	// inputs event
+	$('#interviewerEmail').focusout(checkEmail);
+	$('#intervieweeEmail').focusout(checkEmail);
+	$('#interviewDate')
+		.focusout(checkDate)
+		.val(defaultToday());
+
+	/**
+	 * Reset the effect given
+	 */
+	$.fn.hasNormal = function() {
+		$(this).parent().removeClass("has-success has-error");
+	};
+
+	/**
+	 * Create the effect on the object (input)
+	 * when the value of the object is not valid
+	 */
+	$.fn.hasError = function() {
+		$(this).hasNormal();
+		$(this).parent().addClass("has-error");
+	};
+
+	/**
+	 * Create the effect on the object (input)
+	 * when the value of the object is valid
+	 */
+	$.fn.hasSuccess = function() {	
+		$(this).hasNormal();
+		$(this).parent().addClass("has-success");
+	};
+
 	
+	/**
+	 * Recheck all the elements in the form
+	 *
+	 * If all the elements are valid then submit the form
+	 * otherwise the place where the error is taking placing is shown
+	 */
+	function checkForm() {
+		var erEmail = $('#interviewerEmail');
+		var eeEmail = $('#intervieweeEmail');
+		var date = $('#interviewDate');
+
+		var checkErEmail = checkEmailValue(erEmail.val());
+		var checkEeEmail = checkEmailValue(eeEmail.val());
+		var checkSimilar = erEmail.val() != eeEmail.val();
+		var checkDate = checkDateValue(date.val());
+
+		if ( checkEeEmail && checkErEmail && checkDate && checkSimilar ) {
+			submitForm();
+		} else {
+			if ( checkErEmail ) {
+				erEmail.hasSuccess();
+			} else {
+				erEmail.hasError();
+			}	
+
+			if ( checkEeEmail ) {
+				eeEmail.hasSuccess();
+			} else {
+				eeEmail.hasError();
+			}
+
+			if ( checkDate ) {
+				date.hasSuccess();
+			} else {
+				date.hasError();
+			}
+
+			if ( !checkSimilar ) {
+				erEmail.hasError();
+				eeEmail.hasError();
+			}
+		} 
+	}
 	
+	/**
+	 * Check the email inputted by user
+	 *
+	 * Triggered when user finish inputting the email
+	 * 
+	 * - Checked the syntax of the email not the validity 
+	 * - Checked the similarity of the other email
+	 */
+	function checkEmail() {
+		var i = $(this);
+		var email = i.val();
+		if (checkEmailValue(email)) {
+			i.hasSuccess();
+		} else {
+			i.hasError();
+		}
+
+		checkSimilarEmail()
+	}
+
+	/**
+	 * Check the value(string) of the email
+	 * 
+	 * this function do the real work checking the email's syntax
+	 */
+	function checkEmailValue(email) {
+		if (email == null || email == "" ){
+			return false;
+		}
+		var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+		return pattern.test(email);
+	}
+
+	/**
+	 * Check the similarity of the value of all the emails
+	 *
+	 * Interviewer email cannot be the same as interviewee email
+	 */
+	function checkSimilarEmail() {
+		var email = $('.email');
+		
+		if ($(email[0]).val() == $(email[1]).val())
+			email.each( function() {
+				$(this).hasError();
+			});
+	}
+
+	/**
+	 * Check the date syntax and validity
+	 *
+	 * Triggered when the user finished inputting the date 
+	 * in the input field
+	 */
+	function checkDate() {
+		var i = $(this);
+		var input_date = i.val();
+
+		if ( checkDateValue(input_date) ) {
+			i.hasSuccess();
+		} else {
+			i.hasError();
+		}
+	}
+
+	/**
+	 * Check the date value (String) 
+	 *
+	 * this function does the real work of checking the syntax
+	 */
+	function checkDateValue(date) {
+		if (date == null || date == "")
+			return false;
+
+		var pattern = new RegExp(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/);
+		var inputs = date.split("-");
+		var now = new Date();
+
+		return inputs[0] >= now.getFullYear() && inputs[1] >= now.getMonth() && inputs[2] >= now.getDate() && pattern.test(date);
+	}
+
+	/**
+ 	 * Get the String value of today's date
+ 	 */
 	function defaultToday() {
 		var now = new Date();
  
@@ -17,51 +183,65 @@ $(document).ready(function() {
 
 		today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
-		$('#interviewDate').val(today);
+		return today;
 	}
 	
-	// executed when "Reset" Button is clicked
-	//
-	// clear all the input fields in the create session form
-	function resetForm() {	
-		$("#interviewTitle").val("");
-		$("#interviewDescription").val("");
-		//$("#interviewDescription").html("");
-		$("#interviewDate").val("");
-		
-		// disabled for alpha release
-		//$("#interviewerEmail").val("");
-		//$("#intervieweeEmail").val("");
-		
-		defaultToday();
+	/**
+	 * Reset all the input field in the form
+	 *
+	 * executed when "Reset" Button is clicked
+	 *
+	 * clear all the input fields in the create session form
+	 */
+	function resetForm() {
+		$('#interviewTitle').val('');
+		$('#interviewDescription').val('');
+		$('#interviewDate')
+			.val(defaultToday())
+			.hasNormal();
+		$("#interviewerEmail")
+			.val('')
+			.hasNormal();
+		$("#intervieweeEmail")
+			.val('')
+			.hasNormal();
 	}
 	
-	// executed when "New Session" button is clicked
-	//
-	// reinitialize the button states
-	// and reset to blank form
+	/**
+	 * Create a state of the form just like the beginning 
+	 *
+	 * executed when "New Session" button is clicked
+	 *
+	 * reinitialize the button states
+	 * and reset to blank form
+	 */
 	function reinitializeForm() {
+		$("#resultloading").show('fast');
 		$("#formarea").show('slow');
-		$("#resultarea").hide('slow');
+		$("#resultarea").hide();
+		$("#resultmessage").hide('slow');
 		$("#createBtn").removeAttr("disabled");
-		$("#resetBtn").show().removeAttr("disabled");		
+		$("#resetBtn").show().removeAttr("disabled");
 		
 		$("#newBtn").hide();
 		
-		resetForm();
+		if ($(this).val() === "true")
+			resetForm();
 	}
 		
-	// executed when "Submit" button is clicked
-	//
-	// change some of the buttons' state
-	// and send request to the web server then show the response
+	/**	
+	 * executed when "Submit" button is clicked and pass all the checking
+	 *
+	 * change some of the buttons' state
+	 * and send request to the web server then show the response
+	 */
 	function submitForm() {
 		// show loading .gif and close the form
 		// and disabling "Submit" button
 		$("#formarea").hide('slow');
 		$("#resultarea").show('slow');
 		$("#createBtn").attr("disabled","disable");
-		$("#resetBtn").attr("disabled","disable");	
+		$("#resetBtn").attr("disabled","disable");
 		
 		// fetch data
 		jqueryFetchRequest();
@@ -69,89 +249,54 @@ $(document).ready(function() {
 		// after (successfully/failed) fetching
 		// show "Create New Session" button
 		$("#resetBtn").hide();
-		$("#newBtn").show();
 	}
 	
-	// perform the request data from the web server
+	/**
+	 * perform the request data from the web server
+	 */
 	function jqueryFetchRequest() {
 		$.post("api/REST.php", $("#interviewform").serialize(), jqueryShowResponse)
 			.fail(jqueryShowFailure);
 	}
 	
-	// this function is called when the server make a (good/bad) response
-	// good:
-	// - session created successfully
-	// bad:
-	// - bad input from user
+	/**
+	 * this function is called when the server make a (good/bad) response
+	 * good:
+	 * - session created successfully
+	 * bad:
+	 * - bad input from user
+	 *
+	 * show appropiate message to user in the given area
+	 */
 	function jqueryShowResponse(data) {
-		$("#resultloading").hide('fast');
-		
+		$("#resultloading").hide();
+		$("#newBtn").show();
 		var area = $("#resultmessage");
-		
+		area.show();
 		if( data.code == 1) {
-				area.html("Your interview session is succesfully scheduled");
+				area.html("Your interview session is succesfully scheduled, please check you email");
+				$("#newBtn").val(true);
 		} else {
-				area.html("Something wrong with your request");
+				area.html("Something wrong with your request! \n" + data['failure_reason']);
+				$("#newBtn").val(false);
 		}
 	}
 	
-	// this function is called when there is no response from server
-	// because of:
-	// - bad request(not from user)
-	// - server down
+	/**
+	 * this function is called when there is no response from server
+	 * because of:
+	 * - bad request(not from user)
+	 * - server down
+	 *
+	 * show appropiate message to user in the given area
+	 */
 	function jqueryShowFailure() {
 		$("#resultloading").hide('fast');
 		
+		$("#resultmessage").show();
 		$("#resultmessage").html("Server Error: Please try again later!");
+		$("#newBtn").val(false);
 	}
-			
-	function afterFetch() {
-				
-	}
-			
-	// old codes:
-	// references...		
-	function fetchRequest() {
-		var xmlhttp;
-		if (window.XMLHttpRequest) {
-			// code for IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp=new XMLHttpRequest();
-		} else {
-			// code for IE6, IE5
-			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}	
-					
-		xmlhttp.onload = showResponse;
-		xmlhttp.open("POST","api/REST.php",true);
-				
-		var title = encodeURIComponent($("#interviewTitle").val());
-		var description = encodeURIComponent($("#interviewDescription").val());
-		var interviewerEmail = encodeURIComponent($("#interviewerEmail").val());
-		var intervieweeEmail = encodeURIComponent($("#intervieweeEmail").val());
-		var date = encodeURIComponent($("#interviewDate").val());
-				
-		var parameters="interviewer_email="+interviewerEmail+"&interviewee_email="+intervieweeEmail+"&date_scheduled="+date+"&title="+title+"&description="+description;
-				
-		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				
-		xmlhttp.send(parameters);
-	}
-			
-			
-			
-	function showResponse() {
-		// hide loading .gif
-		$("#resultloading").hide('fast');
-	
-		var area = $("#resultmessage");
-		if( this.status == 200 ) {
-			var json = JSON.parse(this.responseText);
-			
-			if( json.code == 1) {
-				area.html("Your interview session is succesfully scheduled");
-			} else {
-				area.html("Something wrong with your request");
-			}
-		}
-	}
+		
 });
+})( jQuery );
