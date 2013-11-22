@@ -87,12 +87,12 @@
 							<form id="joininterviewform" role="form" action="POST">
 								<div class="form-group">
 									<label for="interviewID">Interview ID</label>
-									<input type="text" class="form-control" id="interviewID" placeholder="Interview ID sent to your email" name="url" value="AlphaSession">
+									<input type="text" class="form-control" id="interviewID" placeholder="Interview ID sent to your email" name="url">
 								</div>
 								
 								<div class="form-group">
 									<label for="interviewPassword">Secret Key</label>
-									<input type="text" class="form-control" id="interviewDescription" placeholder="Secret key sent to your email" name="key" value="anythinggoesin">
+									<input type="text" class="form-control" id="interviewSecretKey" placeholder="Secret key sent to your email" name="key">
 								</div>
 							
 						   </form>
@@ -102,7 +102,6 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Didn't Receive Any Email?</button>
 						<a type="button" class="btn btn-primary" href="./alpha.html">Join</a>
-						<!--<button type="button" class="btn btn-primary" href="./alpha.html">Join</button>-->
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
@@ -120,33 +119,37 @@
 					<div class="modal-body">
 						
 						<div id="formarea">
-							<form id="interviewform" role="form" action="POST">
+							<form id="interviewform" role="form">
+
 								<div class="form-group">
-									<label for="interviewTitle">Title</label>
-									<input type="text" class="form-control" id="interviewTitle" placeholder="Your Title" name="title" value="Alpha Session">
+									<label class="control-label" for="interviewTitle">Title</label>
+									<input type="text" class="form-control" id="interviewTitle" placeholder="Your Title" name="title">
 								</div>
 								
 								<div class="form-group">
-									<label for="interviewDescription">Description</label>
-									<textarea class="form-control" rows="5" id="interviewDescription" placeholder="Add description" name="description">Don't change the email addresses below, since it will add junks and increase auto increment :) Don't forget to fill the interview date! It's easy thanks to HTML5</textarea>
+									<label class="control-label" for="interviewDescription">Description</label>
+									<textarea class="form-control" rows="5" id="interviewDescription" placeholder="Add description" name="description"></textarea>
 								</div>
-							
+	
 								<div class="form-group">
-									<label for="interviewerEmail">Interviewer Email*</label>
-									<input type="email" class="form-control" id="interviewerEmail" placeholder="Enter email" name="interviewer_email" value="dannych@uw.edu" required>
+									<label class="control-label" for="interviewerEmail">Interviewer Email*</label>
+									<input type="email" class="form-control email" id="interviewerEmail" placeholder="Enter email" name="interviewer_email">
+								</div>
+								
+								
+								<div class="form-group">
+									<label class="control-label" for="intervieweeEmail">Interviewee Email*</label>
+									<input type="email" class="form-control email" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email">
 								</div>
 								
 								<div class="form-group">
-									<label for="intervieweeEmail">Interviewer Email*</label>
-									<input type="email" class="form-control" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email" value="ynamara@uw.edu" required>
+									<label class="control-label" for="intervieweDate">Interview date*</label>
+									<input type="date" class="form-control" id="interviewDate" name="date_scheduled">
 								</div>
 								
-								<div class="form-group">
-									<label for="intervieweDate">Interview date*</label>
-									<input type="date" class="form-control" id="interviewDate" name="date_scheduled" required>
-								</div>
+								<input id="createBtn" type="submit button" class="btn btn-primary" value= "Create">
 						   
-						   </form>
+						  </form>
 						</div>
 						
 						<div id="resultarea" style="display: none;">
@@ -162,7 +165,7 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button id="newBtn" type="button" class="btn btn-success" style="display: none;">New Session</button>
 						<button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
-						<button id="createBtn" type="button" class="btn btn-primary">Create</button>
+						<!-- <button id="createBtn" type="button" class="btn btn-primary">Create</button> -->
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
