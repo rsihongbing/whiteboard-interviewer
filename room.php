@@ -42,7 +42,8 @@ if($x == 0)  header( 'Location: 404.html' );
         .video{ background-color:black; }
 		#leftMenu {	background-color: #eeeeee; }
   		#textEditor { font-family: courier; border:0; height:600px; }
-        #content { background-color:rgba(255,255,255,0.75); padding:50px; border-radius:25px;}
+
+.cols{float:left; position:relative;}
     	</style>
         
 	</head>
@@ -67,17 +68,15 @@ if($x == 0)  header( 'Location: 404.html' );
 			</nav>
 
 			<!-- put content here -->
-		    <div class="container" id="content">
+		    <div style="background-color:rgba(255,255,255,0.75); padding:50px; border-radius:25px; overflow:hidden; height:550px; width:1150px;">
 
-				<div class="row">
-					<div class="col-sm-4">
-                        <div style="position:relative; margin:30px auto;">
-                            <video id="remote" class="video" style="position:absolute; top:0; left:0; width:300px; height:400px;"></video>
-                            <video id="local" class="video" style="position:absolute; top:300px; left:200px; width:100px; height: 100px; z-index:100;"></video>
+  <div class="row" style="position:relative;">
+					<div style="position:absolute; top:30px; left:0;">
+                            <video id="remote" class="video" style="position:absolute; top:0; left:0; width:300px; height:400px;z-index:1;"></video>
+                            <video id="local" class="video" style="position:absolute; top:300px; left:200px; width:100px; height: 100px; z-index:2;"></video>
                         </div>
-					</div>
 
-					<div class="col-sm-8">
+					<div style="position:absolute; top:0; left:350px; z-index:3; width:700px;">
                         <div style="margin:5px; text-align:center;">Language Mode : <select id='languages'></select></div>
                         <div id="editor-container"></div>
                     </div>
