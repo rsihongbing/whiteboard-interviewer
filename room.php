@@ -42,8 +42,8 @@ if($x == 0)  header( 'Location: 404.html' );
         .video{ background-color:black; }
 		#leftMenu {	background-color: #eeeeee; }
   		#textEditor { font-family: courier; border:0; height:600px; }
-
 .cols{float:left; position:relative;}
+#remote video{width:100%;}
     	</style>
         
 	</head>
@@ -71,9 +71,9 @@ if($x == 0)  header( 'Location: 404.html' );
 		    <div style="background-color:rgba(255,255,255,0.75); padding:50px; border-radius:25px; overflow:hidden; height:550px; width:1150px;">
 
   <div class="row" style="position:relative;">
-					<div style="position:absolute; top:30px; left:0;">
-                            <video id="remote" class="video" style="position:absolute; top:0; left:0; width:300px; height:400px;z-index:1;"></video>
-                            <video id="local" class="video" style="position:absolute; top:300px; left:200px; width:100px; height: 100px; z-index:2;"></video>
+					<div style="position:absolute; top:30px; left:0; height:400px; width:300px; overflow:hidden;">
+                            <div id="remote" class="video" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
+                            <video id="local" class="video" style="position:absolute; top:250px; left:100px; width:100px; height: 100px; z-index:2;"></video>
                         </div>
 
 					<div style="position:absolute; top:0; left:350px; z-index:3; width:700px;">
