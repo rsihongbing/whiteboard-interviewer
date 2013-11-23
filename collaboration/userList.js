@@ -1,6 +1,6 @@
 // Prompt the user for a name to use.
 var name = prompt("Please enter your name", "Guest"),
-           room = "hello"; //TODO: assign to the correct room name/URL
+           room = location.search.split('&')[0];
 
 // Get a reference to the presence data in Firebase.
 var userListRef = new Firebase("https://whiteboard-user.firebaseIO.com/");
@@ -23,8 +23,7 @@ function getMessageId(snapshot) {
 }
 
 function getCurrentRoomURL() {
-  //TODO: when unique url is integrated, need to return the right url.
-  return "hello";
+  return location.search.split('&')[0];
 }
 
 // Update our GUI to show someone"s online status.

@@ -1,5 +1,0 @@
-AuthName "Whiteboard Interviewer Development Sandbox"
-AuthType Basic
-AuthUserFile /projects/instr/cubist/13au/cse403/cse403g/dev/.htpasswd
-AuthGroupFile /dev/null
-require valid-user
