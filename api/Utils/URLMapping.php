@@ -77,8 +77,9 @@ class URLMapping {
 			return $rootDomain . "/~ctjong/";
 		} else if (preg_match('/~tuanvo/', $path)) {
 			return $rootDomain . "/~tuanvo/";
+		} else if (preg_match('/~bing04/', $path)) {
+			return $rootDomain . "/~bing04/";
 		}
-		// TODO: Roy, I don't know your csenetid.
 	}
 	
 	/**
