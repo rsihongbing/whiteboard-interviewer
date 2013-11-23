@@ -84,7 +84,7 @@
 					</div>
 					<div class="modal-body">
 						<div id="joinformarea">
-							<form id="joininterviewform" role="form" action="POST">
+							<form id="joininterviewform" role="form" action="room.php" method="get">
 								<div class="form-group">
 									<label for="interviewID">Interview ID</label>
 									<input type="text" class="form-control" id="interviewID" placeholder="Interview ID sent to your email" name="url">
@@ -92,7 +92,7 @@
 								
 								<div class="form-group">
 									<label for="interviewPassword">Secret Key</label>
-									<input type="text" class="form-control" id="interviewSecretKey" placeholder="Secret key sent to your email" name="key">
+									<input type="text" class="form-control" id="interviewSecretKey" placeholder="Secret key sent to your email" name="pid">
 								</div>
 							
 						   </form>
@@ -101,8 +101,8 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Didn't Receive Any Email?</button>
-						<a type="button" class="btn btn-primary" href="./alpha.html">Join</a>
-					</div>
+						<button type="button" class="btn btn-primary" id="joinButton">Join</button>
+					</div> 
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
@@ -181,6 +181,12 @@
 		<script src="js/supersized.min.js"></script>
 		<script src="js/helloworld.js"></script>
 		<script src="js/createSession.js"></script>
+        
+        <script> $("#joinButton").click(function(){ $("#joininterviewform").submit(); }); </script>
+        
+        </script>
+        
+        
 	</body>
 	
 </html>

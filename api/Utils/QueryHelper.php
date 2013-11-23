@@ -48,6 +48,26 @@ class QueryHelper {
 	}
 
 	/**
+	 * Validate login credentials
+	 * @param $url url of the interview
+	 * @param $key secret key 
+	 * @return
+	 *  0 if the login credential is invalid
+     *  1 if the login succeed for an interviewer
+     *  2 if the login succeed for an interviewee
+	 */
+	public function validate_login($url, $key) {
+		$res = $this->get_session($url);
+		if($res["interviewee_password"] == $key){
+            return 2;
+        }else if($res["interviewer_password"] == $key){
+            return 1;
+        }else{
+            return 0;
+        }
+	}
+
+	/**
 	 *
 	 * @param varchar(50) $url
 	 * @param varchar(30) $interviewer_email

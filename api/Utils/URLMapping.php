@@ -11,7 +11,7 @@ class URLMapping {
 	 * Path to the interview room relative to the project directory. This is where we invite
 	 * interviewer/ee to go.
 	 */
-	private static $PathToInterviewRoom = "beta.html";
+	private static $PathToInterviewRoom = "room.php";
 	
 	
 	/** Ensure non-instantiability */
