@@ -73,9 +73,11 @@ function InterviewForm() {
 	}
 
 	this.initializeTime = function() {
-		$_time
-			.val('')
-			.normal();
+		if( !$_time.is(':disabled') ) {
+			$_time
+				.val('')
+				.normal();
+		}
 	}
 
 	/**
