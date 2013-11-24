@@ -25,7 +25,6 @@
 			var date = ev.date.getDate();
 
 			if ( !$('#interviewTime').is(':disabled') ) {
-				form.initializeTime();
 				$('#timepicker')
 					.datetimepicker('remove')
 					.datetimepicker({
@@ -38,6 +37,8 @@
 						endDate: new Date(year,month,date+1,23,59)
 					})
 					.on('hide', form.checkTime);
+
+				form.initializeTime();
 			}
 		});
 
@@ -64,6 +65,21 @@
 
 	$('#timeFormToggle').click(function() {
 		if ( $('#interviewTime').is(':disabled') ) {
+			var dates = $('#interviewDate').val();
+			var yearMonthDate = dates.split('/');
+
+
+			$('#timepicker')
+				.datetimepicker({
+						autoclose: true,
+						maxView: 1,
+						startView: 1,
+						minuteStep: 5,
+						forceParse: false,
+						startDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2]),
+						endDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2],23,59)
+				});
+
 			$('#interviewTime')
 				.val('')
 				.prop('disabled',false);
