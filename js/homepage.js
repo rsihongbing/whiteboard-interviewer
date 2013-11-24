@@ -78,7 +78,8 @@
 						forceParse: false,
 						startDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2]),
 						endDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2],23,59)
-				});
+				})
+				.on('hide', form.checkTime);
 
 			$('#interviewTime')
 				.val('')
