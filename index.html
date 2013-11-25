@@ -8,8 +8,9 @@
 
    		<!-- Bootstrap -->
     	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    	<link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
+    	<link rel="stylesheet" href="css/supersized.core.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
+    	<link rel="stylesheet" href="css/scrolltotop.css" media="screen">
     	<style>
     		body {
     			padding-top: 20px;
@@ -378,9 +379,11 @@
 				</div>
 			</div>
 		</div><!-- /.form -->
-		
-		<div class="navbar navbar-fixed-bottom">
-			
+
+
+		<!-- Scroll to top Button -->
+		<div>
+			<a href="#" class="scroll-to-top">Go Top</a>
 		</div>
 
 		<!-- Load JS Assets Last, rather than in HEAD. Prevents DOM blocking -->
@@ -395,7 +398,8 @@
     	<script src="js/homepage.js" type="text/javascript"></script>
     	<!-- "eased" scrolling for anchor links to anchors -->
    		<script src='js/smooth-scroll.js'></script>
-        
+        <!-- Event handler for button that scrolls to top of page -->
+        <script src="js/scrolltotop.js"></script>
         
 	</body>
 	
