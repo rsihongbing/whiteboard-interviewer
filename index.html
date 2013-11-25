@@ -20,11 +20,50 @@
     			margin-top: 8px;
     			margin-bottom: 8px;
     		}
+    		.content {
+    			background-color: #eeeeee;
+    			border-bottom-left-radius: 6px;
+
+    			border-bottom-right-radius: 6px;
+    			margin: 0px;
+  				padding: 30px;
+  				margin-bottom: 30px;
+    		}
+    		.content .media {
+    			border-radius: 6px;
+    			padding: 10px;
+    		}
+    		.media-right {
+    			background-color: white;
+    		}
+
+    		h2.content-header {
+    			background-color: #222222;
+  				border-color: #080808;
+  				color: white;
+  				border-top-left-radius: 4px;
+  				border-top-right-radius: 4px;
+  				margin: 0px;
+  				padding-top: 8px;
+  				padding-bottom: 8px;
+  				padding-left: 15px;
+    		}
+    		.jumbotron.jumbotron-no-top-radius {
+    			border-top-right-radius: 0px;
+    			border-top-left-radius: 0px;
+    		}
+    		.list-group-item:hover {
+    			background-color: #428bca;
+    			color: white;
+    			text-decoration: none;
+    		}
+
     	</style>
 	</head>
 	<body>
 	
 		<div class="container">
+
 			<div class="alert alert-danger alert-dismissable">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				<strong>Update!</strong> Now you can create a session! Just click "Create Session"
@@ -43,9 +82,9 @@
 			  <!-- Collect the nav links, forms, and other content for toggling -->
 			  <div class="collapse navbar-collapse navbar-ex1-collapse">
 			    <ul class="nav navbar-nav">
-			      <li class="active"><a href="#">Intro</a></li>
-			      <li><a href="#">Team</a></li>
-			      <li><a href="#">Contact</a></li>
+			      <li class="active"><a href="#content_intro">Intro</a></li>
+			      <li><a href="#content_team">Team</a></li>
+			      <li><a href="#content_legal">Legal</a></li>
 			    </ul>
 			    <ul class="nav navbar-nav navbar-right">
 			      <li><button id="main-createBtn" data-toggle="modal" href="#createForm" type="button" class="btn btn-danger">Create Session</button></li>
@@ -55,21 +94,147 @@
 			</nav>
 
 			<!-- put content here -->
-		    <div class="container">
-				<div class="jumbotron">
-					<div class="row featurette">
-						<div class="col-md-7">
-							<h2 class="featurette-heading">More code,<span class="text-muted"> less logistics.</span></h2>
-					          <p class="lead">Coding interviews are hard enough. And it definitely does not need to be made difficult by logistics. 
-					 		</p>
-						</div>
-						<div class="col-md-5">
-							<img class="featurette-image img-rounded" src="img/coding.png">
-       					</div>
-       				</div>
+			<div class="container" id="content_intro">
+				<h2 class="content-header">Intro</h2>
+		    	<div class="container content">
+					<div class="jumbotron">
+						<div class="row featurette">
+							<div class="col-md-7">
+								<h2 class="featurette-heading">More code,<span class="text-muted"> less logistics.</span></h2>
+						          <p class="lead">Coding interviews are hard enough. And it definitely does not need to be made difficult by logistics. 
+						 		</p>
+							</div>
+							<div class="col-md-5">
+								<img class="featurette-image img-rounded" src="img/coding.png">
+	       					</div>
+	       				</div>
+					</div>
 				</div>
 			</div> <!-- /container -->
 
+
+			<!-- put content here -->
+		    <div class="container" id="content_team">
+		    	<h2 class="content-header">The Team</h2>
+		    	<div class="container content">
+					<div class="media">
+						  <a class="pull-left" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/yosan.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">YOSAN<span class="text-muted"> Server Side Services</span></h4>
+						  		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim lobortis porttitor. Suspendisse potenti. Fusce tempor, velit eget ultricies tempus, elit mi mattis velit, a lobortis massa enim sit amet dui. Fusce vel risus id risus rhoncus fermentum ut nec est. Aenean ultricies odio a eros facilisis, sed venenatis dui porttitor. Proin tortor augue, mattis in imperdiet in, ullamcorper sed risus. Aliquam vestibulum nulla id fringilla gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus consequat tortor sed dui imperdiet lacinia. Suspendisse potenti. Praesent hendrerit dapibus rhoncus. Aenean nulla nibh, tempor nec tincidunt ac, egestas aliquet sem. Donec sed nisl leo.
+						</div>
+					</div>
+
+					<div class="media media-right">
+						  <a class="pull-right" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/ROI.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">ROI<span class="text-muted"> Colloborative Text Editor</span></h4>
+						  		Aenean gravida hendrerit nulla, eu bibendum ligula tempor sit amet. Nulla turpis tortor, ultricies et facilisis quis, molestie vel lorem. Praesent egestas ipsum eget massa consectetur laoreet. Morbi vitae magna nec ligula feugiat tincidunt. Nam quis neque volutpat, tristique lacus et, rhoncus sem. Cras pellentesque leo eget dictum scelerisque. Etiam ipsum libero, laoreet eget bibendum vel, ultricies varius nisl. Fusce volutpat ante a eros euismod, id facilisis risus porta. Proin ut nisl tempus, dapibus augue eget, consectetur leo.
+						</div>
+					</div>
+
+					<div class="media">
+						  <a class="pull-left" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/chris.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">CHRIS<span class="text-muted"> Build System & Development Tools</span></h4>
+						  		Pellentesque venenatis velit id libero euismod, vitae sagittis odio ultrices. Phasellus volutpat ornare tortor et blandit. Duis eget risus ligula. Cras iaculis, libero eu vehicula semper, augue magna fermentum nisl, nec pulvinar nulla tellus id magna. Duis at aliquet massa, nec ultricies nunc. Integer ac blandit sapien. Nullam consectetur, justo eget sodales vestibulum, turpis neque mollis odio, sed placerat metus nisl eget dolor.
+						</div>
+					</div>
+
+					<div class="media media-right">
+						  <a class="pull-right" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/danny.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">DANNY<span class="text-muted"> Database Design & Application Code</span></h4>
+						  		Vestibulum quam nulla, tempor eu dapibus sed, sodales ac diam. Donec quis rutrum lacus, sed luctus urna. Nullam in consequat purus, id commodo justo. Sed vel cursus magna. Etiam sodales ac velit sollicitudin molestie. Nunc mollis condimentum diam vel porttitor. Duis blandit nec massa non tincidunt. Etiam a leo ullamcorper, pretium magna quis, sodales magna. Curabitur tincidunt sodales quam, mollis lacinia diam malesuada vel. Proin lacinia ultrices libero, vel convallis erat gravida at
+						</div>
+					</div>
+
+					<div class="media">
+						  <a class="pull-left" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/tuan.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">TUAN<span class="text-muted"> Project Manager & Technical Lead</span></h4>
+						  		I focus on the high level aspects of the project. I figure out what core components needs to be developed,
+								and determine the appropriate resources, technologies, and people necessary to bring thee components to life. Consequently, this involves facilitating communication between our developers with one another, and relating our 
+								development to course staff. Most of my time is Issue Tracking, and writing... in English.  
+						</div>
+					</div>
+				</div>
+			</div> <!-- /container -->
+
+			<div class="container" id="content_legal">
+				<h2 class="content-header">Documents</h2>
+				<div class="jumbotron jumbotron-no-top-radius">
+					<div class="row featurette">
+						<div class="md-col-12">
+							<p>These are documents related to our development</p>
+							<ul class="list-group">
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+										Requirements
+								</li>
+								<li class="list-group-item">
+									<span class="badge">docx</span>
+									UI Doc
+								</li>
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+									Design Doc
+								</li>
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+									Design Doc Diagram - High Level UML
+								</li>
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+									UML - Database Helper
+								</li>
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+									UML - QueryHelper
+								</li>
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+									Alpha Release
+								</li>
+								<li class="list-group-item">
+									<span class="badge">pdf</span>
+									Beta Presentation Outline
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container" id="content_legal">
+				<h2 class="content-header">Legal</h2>
+				<div class="jumbotron jumbotron-no-top-radius">
+					<div class="row featurette">
+						<div class="md-col-12">
+							<p>
+			    				Our code is open source, and can be seen at <a href="https://github.com/ctjong/whiteboard-interviewer">GitHub</a>.
+			    				We used open source code and tools in our project, here is a list:
+			    			</p>
+			    			<ul  class="list-group">
+			    				<a href="http://simplewebrtc.com/" target="_blank"><li class="list-group-item">SimpleWebRTC</li></a>
+			    				<a href="http://www.firepad.io/" target="_blank"><li class="list-group-item">FirePad</li></a>
+			    				<a href="http://getbootstrap.com/" target="_blank"><li class="list-group-item">Twitter Bootstrap</li></a>
+			    				<a href="http://jquery.com/" target="_blank"><li class="list-group-item">jQuery</li></a>
+			    			</ul>
+			    		</div>
+		    		</div>
+		    	</div>
+		    </div> 
 
 
 		</div><!-- /container -->
