@@ -1,11 +1,13 @@
 // Scroll to top of page
 console.log("Loaded ScrollToTop.js");
-
 $(document).ready(function() {
 	// ms to scroll to top
 	var SCROLL_TOP_TIME = 1000;
 	// class selector for elements that trigger scrolling
 	var SCROLL_TOP_CLASS = "scroll-to-top";
+
+	// Initialize Scroll to Top button to be hidden
+	$("." + SCROLL_TOP_CLASS).fadeOut(0);
 
 	// Show or hide the sticky footer button
 	$(window).scroll(function() {
