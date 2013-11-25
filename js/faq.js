@@ -5,8 +5,7 @@ $(document).ready(function() {
 	console.log("Loaded JS Component: faq.js");
 	console.log("\tThis component will fail to load in chrome local file access, will be fine on HTTP server");
 	var faqURL = "docs/faq.json";
-	// DOM selector for container to inject FAQ into
-	var faqDOM = "#faq";
+	
 
 	$.getJSON(faqURL, function (data) {
 		console.log("\t faq.js: in $.getJSON");
@@ -18,7 +17,7 @@ $(document).ready(function() {
 		});
 		$( "<div/>", {
 			html: items.join( "" )
-		}).appendTo(faqDOM);
+		}).appendTo("#faq");
 
 	});
 });

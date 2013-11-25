@@ -1,14 +1,17 @@
 {"faq": [
 	{
-		"q": "What?",
-		"a": "yes"
+		"q": "Do I need a webcam to use Whiteboard Interviewer?",
+		"a": "Yes, if you want the person you are conferencing with to see you. Other than that, you do not need a webcam. You will be able to see video of the other person (provided they have a webcam), and also be able to utilize the colloborative text editor. Also, you have the option to have an audio only conference without video."
 	},
 	{
-		"q": "When?",
-		"a": "yes"
+		"q": "Why do you need my email?",
+		"a": "Whiteboard Interviewer aims to be non-invasive, which is also why we don't require you to mke an account. However, we require an email account to notify the partues associated with an interview of the interview details: time, unique url, etc. "
+	},
+	{	"q": "My Video is not working, why?",
+		"a": "Make sure you have the latest version of chrome and firefox. If you do not have video, make sure your webcam is installed correctly with the latest drivers. Also, make sure you gave your provide access to your webcam"
 	},
 	{
-		"q": "Why?",
-		"a": "yes"
+		"q": "Will Whiteboard Interviewer be able to access my webcam without permission?",
+		"a": "No. We utilize WebRTC, and your browser will explictly ask for your permission to allow or deny Whiteboard Interviewer from accessing your webcam"
 	}
 ]}
