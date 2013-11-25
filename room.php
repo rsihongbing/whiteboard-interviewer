@@ -90,8 +90,10 @@ if($x == 0)  header( 'Location: 404.html' );
 		<!-- Load JS Assets Last, rather than in HEAD. Prevents DOM blocking -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script src="js/supersized.min.js"></script>
-		<script src="js/helloworld.js"></script>
+		<!-- library for full screen background -->
+		<script src="js/supersized.min.js" type="text/javascript"></script>
+		<!-- Loads full screen background" -->
+		<script src="js/loadFullSizeBG.js" type="text/javascript"></script>
 		<script src="js/createSession.js"></script>
 		<script src="editor/editor.js"></script>
         
