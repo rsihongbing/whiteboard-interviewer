@@ -147,7 +147,7 @@ class QueryHelperTest extends UnitTestCase {
 		$this->assertEqual($session['interviewer_password'],'asdu4w97vny' );
 		$this->assertEqual($session['interviewee_id'],2 );
 		$this->assertEqual($session['interviewee_password'],'89uwn5by98' );
-		$this->assertEqual($session['date_scheduled'], $time );
+		$this->assertEqual(date("Y-m-d H:i:s",strtotime($session['date_scheduled'])), $time );
 		
 		
 		// drop seession

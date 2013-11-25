@@ -1,0 +1,14 @@
+/* CSS for scroll to top button */
+
+.scroll-to-top {
+	position: fixed;
+	left: 20px;
+	bottom: 20px;
+	font-weight: bold;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 16px;
+	padding: 1em;
+	border-radius: 4px;
+}

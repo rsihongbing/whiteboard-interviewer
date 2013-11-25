@@ -5,10 +5,17 @@
 		<title>Whiteboard Interview</title>
 
    		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
    		<!-- Bootstrap -->
     	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    	<link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
+    	<link rel="stylesheet" href="css/supersized.core.css" media="screen">
+    	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
+    	<link rel="stylesheet" href="css/scrolltotop.css" media="screen">
     	<style>
+    		body {
+    			padding-top: 20px;
+   				padding-bottom: 20px;
+    		}
     		.navbar {
     			margin-top: 10px;
     		}
@@ -18,12 +25,64 @@
     			margin-top: 8px;
     			margin-bottom: 8px;
     		}
-  
+    		.content {
+    			background-color: #eeeeee;
+    			border-bottom-left-radius: 6px;
+
+    			border-bottom-right-radius: 6px;
+    			margin: 0px;
+  				padding: 30px;
+  				margin-bottom: 30px;
+    		}
+    		.content .media {
+    			border-radius: 6px;
+    			padding: 10px;
+    		}
+    		.media-right {
+    			background-color: white;
+    		}
+
+    		h2.content-header {
+    			background-color: #222222;
+  				border-color: #080808;
+  				color: white;
+  				border-top-left-radius: 4px;
+  				border-top-right-radius: 4px;
+  				margin: 0px;
+  				padding-top: 8px;
+  				padding-bottom: 8px;
+  				padding-left: 15px;
+    		}
+    		.jumbotron.jumbotron-no-top-radius {
+    			border-top-right-radius: 0px;
+    			border-top-left-radius: 0px;
+    		}
+    		.list-group > a:hover {
+    			text-decoration: none;
+    		}
+    		.list-group-item:hover {
+    			background-color: #428bca;
+    			color: white;
+    			text-decoration: none;
+    		}
+    		.col-md-5 {
+    			border-radius: 5px;
+    			overflow: hidden;
+    		}
+
+    		#content_intro .row.featurette {
+    			margin-bottom: 50px;
+    		}
+
+    		#content_intro .row.featurette.last {
+    			margin-bottom: 0px;
+    		}
     	</style>
 	</head>
 	<body>
 	
 		<div class="container">
+
 			<div class="alert alert-danger alert-dismissable">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				<strong>Update!</strong> Now you can create a session! Just click "Create Session"
@@ -42,9 +101,11 @@
 			  <!-- Collect the nav links, forms, and other content for toggling -->
 			  <div class="collapse navbar-collapse navbar-ex1-collapse">
 			    <ul class="nav navbar-nav">
-			      <li class="active"><a href="#">Intro</a></li>
-			      <li><a href="#">Team</a></li>
-			      <li><a href="#">Contact</a></li>
+			      <li class="active"><a class="scroll" data-speed="1500" data-easing="easeInOutNormal" href="#content_intro">Philosophy</a></li>
+			      <li><a class="scroll" data-speed="1500" data-easing="easeInOutNormal" href="#content_team">Team</a></li>
+			      <li><a class="scroll" data-speed="1500" data-easing="easeInOutNormal" href="#content_documents">Documents</a></li>
+			      <li><a class="scroll" data-speed="1500" data-easing="easeInOutNormal" href="#content_legal">Legal</a></li>
+
 			    </ul>
 			    <ul class="nav navbar-nav navbar-right">
 			      <li><button id="main-createBtn" data-toggle="modal" href="#createForm" type="button" class="btn btn-danger">Create Session</button></li>
@@ -54,21 +115,208 @@
 			</nav>
 
 			<!-- put content here -->
-		    <div class="container">
-				<div class="jumbotron">
-					<div class="row featurette">
-						<div class="col-md-7">
-							<h2 class="featurette-heading">More code,<span class="text-muted"> less logistics.</span></h2>
-					          <p class="lead">Coding interviews are hard enough. And it definitely does not need to be made difficult by logistics. 
-					 		</p>
-						</div>
-						<div class="col-md-5">
-							<img class="featurette-image img-rounded" src="img/coding.png">
-       					</div>
-       				</div>
+			<div class="container" id="content_intro">
+				<h2 class="content-header">Philosophy</h2>
+		    	<div class="container content">
+					<div class="jumbotron">
+						<div class="row featurette">
+							<div class="col-md-7">
+								<h2 class="featurette-heading">More coding,<span class="text-muted"> less juggling.</span></h2>
+						        	<p class="lead">
+						        		Coding interviews are hard enough. And it definitely does not need to be made difficult by logistics.
+						        		Whiteboard Interviewer solves this by packaging together a suite of tools relevant to the 
+						        		programming interviewer. Interview performance should be measured by how well an interviewee
+						        		juggles between programs not intended for coding interviews... 
+
+						 			</p>
+
+							</div>
+							<div class="col-md-5">
+								<img class="featurette-image img-rounded" src="img/mainpage_intro/coding.png">
+	       					</div>
+	       				</div>
+	       				<div class="row featurette">
+	       					<div class="col-md-5">
+								<img class="featurette-image img-rounded" src="img/mainpage_intro/programmers.jpg">
+	       					</div>
+							<div class="col-md-7">
+								<h2 class="featurette-heading">For programmers,<span class="text-muted"> by programmers.</span></h2>
+						        	<p class="lead">
+						        		We asked, what would a programmer need and want? We've included a colloborative text editor with syntax highlighting for dozens of programming languages. The interviewee and interviewer can concurrently modify the 
+						        		text area, and see what the other is typing... live! 
+
+						 			</p>
+
+							</div>
+	       				</div>
+	       				<div class="row featurette">
+							<div class="col-md-7">
+								<h2 class="featurette-heading">Communicate<span class="text-muted">, naturally.</span></h2>
+						        	<p class="lead">
+						        		In addition to our colloborative text editor, Whiteboard Interviewer has video communication built in.
+						        		The minimum requirement is that the user has a webcam, or microphone. This provides for a truly
+						        		hands free coding experience. Whiteboard Interviewer is derived from the idea of being able to communicate
+						        		with the interviewer, as though they are in the same room.
+						 			</p>
+							</div>
+							<div class="col-md-5">
+								<img class="featurette-image img-rounded" src="img/mainpage_intro/communicate.jpg">
+	       					</div>
+	       				</div>
+
+	       				<div class="row featurette last">
+	       					<div class="col-md-5">
+								<img class="featurette-image img-rounded" src="img/mainpage_intro/streamline.jpg">
+	       					</div>
+							<div class="col-md-7">
+								<h2 class="featurette-heading">Streamline, <span class="text-muted"> everything</span></h2>
+						        	<p class="lead">
+						        		Whether it is the Application User Interface, or the process of creating and joining a session, 
+						        		Whiteboard Interviewer makes everything streamlined for the user. That's why a core feature
+						        		of Whiteboard Interview is a one-time password system, for account free registration. 
+
+						 			</p>
+							</div>
+	       				</div>
+					</div>
 				</div>
 			</div> <!-- /container -->
 
+
+			<!-- put content here -->
+		    <div class="container" id="content_team">
+		    	<h2 class="content-header">The Team</h2>
+		    	<div class="container content">
+					<div class="media">
+						  <a class="pull-left" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/yosan.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">YOSAN<span class="text-muted"> Server Side Services</span></h4>
+						  		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dignissim lobortis porttitor. Suspendisse potenti. Fusce tempor, velit eget ultricies tempus, elit mi mattis velit, a lobortis massa enim sit amet dui. Fusce vel risus id risus rhoncus fermentum ut nec est. Aenean ultricies odio a eros facilisis, sed venenatis dui porttitor. Proin tortor augue, mattis in imperdiet in, ullamcorper sed risus. Aliquam vestibulum nulla id fringilla gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus consequat tortor sed dui imperdiet lacinia. Suspendisse potenti. Praesent hendrerit dapibus rhoncus. Aenean nulla nibh, tempor nec tincidunt ac, egestas aliquet sem. Donec sed nisl leo.
+						</div>
+					</div>
+
+					<div class="media media-right">
+						  <a class="pull-right" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/ROI.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">ROI<span class="text-muted"> Colloborative Text Editor</span></h4>
+						  		Aenean gravida hendrerit nulla, eu bibendum ligula tempor sit amet. Nulla turpis tortor, ultricies et facilisis quis, molestie vel lorem. Praesent egestas ipsum eget massa consectetur laoreet. Morbi vitae magna nec ligula feugiat tincidunt. Nam quis neque volutpat, tristique lacus et, rhoncus sem. Cras pellentesque leo eget dictum scelerisque. Etiam ipsum libero, laoreet eget bibendum vel, ultricies varius nisl. Fusce volutpat ante a eros euismod, id facilisis risus porta. Proin ut nisl tempus, dapibus augue eget, consectetur leo.
+						</div>
+					</div>
+
+					<div class="media">
+						  <a class="pull-left" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/chris.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">CHRIS<span class="text-muted"> Build System & Development Tools</span></h4>
+						  		Pellentesque venenatis velit id libero euismod, vitae sagittis odio ultrices. Phasellus volutpat ornare tortor et blandit. Duis eget risus ligula. Cras iaculis, libero eu vehicula semper, augue magna fermentum nisl, nec pulvinar nulla tellus id magna. Duis at aliquet massa, nec ultricies nunc. Integer ac blandit sapien. Nullam consectetur, justo eget sodales vestibulum, turpis neque mollis odio, sed placerat metus nisl eget dolor.
+						</div>
+					</div>
+
+					<div class="media media-right">
+						  <a class="pull-right" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/danny.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">DANNY<span class="text-muted"> Database Design & Application Code</span></h4>
+						  		Vestibulum quam nulla, tempor eu dapibus sed, sodales ac diam. Donec quis rutrum lacus, sed luctus urna. Nullam in consequat purus, id commodo justo. Sed vel cursus magna. Etiam sodales ac velit sollicitudin molestie. Nunc mollis condimentum diam vel porttitor. Duis blandit nec massa non tincidunt. Etiam a leo ullamcorper, pretium magna quis, sodales magna. Curabitur tincidunt sodales quam, mollis lacinia diam malesuada vel. Proin lacinia ultrices libero, vel convallis erat gravida at
+						</div>
+					</div>
+
+					<div class="media">
+						  <a class="pull-left" href="#">
+						  	<img class="img-rounded" src="img/member_pictures/tuan.jpg">
+						  </a>
+						  <div class="media-body">
+						    <h4 class="featurette-heading text-center">TUAN<span class="text-muted"> Project Manager & Technical Lead</span></h4>
+						  		I focus on the high level aspects of the project. I figure out what core components needs to be developed,
+								and determine the appropriate resources, technologies, and people necessary to bring thee components to life. Consequently, this involves facilitating communication between our developers with one another, and relating our 
+								development to course staff. Most of my time is Issue Tracking, and writing... in English.  
+						</div>
+					</div>
+				</div>
+			</div> <!-- /container -->
+
+			<div class="container" id="content_documents">
+				<h2 class="content-header">Documents</h2>
+				<div class="jumbotron jumbotron-no-top-radius">
+					<div class="row featurette">
+						<div class="md-col-12">
+							<p>These are documents related to our development</p>
+							<ul class="list-group">
+								<a href="docs/ReqDocs_WhiteBoardInterviewer.docx">
+									<li class="list-group-item">
+										<span class="badge">docx</span>
+											Requirements
+									</li>
+								</a>
+								<a href="docs/UI.docx">
+									<li class="list-group-item">
+										<span class="badge">docx</span>
+										UI Doc
+									</li>
+								</a>
+								<a href="docs/designdoc_v2.doc">
+									<li class="list-group-item">
+										<span class="badge">doc</span>
+										Design Doc
+									</li>
+								</a>
+								<a href="docs/designdoc_diagram_withHighLevel.jpg" target="_blank">
+									<li class="list-group-item">
+										<span class="badge">jpg</span>
+										Design Doc Diagram - High Level UML
+									</li>
+								</a>
+								<a href="docs/uml_database_helper.jpg" target="_blank">
+									<li class="list-group-item">
+										<span class="badge">jpg</span>
+										UML - Database Helper
+									</li>
+								</a>
+								<a href="docs/uml_query_helper.jpg" target="_blank">
+									<li class="list-group-item">
+										<span class="badge">jpg</span>
+										UML - QueryHelper
+									</li>
+								</a>
+								<a href="docs/presentation_outline.docx">
+									<li class="list-group-item">
+										<span class="badge">docx</span>
+										Beta Presentation Outline
+									</li>
+								</a>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container" id="content_legal">
+				<h2 class="content-header">Legal</h2>
+				<div class="jumbotron jumbotron-no-top-radius">
+					<div class="row featurette">
+						<div class="md-col-12">
+							<p>
+			    				Our code is open source, and can be seen at <a href="https://github.com/ctjong/whiteboard-interviewer">GitHub</a>.
+			    				We used open source code and tools in our project, here is a list:
+			    			</p>
+			    			<ul  class="list-group">
+			    				<a href="http://simplewebrtc.com/" target="_blank"><li class="list-group-item">SimpleWebRTC</li></a>
+			    				<a href="http://www.firepad.io/" target="_blank"><li class="list-group-item">FirePad</li></a>
+			    				<a href="http://getbootstrap.com/" target="_blank"><li class="list-group-item">Twitter Bootstrap</li></a>
+			    				<a href="http://jquery.com/" target="_blank"><li class="list-group-item">jQuery</li></a>
+			    				<a href="http://buildinternet.com/project/supersized/" target="_blank"><li class="list-group-item">Supersized</li></a>
+			    				<a href="https://github.com/smalot/bootstrap-datetimepicker" target="_blank"><li class="list-group-item">Bootstrap-Datetimepicker</li></a>
+			    			</ul>
+			    		</div>
+		    		</div>
+		    	</div>
+		    </div> 
 
 
 		</div><!-- /container -->
@@ -84,15 +332,15 @@
 					</div>
 					<div class="modal-body">
 						<div id="joinformarea">
-							<form id="joininterviewform" role="form" action="POST">
+							<form id="joininterviewform" role="form" action="room.php" method="get">
 								<div class="form-group">
 									<label for="interviewID">Interview ID</label>
-									<input type="text" class="form-control" id="interviewID" placeholder="Interview ID sent to your email" name="url" value="AlphaSession">
+									<input type="text" class="form-control" id="interviewID" placeholder="Interview ID sent to your email" name="url">
 								</div>
 								
 								<div class="form-group">
 									<label for="interviewPassword">Secret Key</label>
-									<input type="text" class="form-control" id="interviewDescription" placeholder="Secret key sent to your email" name="key" value="anythinggoesin">
+									<input type="text" class="form-control" id="interviewSecretKey" placeholder="Secret key sent to your email" name="pid">
 								</div>
 							
 						   </form>
@@ -101,15 +349,12 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Didn't Receive Any Email?</button>
-						<a type="button" class="btn btn-primary" href="./alpha.html">Join</a>
-						<!--<button type="button" class="btn btn-primary" href="./alpha.html">Join</button>-->
-					</div>
+						<button type="button" class="btn btn-primary" id="joinButton">Join</button>
+					</div> 
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 		
-		<!-- Button trigger modal -->
-		<!-- Modal - Triggered by clicking create session -->
 		<div class="modal fade" id="createForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -120,33 +365,65 @@
 					<div class="modal-body">
 						
 						<div id="formarea">
-							<form id="interviewform" role="form" action="POST">
+							<form id="interviewform" role="form">
+
 								<div class="form-group">
-									<label for="interviewTitle">Title</label>
-									<input type="text" class="form-control" id="interviewTitle" placeholder="Your Title" name="title" value="Alpha Session">
+									<label class="control-label" for="interviewTitle">Title</label>
+									<input type="text" class="form-control" id="interviewTitle" placeholder="Your Title" name="title">
 								</div>
 								
 								<div class="form-group">
-									<label for="interviewDescription">Description</label>
-									<textarea class="form-control" rows="5" id="interviewDescription" placeholder="Add description" name="description">Don't change the email addresses below, since it will add junks and increase auto increment :) Don't forget to fill the interview date! It's easy thanks to HTML5</textarea>
+									<label class="control-label" for="interviewDescription">Description</label>
+									<textarea class="form-control" rows="5" id="interviewDescription" placeholder="Add description" name="description"></textarea>
 								</div>
-							
+	
 								<div class="form-group">
-									<label for="interviewerEmail">Interviewer Email*</label>
-									<input type="email" class="form-control" id="interviewerEmail" placeholder="Enter email" name="interviewer_email" value="dannych@uw.edu" required>
+									<label class="control-label" for="interviewerEmail">Interviewer Email*</label>
+									<input type="email" class="form-control email" id="interviewerEmail" placeholder="Enter email" name="interviewer_email">
+								</div>
+								
+								
+								<div class="form-group">
+									<label class="control-label" for="intervieweeEmail">Interviewee Email*</label>
+									<input type="email" class="form-control email" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email">
 								</div>
 								
 								<div class="form-group">
-									<label for="intervieweeEmail">Interviewer Email*</label>
-									<input type="email" class="form-control" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email" value="ynamara@uw.edu" required>
+									
+									<label class="control-label" for="intervieweDate">Interview Date*</label>
+
+									<div id="datepicker" class="input-group date" data-date="" data-date-format="yyyy/mm/dd">
+										
+										<input type="text" class="form-control" id="interviewDate" name="date_scheduled" placeholder="yyyy/mm/dd">
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-calendar icon-calendar"></i>
+										</span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									
+									<label class="control-label" for="intervieweTime">Interview Time</label>
+
+									<div id="timepicker" class="input-group date" data-date="" data-date-format="hh:ii">
+
+										<span class="input-group-addon">
+											<i id="timeFormToggle" class="glyphicon glyphicon-plus"></i>
+										</span>
+
+										<input type="text" class="form-control" id="interviewTime" name="date_scheduled" placeholder="hh:mm" disabled>
+
+										<span class="input-group-addon">
+											<i class="glyphicon glyphicon-time icon-time"></i>
+										</span>
+										
+										
+									</div>
 								</div>
 								
-								<div class="form-group">
-									<label for="intervieweDate">Interview date*</label>
-									<input type="date" class="form-control" id="interviewDate" name="date_scheduled" required>
-								</div>
+								<input id="createBtn" type="submit button" class="btn btn-primary" value= "Create">
 						   
-						   </form>
+						  </form>
 						</div>
 						
 						<div id="resultarea" style="display: none;">
@@ -162,22 +439,33 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button id="newBtn" type="button" class="btn btn-success" style="display: none;">New Session</button>
 						<button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
-						<button id="createBtn" type="button" class="btn btn-primary">Create</button>
+						<!-- <button id="createBtn" type="button" class="btn btn-primary">Create</button> -->
 					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-		
-		<div class="navbar navbar-fixed-bottom">
-			
+				</div>
+			</div>
+		</div><!-- /.form -->
+
+
+		<!-- Scroll to top Button -->
+		<div>
+			<a href="#" class="scroll-to-top">Go Top</a>
 		</div>
 
 		<!-- Load JS Assets Last, rather than in HEAD. Prevents DOM blocking -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/supersized.min.js"></script>
-		<script src="js/helloworld.js"></script>
-		<script src="js/createSession.js"></script>
+		<script src="js/jquery.min.js" type="text/javascript"></script>
+		<script src="js/bootstrap.min.js" type="text/javascript"></script>
+		<!-- library for full screen background -->
+		<script src="js/supersized.min.js" type="text/javascript"></script>
+		<!-- Loads full screen background" -->
+		<script src="js/loadFullSizeBG.js" type="text/javascript"></script>
+		<script src="js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>	
+		<script src="js/Form.js" type="text/javascript"></script>	
+    	<script src="js/homepage.js" type="text/javascript"></script>
+    	<!-- "eased" scrolling for anchor links to anchors -->
+   		<script src='js/smooth-scroll.js'></script>
+        <!-- Event handler for button that scrolls to top of page -->
+        <script src="js/scrolltotop.js"></script>
+        
 	</body>
 	
 </html>

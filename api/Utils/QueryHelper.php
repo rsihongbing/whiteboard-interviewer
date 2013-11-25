@@ -1,5 +1,6 @@
 <?php
 require_once 'DBConnectionHelper.php';
+require_once 'InputValidator.php';
 
 class QueryHelper {
 
@@ -47,6 +48,26 @@ class QueryHelper {
 	}
 
 	/**
+	 * Validate login credentials
+	 * @param $url url of the interview
+	 * @param $key secret key 
+	 * @return
+	 *  0 if the login credential is invalid
+     *  1 if the login succeed for an interviewer
+     *  2 if the login succeed for an interviewee
+	 */
+	public function validate_login($url, $key) {
+		$res = $this->get_session($url);
+		if($res["interviewee_password"] == $key){
+            return 2;
+        }else if($res["interviewer_password"] == $key){
+            return 1;
+        }else{
+            return 0;
+        }
+	}
+
+	/**
 	 *
 	 * @param varchar(50) $url
 	 * @param varchar(30) $interviewer_email
@@ -64,18 +85,19 @@ class QueryHelper {
 			$interview_title = NULL, $interview_description = NULL)
 	{
 		try {
-
-			$interview_title = $this->quote($interview_title);
-			$interview_description = $this->quote($interview_description);
-			$interview_date = $this->quote($interview_date);
-				
 			// validate the given parameter
-			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password);
+			$this->validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $interview_date);
 				
 			$interviewee_id = $this->find_user_by_email($interviewee_email)['id'];
 			$interviewer_id = $this->find_user_by_email($interviewer_email)['id'];
 				
+			// XXX: Quote just before we insert the tuple to the database, otherwise validate_info
+			// will fail due to the extra quotation mark.
+			
 			// create the tuple
+			$interview_title = $this->quote($interview_title);
+			$interview_description = $this->quote($interview_description);
+			$interview_date = $this->quote($interview_date);
 			$interviewer_email = $this->quote($interviewer_email);
 			$interviewee_email = $this->quote($interviewee_email);
 			$interviewee_password = $this->quote($interviewee_password);
@@ -100,6 +122,7 @@ class QueryHelper {
 	 * @param varchar(50) $interviewer_password
 	 * @param varchar(30) $interviewee_email
 	 * @param varchar(50) $interviewee_password
+	 * @param string $date optional
 	 *
 	 * @throws Exception if
 	 * 	<ul>
@@ -107,14 +130,25 @@ class QueryHelper {
 	 * 		<li>both emails are the same</li>
 	 * 		<li>either email is not in the database</li>
 	 * 		<li>both passwords already exist</li>
+	 * 		<li>either one of the email is invalid</li>
+	 * 		<li>the given date is not in the right format, or it happens to be in the past</li>
 	 * </ul>
 	 */
-	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password) {
+	private function validate_info($url,$interviewer_email, $interviewer_password, $interviewee_email, $interviewee_password, $date = null) {
 		if ($this->check_url($url) == 1)
 			throw new Exception("Same URL exists in the database", 0);
 
 		if ($interviewee_email == $interviewer_email)
 			throw new Exception("Interviewer's email and interviewee email cannot be the same", 1);
+
+		if ($interviewee_password == $interviewer_password)
+			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
+
+		if ($this->check_password($interviewee_password) == 1)
+			throw new Exception("Interviewee's password already exists", 3);
+
+		if ($this->check_password($interviewer_password) == 1)
+			throw new Exception("Interviewer's password already exists", 4);
 
 		if ($this->check_email($interviewee_email) == 0)
 			throw new Exception("No such email: $interviewee_email registered",5);
@@ -122,18 +156,23 @@ class QueryHelper {
 		if ($this->check_email($interviewer_email) == 0)
 			throw new Exception("No such email: $interviewer_email registered",5);
 
-		if ($interviewee_password == $interviewer_password)
-			throw new Exception("Interviewer's password and interviewee's password cannot be the same", 2);
+		// Check the sanity of the given email addresses.
+		if (!InputValidator::isEmailValid($interviewer_email)) {
+			throw new Exception("Invalid interviewer email: $interviewer_email", 6);
+		}
+		if (!InputValidator::isEmailValid($interviewee_email)) {
+			throw new Exception("Invalid interviewee email: $interviewee_email", 6);
+		}
+		
+		// Ensures that the interview date is valid. 
+		if (!is_null($date) && !InputValidator::isDateValid($date)) {
+			throw new Exception("Invalid date: $date", 6);
+		}
 
-		// XXX: Why not?
-		if ($this->check_password($interviewee_password) == 1)
-			throw new Exception("Interviewee's password already exists", 3);
-		if ($this->check_password($interviewer_password) == 1)
-			throw new Exception("Interviewer's password already exists", 4);
+
 	}
 
 	/**
-	 *
 	 * @param varchar(25) $name
 	 * @param varchar(30) $email
 	 * @param varchar(1) $gender
@@ -142,14 +181,18 @@ class QueryHelper {
 	 * @effect
 	 * 		add user to the database if same person has not exist in the database which is identified by the email
 	 *
-	 * @return
-	 * 		true if success, false same email exists
+	 * @throw
+	 * 		Exception when email is not valid
 	 */
 	public function add_user($email, $name = NULL, $gender = NULL, $phone = NULL)
 	{
 		try {
+			if (!InputValidator::isEmailValid($email)) {
+				throw new Exception("Invalid email: $interviewee_email", 6);
+			}
+
 			if ( $this->check_email($email) ) {
-				return false;
+				throw new Exception("Existing email: $email", 8);
 			}
 			
 			$name =  $this->quote($name);
@@ -159,15 +202,10 @@ class QueryHelper {
 				
 			$query = "INSERT INTO `dannych_cse403c`.`users` (`name`, `gender`, `email`, `phone`) VALUES ($name, $gender, $email, $phone)";
 				
-			
-				
 			$this->execute($query);
 		} catch (Exception $e) {
-
-			return false;
+			throw $e;
 		}
-
-		return true;
 	}
 
 	/**

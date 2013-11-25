@@ -24,17 +24,19 @@ class TestJSONConstructor extends UnitTestCase {
 		$this->assertEqual("The given URL does not exist", $json["message"]);
 	}
 	
-	function createDropSession() {
+
+	// Excluded from the unit test due to the unit test framework bug.
+	function CreateDropSession() {
 		$erEmail = "ynamara@uw.edu";
 		$eeEmail = "dannych@uw.edu";
-		$time = "2013-12-30 00:00:00";
-		$var = new JSONConstructor();
-		$json = json_decode($var->createSession($erEmail, $eeEmail, $time));
-		$this->assertEqual(1, $json["code"]);
-		$this->assertEqual("Success", $json["message"]);
+		$time = date("Y-m-d H:i:s", strtotime("+1 day"));
+		$vr = new JSONConstructor();
+		$js = json_decode($vr->createSession($erEmail, $eeEmail, $time));
+		$this->assertEqual(1, $js["code"]);
+		$this->assertEqual("Success", $js["message"]);
 		
 		$qH = new QueryHelper();
-		$qH->drop_session($json["url"]);
+		$qH->drop_session($js["url"]);
 	}
 }
 

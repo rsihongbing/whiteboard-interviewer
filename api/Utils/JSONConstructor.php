@@ -1,6 +1,8 @@
 <?php
 require_once 'QueryHelper.php';
 require_once 'PasswordGenerator.php';
+require_once 'MailSender.php';
+require_once 'URLMapping.php';
 
 /**
  * Constructs JSON object that our REST API returns.
@@ -65,8 +67,6 @@ class JSONConstructor {
 				$this->queryHelper->create_session($url, $interviewer_email, $interviewee_email,
 						$erPwd, $eePwd, $date_scheduled, $title,  $description);
 				// Success, return result
-				
-				
 				$result = array(
 						"code" => "1",
 						"message" => "Success",
@@ -74,9 +74,14 @@ class JSONConstructor {
 						"interviewer_password" => $erPwd,
 						"interviewee_password" => $eePwd
 				);
+				
+				// We're also sending emails to both interviewer and interviewee
+				static::notifyRecipients($interviewer_email, $erPwd, $interviewee_email, $eePwd,
+						$url, $date_scheduled);
+				
 				return json_encode($result);
 			} catch (Exception $ex) {
-				if ($ex->getCode() == 1 || $ex->getCode() == 5) {
+				if ($ex->getCode() == 1 || $ex->getCode() == 5 || $ex->getCode() == 6) {
 					// Either interviewer's and interviewee's email is the same, or email hasn't
 					// been registered in the database yet. Reject.
 					$result = array(
@@ -90,6 +95,33 @@ class JSONConstructor {
 				// Keep trying.
 			}
 		}
+	}
+	
+	/**
+	 * This will send email with the session URL to both interviewer and interviewee once a the
+	 * session has been successfully generated.s
+	 * 
+	 * @param string $erEmail
+	 * 	interviewer's email
+	 * @param string $erPwd
+	 * 	interviewer's password
+	 * @param string $eeEmail
+	 * 	interviewee's email
+	 * @param string $eePwd
+	 * 	interviewee's password
+	 * @param string $url
+	 * 	URL that is generated for both interviewer and interviewee
+	 * @param string $date_scheduled
+	 * 	date when the interview is scheduled
+	 */
+	private static function notifyRecipients($erEmail, $erPwd, $eeEmail, $eePwd, $url, $date) {
+		// Sends email to interviewer.
+		$erURL = URLMapping::generateInterviewURL($url, $erPwd);
+		while (!MailSender::notifyInterview($erEmail, $date, $erURL));
+		
+		// Sends email to interviewee.
+		$eeURL = URLMapping::generateInterviewURL($url, $eePwd);
+		while (!MailSender::notifyInterview($eeEmail, $date, $eeURL));
 	}
 	
 	/**

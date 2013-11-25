@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit Example</title>
+  <link rel="stylesheet" href="resources/qunit.css">
+</head>
+<body>
+  
+
+  	<div class="modal fade" id="createForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Create Interview Session</h4>
+					</div>
+					<div class="modal-body">
+						
+						<div id="formarea">
+							<form id="interviewform" role="form">
+
+								<div class="form-group">
+									<label class="control-label" for="interviewTitle">Title</label>
+									<input type="text" class="form-control" id="interviewTitle" placeholder="Your Title" name="title">
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label" for="interviewDescription">Description</label>
+									<textarea class="form-control" rows="5" id="interviewDescription" placeholder="Add description" name="description"></textarea>
+								</div>
+	
+								<div class="form-group">
+									<label class="control-label" for="interviewerEmail">Interviewer Email*</label>
+									<input type="email" class="form-control email" id="interviewerEmail" placeholder="Enter email" name="interviewer_email">
+								</div>
+								
+								
+								<div class="form-group">
+									<label class="control-label" for="intervieweeEmail">Interviewee Email*</label>
+									<input type="email" class="form-control email" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email">
+								</div>
+								
+								<div class="form-group">
+									
+									<label class="control-label" for="intervieweDate">Interview Date*</label>
+
+									<div id="datepicker" class="input-append input-group">
+										<span class="input-group-addon add-on">
+											<i class="glyphicon glyphicon-calendar icon-calendar" data-date-icon="icon-calendar" data-time-icon="icon-time"></i>
+										</span>
+
+										<input type="text" class="form-control" data-format="yyyy/MM/dd"  id="interviewDate" name="date_scheduled" placeholder="yyyy/mm/dd">
+	
+									</div>
+								</div>
+
+								<div class="form-group">
+									
+									<label class="control-label" for="intervieweTime">Interview Time*</label>
+
+									<div id="timepicker" class="input-append input-group">
+
+										<span class="input-group-addon add-on">
+											<i class="glyphicon glyphicon-time icon-time"data-time-icon="icon-time"></i>
+										</span>
+
+										<input type="text" class="form-control" data-format="hh:mm PP"  id="interviewTime" name="date_scheduled" placeholder="hh:mm PP">
+
+										
+										
+									</div>
+								</div>
+								
+								<input id="createBtn" type="submit button" class="btn btn-primary" value= "Create">
+						   
+						  </form>
+						</div>
+						
+						<div id="resultarea" style="display: none;">
+							<div id="resultloading">
+								LOADING....
+							</div>
+							
+							<p id="resultmessage"></p>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button id="newBtn" type="button" class="btn btn-success" style="display: none;">New Session</button>
+						<button id="resetBtn" type="button" class="btn btn-danger">Reset</button>
+						<!-- <button id="createBtn" type="button" class="btn btn-primary">Create</button> -->
+					</div>
+				</div>
+			</div>
+		</div><!-- /.form -->
+
+	<script src="../jquery.min.js" type="text/javascript"></script>
+	<script src="resources/qunit.js"></script>
+
+	<!-- All the test list here -->
+	<script src="../Form.js"></script>
+	<script src="TestForm.js"></script>
+
+	<div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+
+</body>
+</html>
+
