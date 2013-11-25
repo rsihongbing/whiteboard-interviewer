@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["url"])) {
 	$title = isset($_POST["title"]) ? $_POST["title"] : null;
 	$description = isset($_POST["description"]) ? $_POST["description"] : null;
 	
-	echo $jsonFactory->createSession($_POST["interviewer_email"], $_POST["interviewee_email"],
+	echo $jsonFactory->quick_createSession($_POST["interviewer_email"], $_POST["interviewee_email"],
 			$_POST["date_scheduled"], $title, $description);
 } else {
 	// Caller does not follow specification. 
