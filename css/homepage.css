@@ -81,3 +81,7 @@ form i:hover {
 width:150px;
 height:150px;
 }
+
+.modal {
+    overflow-y: auto;
+}

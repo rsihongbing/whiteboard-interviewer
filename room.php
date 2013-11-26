@@ -18,10 +18,6 @@ if($x == 0)  header( 'Location: 404.html' );
         
         <!-- jQuery -->
         <script src="js/jquery.min.js"></script>
-
-
-        <link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
-
         
         <!-- Firepad -->
         <script src="https://cdn.firebase.com/v0/firebase.js"></script>
@@ -65,8 +61,6 @@ if($x == 0)  header( 'Location: 404.html' );
 
                 </div>
 
-      		<script src="js/supersized.min.js" type="text/javascript"></script>
-		<script src="js/loadFullSizeBG.js" type="text/javascript"></script>
 		<script src="editor/editor.js"></script>
         
 	</body>
