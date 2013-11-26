@@ -17,7 +17,7 @@ if($x == 0)  header( 'Location: 404.html' );
    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!-- jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="js/jquery.min.js"></script>
 
 
         <link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
