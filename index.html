@@ -144,16 +144,17 @@
 						</div>
 					</div>
 
+
 					<div class="media media-right">
 						  <a class="pull-right" href="#">
 						  	<img class="img-rounded" src="img/member_pictures/danny.jpg">
 						  </a>
 						  <div class="media-body">
-						    <h4 class="featurette-heading text-center">Danny<span class="text-muted"> Database Design & Application Code</span></h4>
+						    <h4 class="featurette-heading text-center">DANNY<span class="text-muted"> Database Design & Application Code</span></h4>
 						  		<p>
-						  			I designed and created the database to be efficient as possible; ensuring the data read/write/transfer to be fast, yet applicable for our application, and also implemented the API to interact with the database.
+						  			I designed and created the database to be efficient as possible; ensuring the data read/write/transfer to be fast, yet applicable for our application, and also implemented the API to interact with the database for the backend.
 						  		
-									Other than that, I designed the creation of interview session to be user friendly and implemented the date-time clicker as some of the feature when choosing date and time for the interview.		
+									Other than that, I designed the creation of interview session to be user friendly and implemented the date-time clicker as some of the feature when choosing date and time for the interview for the front-end.		
 						  		</p>
 						</div>
 					</div>
@@ -322,44 +323,43 @@
 								<div class="form-group">
 									<label class="control-label" for="interviewerEmail">Interviewer Email*</label>
 									<input type="email" class="form-control email" id="interviewerEmail" placeholder="Enter email" name="interviewer_email">
+									<span id="interviewerHelp" class="help-block"></span>
 								</div>
 								
 								
 								<div class="form-group">
 									<label class="control-label" for="intervieweeEmail">Interviewee Email*</label>
 									<input type="email" class="form-control email" id="intervieweeEmail" placeholder="Enter email" name="interviewee_email">
+									<span id="intervieweeHelp" class="help-block"></span>
 								</div>
 								
 								<div class="form-group">
 									
-									<label class="control-label" for="intervieweDate">Interview Date*</label>
+									<label class="control-label" for="interviewDate">Interview Date*</label>
 
 									<div id="datepicker" class="input-group date" data-date="" data-date-format="yyyy/mm/dd">
-										
 										<input type="text" class="form-control" id="interviewDate" name="date_scheduled" placeholder="yyyy/mm/dd">
 										<span class="input-group-addon">
 											<i class="glyphicon glyphicon-calendar icon-calendar"></i>
 										</span>
 									</div>
+									<span id="interviewDateHelp" class="help-block"></span>
 								</div>
 
 								<div class="form-group">
 									
-									<label class="control-label" for="intervieweTime">Interview Time</label>
+									<label class="control-label" for="interviewTime">Interview Time</label>
 
 									<div id="timepicker" class="input-group date" data-date="" data-date-format="hh:ii">
-
 										<span class="input-group-addon">
 											<i id="timeFormToggle" class="glyphicon glyphicon-plus"></i>
 										</span>
-
 										<input type="text" class="form-control" id="interviewTime" name="date_scheduled" placeholder="hh:mm" disabled>
-
 										<span class="input-group-addon">
 											<i class="glyphicon glyphicon-time icon-time"></i>
 										</span>
-										
 									</div>
+									<span id="interviewTimeHelp" class="help-block"></span>
 								</div>
 								
 								<input id="createBtn" type="submit button" class="btn btn-primary" value= "Create">
