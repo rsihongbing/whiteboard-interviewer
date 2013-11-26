@@ -76,3 +76,8 @@ form i:hover {
     margin-left: auto;
     margin-right: auto;
 }
+
+.media img{
+width:150px;
+height:150px;
+}
