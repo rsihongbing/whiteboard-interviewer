@@ -3,8 +3,7 @@ function initEditor(languageMode, languageMime, containerId){
   $("#langScript").attr("src", scriptSrc);
   $.getScript(scriptSrc, function(){
     $("#" + containerId).html("");
-    var room = "" + (window.location != window.parent.location) ? document.referrer: document.location;
-    room = room.substring(room.indexOf('?'), room.indexOf('&'));
+    var room = location.search.split('&')[0];
     var editorRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor/' + room);
     var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
     var editor = Firepad.fromCodeMirror(editorRef, codeMirror);
