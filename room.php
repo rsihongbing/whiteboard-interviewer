@@ -18,11 +18,11 @@ if($x == 0)  header( 'Location: 404.html' );
         
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        
-   	<!-- Bootstrap -->
-    	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    	<link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
 
+
+        <link rel="stylesheet" href="css/supersized.core.css" media="screen"/>
+
+        
         <!-- Firepad -->
         <script src="https://cdn.firebase.com/v0/firebase.js"></script>
         <script src="editor/codemirror/lib/codemirror.js"></script>
@@ -37,51 +37,35 @@ if($x == 0)  header( 'Location: 404.html' );
 	<script src="js/video.js"></script>
     	
         <style>
-        .navbar { margin-top: 10px; }
-        .navbar button { margin: 8px 6px 8px 2px; }
-        .video{ background-color:black; }
-	#leftMenu {	background-color: #eeeeee; }
-        #textEditor { font-family: courier; border:0; height:600px; }
-        .cols{float:left; position:relative;}
+
+        a{ text-decoration:none; color:white; }
+        body{ font-family:"Myriad Pro", "Calibri", "Sans-serif"; }
+        body > *, #sidebar > div, #sidebar > video{ position: absolute; }        
+        .firepad{ width:100%; height:100%;}
+        .video{ background-color:black; width:80%; height:40%; right:10%;}
+        #editor-container{height:100%; top:0; left:0; width:70%; background-color:white;}
+        #langPanel{z-index:3; top:0; right:30%; padding: 5px 5px 5px 15px; background-color:rgba(0,0,0,0.7); color: white; text-align:center; border-bottom-left-radius:30px;}
         #remote video{width:100%;}
+        #sidebar{ top:0; right:0; height:100%; width:30%; overflow:hidden; background-color:black; color:white; text-align:center; }
+
     	</style>
         
 	</head>
     
 	<body>
-		<div class="container">
-			<nav class="navbar navbar-default navbar-inverse" role="navigation">
-      			    <div class="navbar-header">
-			        <a class="navbar-brand" href="index.html" style="margin: 0 auto;">Whiteboard Interviewer</a>
-			    </div>
-  			</nav>
 
-			<!-- put content here -->
-	                <div style="background-color:rgba(255,255,255,0.75); padding:50px; border-radius:25px; overflow:hidden; height:550px; width:1150px;">
+                <div id="editor-container"></div>
 
-                            <div class="row" style="position:relative;">
-			        <div style="position:absolute; top:30px; left:0; height:400px; width:300px; overflow:hidden;">
-                                    <div id="remote" class="video" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>
-                                    <video id="local" class="video" style="position:absolute; top:250px; left:100px; width:100px; height: 100px; z-index:2;"></video>
-                                </div>
+                <div id="langPanel">Language : <select id='languages'></select></div>
 
-                      		<div style="position:absolute; top:0; left:350px; z-index:3; width:700px;">
-                                    <div style="margin:5px; text-align:center;">Language Mode : <select id='languages'></select></div>
-                                    <div id="editor-container"></div>
-                                </div>
+                <div id="sidebar">
+                    <div id="remote" class="video" style="bottom:40%;"></div>
+                    <video id="local" class="video" style="bottom:10%;"></video>
+                    <a href="index.html"><h1 style="margin-top:20px;">whiteboard<span style="color:#AAA;">Interviewer</span></h1></a>
 
-		             </div>
-                
-		         </div> <!-- /container -->
+                </div>
 
-		</div><!-- /container -->
-		
-		<!-- Load JS Assets Last, rather than in HEAD. Prevents DOM blocking -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<!-- library for full screen background -->
-		<script src="js/supersized.min.js" type="text/javascript"></script>
-		<!-- Loads full screen background -->
+      		<script src="js/supersized.min.js" type="text/javascript"></script>
 		<script src="js/loadFullSizeBG.js" type="text/javascript"></script>
 		<script src="editor/editor.js"></script>
         
