@@ -1,5 +1,14 @@
+/**
+	 * This file initialize the form and datetime clicker
+	 * in the index.html
+	 *
+	 */
 (function() {
-	var form = new InterviewForm();
+	'use strict';	
+
+	// initialize the form
+	var form = new InterviewForm()
+	form.reinitialize();
 
 	$("#joinButton").click(function(){ 
 		$("#joininterviewform").submit(); 
@@ -43,26 +52,13 @@
 		});
 
 	// enable the time pick
-	
 
-	
-
-	// buttons event
-	$("#createBtn").click(form.submit);
-	$("#resetBtn").click(form.initialize);
-	$("#newBtn").click(form.reinitialize);
-	
-	// inputs event
-	$('#interviewerEmail').focusout(form.checkInterviewerEmail);
-	$('#intervieweeEmail').focusout(form.checkIntervieweeEmail);
-	$('#interviewDate')
-		.focusout(form.checkDate);
-
-	// time specific 
+	// initial state of time pick 
 	$('#interviewTime')
 		.val('Anytime')
 		.focusout(form.checkTime);
 
+	// toggle for time pick
 	$('#timeFormToggle').click(function() {
 		if ( $('#interviewTime').is(':disabled') ) {
 			var dates = $('#interviewDate').val();
@@ -87,7 +83,7 @@
 
 			$(this)
 				.removeClass('glyphicon-plus')
-				.addClass('glyphicon-remove');
+				.addClass('glyphicon-minus');
 		} else {
 			form.initializeTime();
 
@@ -99,10 +95,20 @@
 				.prop('disabled',true);
 
 			$(this)
-				.removeClass('glyphicon-remove')
+				.removeClass('glyphicon-minus')
 				.addClass('glyphicon-plus');
 		}
 	});
 
+	// buttons event
+	$("#createBtn").click(form.submit);
+	$("#resetBtn").click(form.initialize);
+	$("#newBtn").click(form.reinitialize);
+	
+	// inputs event
+	$('#interviewerEmail').focusout(form.checkInterviewerEmail);
+	$('#intervieweeEmail').focusout(form.checkIntervieweeEmail);
+	$('#interviewDate')
+		.focusout(form.checkDate);
 
 })();

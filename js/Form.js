@@ -1,4 +1,5 @@
 function InterviewForm() {
+	'use strict';
 	/**
 	 * Store 'this'
 	 */
@@ -112,7 +113,7 @@ function InterviewForm() {
 			return '00';
 
 		if ( num.length < 2 )
-			return ("0" + nums);
+			return ("0" + num);
 
 		return nums; 
 	}
@@ -127,6 +128,7 @@ function InterviewForm() {
 		var date = $_date.val();
 		var check;
 
+		// date must be specified
 		if (date === null || date === "") {
 			$_date.mark(false);
 			return false;
@@ -134,18 +136,20 @@ function InterviewForm() {
 
 		var yearMonthDay = parseDate(date);
 
+		// check the 'first' validity of the input
+		// must match to the regex
 		if (yearMonthDay === null) {
 			$_date.mark(false);
 			return false;
 		}
-
-
 
 		var now = new Date();
 		var inputYear = parseInt(yearMonthDay[1]);
 		var inputMonth = parseInt(yearMonthDay[2]);
 		var inputDate = parseInt(yearMonthDay[3]);
 
+		// check the 'second' validity of the date
+		// input date must be greater than today's time
 		if (inputYear < now.getFullYear()) {
 			check = false;
 		} else if (inputYear == now.getFullYear() && inputMonth < now.getMonth() ) {
@@ -197,11 +201,6 @@ function InterviewForm() {
 		var yearMonthDay = parseDate(date);
 		var hourMinute = parseTime(time);
 
-		// 
-		if ( hourMinute == null ) {
-			$_time.mark(false);
-			return false;
-		} 
 
 		// we should know the day first to verify the time
 		if ( yearMonthDay == null ) {
@@ -209,10 +208,21 @@ function InterviewForm() {
 			$_date.mark(false);
 			return false;
 		}
+
+		// user must input the time 
+		// when not choosing 'Anytime' 
+		if ( hourMinute == null ) {
+			$_time.mark(false);
+			return false;
+		} 
 		
 		// check the value
 		var now = new Date();
-		var input = new Date(yearMonthDay[1],yearMonthDay[2]-1,yearMonthDay[3],hourMinute[1],hourMinute[2]);
+		var input = new Date( yearMonthDay[1],
+													yearMonthDay[2]-1,
+													yearMonthDay[3],
+													hourMinute[1],
+													hourMinute[2]);
 		var check = false;
 
 		if (input.getTime() >= now.getTime()) {
@@ -337,7 +347,11 @@ function InterviewForm() {
 		return check && success;
 	}
 
-
+	/**
+	 * Submit the form via ajax and wait for response
+	 *
+	 * Called when all the form values are valid
+	 */
 	var submitForm = function() {
 		// show loading .gif and close the form
 		// and disabling "Submit" button
@@ -354,6 +368,10 @@ function InterviewForm() {
 		$("#resetBtn").hide();
 	}
 
+	/**
+	 * Encode all the value as the paramater
+	 * then send it to web sever via ajax
+	 */
 	var jqueryFetchRequest = function() {
 		var interviewTitle = encodeURI($_title.val());
 		var interviewDescription = encodeURI($_description.val());
@@ -370,8 +388,8 @@ function InterviewForm() {
 		} else { 
 			rawTime = parseTime($_time.val());
 		}
-		var interviewDate = encodeURI(rawDate[1]+"-"+addZero(rawDate[2]-1)+"-"+addZero(rawDate[3])
-			+" "+addZero(rawTime[4])+":"+addZero(rawTime[5])+":"+"00");
+		var interviewDate = encodeURI(rawDate[1]+"-"+addZero(rawDate[2])+"-"+addZero(rawDate[3])
+			+" "+addZero(rawTime[1])+":"+addZero(rawTime[2])+":"+"00");
 
 		var parameter = 'title=' + interviewTitle
 			+ '&description=' + interviewDescription
@@ -388,31 +406,50 @@ function InterviewForm() {
 			success: jqueryShowResponse,
 			error: jqueryShowFailure
 		});
-		// $.post('api/REST.php',paramater,jqueryShowResponse,'json')
-		// 	.fail(jqueryShowFailure);
 	}
 
+	/**
+	 * Show response to the result area (#resultmessage)
+	 * that might be:
+	 * - interview session is created succesfully
+	 * - interview session cannot be created 
+	 */
 	var jqueryShowResponse = function(data) {
+		// hide the waiting menu
 		$('#resultloading').hide();
 		$("#newBtn").show();
+
+		// show the message
 		var area = $("#resultmessage");
+		var msg = '';
 		area.show();
 		if( data.code == 1) {
-				area.html("Your interview session is succesfully scheduled, please check you email");
+				area.html("Your interview session: <br>" 
+						+ "<strong>Title: </strong>" + $_title.val() + "<br>"
+						+ "<strong>Date: </strong>" + $_date.val() + "<br>"
+						+ "<strong>Time: </strong>" + $_time.val() + "<br><br>"
+						+ "is succesfully scheduled, please check you email");
 				$("#newBtn").val(true);
 		} else {
-				var msg = '';
+				
 				if(data['failure_reason']) {
 					msg = data['failure_reason'];
 				}
-				area.html("Something wrong with your request! \n" + msg);
+				area.html("Something wrong with your request! &#13;&#10;" + msg);
 				$("#newBtn").val(false);
 		}
 	}
 
+	/**
+	 * Show failure message when:
+	 * - cannot connect to web server
+	 * - requesting time is longer from expected
+	 */
 	var jqueryShowFailure = function() {
+		// hide the waiting menu
 		$("#resultloading").hide('fast');
 		
+		// show the error message menu
 		$("#resultmessage").show();
 		$("#resultmessage").html("Server Error: Please try again later!");
 		$("#newBtn").show();

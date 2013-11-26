@@ -168,8 +168,6 @@ class QueryHelper {
 		if (!is_null($date) && !InputValidator::isDateValid($date)) {
 			throw new Exception("Invalid date: $date", 6);
 		}
-
-
 	}
 
 	/**
@@ -322,6 +320,43 @@ class QueryHelper {
 				// strange database
 				return NULL;
 		}
+	}
+
+	/*
+	 *In case we need more parallelism thingy
+	 * but the default isolation level is "repeatable read"
+	 * which is already good for transaction
+     */
+
+	/**
+	 * Begin transaction
+	 *
+	 * put before executing core query
+	 */
+	public function beginTransaction() {
+		$this->execute("SET autocommit = 0; START TRANSACTION;");
+	}
+
+	/**
+	 * Commit transaction
+	 * apply all change all the queries after the last begin transaction
+	 *
+	 * put after executing core query
+	 * choose either this or rollback()
+	 */
+	public function commit() {
+		$this->execute("COMMIT; SET autocommit = 1;");
+	}
+
+	/**
+	 * Rollback transaction
+	 * cancel out all the queries after the last begin transaction
+	 *
+	 * put after executing core query
+	 * choose either this or commit()
+	 */
+	public function rollback() {
+		$this->execute("ROLLBACK; SET autocommit = 1;");
 	}
 }
 ?>
