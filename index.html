@@ -11,73 +11,9 @@
     	<link rel="stylesheet" href="css/supersized.core.css" media="screen">
     	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
     	<link rel="stylesheet" href="css/scrolltotop.css" media="screen">
-    	<style>
-    		body {
-    			padding-top: 20px;
-   				padding-bottom: 20px;
-    		}
-    		.navbar {
-    			margin-top: 10px;
-    		}
-    		.navbar button {
-    			margin-left: 2px;
-    			margin-right: 6px;
-    			margin-top: 8px;
-    			margin-bottom: 8px;
-    		}
-    		.content {
-    			background-color: #eeeeee;
-    			border-bottom-left-radius: 6px;
 
-    			border-bottom-right-radius: 6px;
-    			margin: 0px;
-  				padding: 30px;
-  				margin-bottom: 30px;
-    		}
-    		.content .media {
-    			border-radius: 6px;
-    			padding: 10px;
-    		}
-    		.media-right {
-    			background-color: white;
-    		}
-
-    		h2.content-header {
-    			background-color: #222222;
-  				border-color: #080808;
-  				color: white;
-  				border-top-left-radius: 4px;
-  				border-top-right-radius: 4px;
-  				margin: 0px;
-  				padding-top: 8px;
-  				padding-bottom: 8px;
-  				padding-left: 15px;
-    		}
-    		.jumbotron.jumbotron-no-top-radius {
-    			border-top-right-radius: 0px;
-    			border-top-left-radius: 0px;
-    		}
-    		.list-group > a:hover {
-    			text-decoration: none;
-    		}
-    		.list-group-item:hover {
-    			background-color: #428bca;
-    			color: white;
-    			text-decoration: none;
-    		}
-    		.col-md-5 {
-    			border-radius: 5px;
-    			overflow: hidden;
-    		}
-
-    		#content_intro .row.featurette {
-    			margin-bottom: 50px;
-    		}
-
-    		#content_intro .row.featurette.last {
-    			margin-bottom: 0px;
-    		}
-    	</style>
+    	<!-- Unique stylesheet for this page -->
+    	<link rel="stylesheet" type="text/css" href="css/homepage.css">
 	</head>
 	<body>
 	
@@ -100,7 +36,7 @@
 			    </ul>
 			    <ul class="nav navbar-nav navbar-right">
 			      <li><button id="main-createBtn" data-toggle="modal" href="#createForm" type="button" class="btn btn-danger">Create Session</button></li>
-			      <li><button data-toggle="modal" href="#myModal" class="btn btn-primary">Join Session</button>
+			      <!-- <li><button data-toggle="modal" href="#myModal" class="btn btn-primary">Join Session</button> -->
 			    </ul>
 			  </div><!-- /.navbar-collapse -->
 			</nav>
@@ -213,8 +149,12 @@
 						  	<img class="img-rounded" src="img/member_pictures/danny.jpg">
 						  </a>
 						  <div class="media-body">
-						    <h4 class="featurette-heading text-center">DANNY<span class="text-muted"> Database Design & Application Code</span></h4>
-						  		Vestibulum quam nulla, tempor eu dapibus sed, sodales ac diam. Donec quis rutrum lacus, sed luctus urna. Nullam in consequat purus, id commodo justo. Sed vel cursus magna. Etiam sodales ac velit sollicitudin molestie. Nunc mollis condimentum diam vel porttitor. Duis blandit nec massa non tincidunt. Etiam a leo ullamcorper, pretium magna quis, sodales magna. Curabitur tincidunt sodales quam, mollis lacinia diam malesuada vel. Proin lacinia ultrices libero, vel convallis erat gravida at
+						    <h4 class="featurette-heading text-center">Danny<span class="text-muted"> Database Design & Application Code</span></h4>
+						  		<p>
+						  			I designed and created the database to be efficient as possible; ensuring the data read/write/transfer to be fast, yet applicable for our application, and also implemented the API to interact with the database.
+						  		
+									Other than that, I designed the creation of interview session to be user friendly and implemented the date-time clicker as some of the feature when choosing date and time for the interview.		
+						  		</p>
 						</div>
 					</div>
 
@@ -419,7 +359,6 @@
 											<i class="glyphicon glyphicon-time icon-time"></i>
 										</span>
 										
-										
 									</div>
 								</div>
 								
@@ -428,9 +367,11 @@
 						  </form>
 						</div>
 						
+						<!-- Response Area
+							 initially hidden, and show after submitting the form -->
 						<div id="resultarea" style="display: none;">
 							<div id="resultloading">
-								LOADING....
+								<img src="img/ajax-loader.gif">
 							</div>
 							
 							<p id="resultmessage"></p>
@@ -460,6 +401,7 @@
 		<script src="js/supersized.min.js" type="text/javascript"></script>
 		<!-- Loads full screen background" -->
 		<script src="js/loadFullSizeBG.js" type="text/javascript"></script>
+		<!-- Form related javascript -->
 		<script src="js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>	
 		<script src="js/Form.js" type="text/javascript"></script>	
     	<script src="js/homepage.js" type="text/javascript"></script>
