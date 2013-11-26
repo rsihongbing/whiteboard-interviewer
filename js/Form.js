@@ -347,7 +347,7 @@ function InterviewForm() {
 	 	$_interviewerEmail.mark(true);
 	 	$('#interviewerHelp').html("");
 
-	 	return check;
+	 	return true;
 	}
 
 	/**
