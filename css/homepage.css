@@ -1,0 +1,87 @@
+/*
+This .css add more design to index.html
+
+*/
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.navbar {
+    margin-top: 10px;
+}
+.navbar button {
+    margin-left: 2px;
+    margin-right: 6px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.content {
+    background-color: #eeeeee;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin: 0px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+.content .media {
+    border-radius: 6px;
+padding: 10px;
+}
+.media-right {
+    background-color: white;
+}
+
+h2.content-header {
+    background-color: #222222;
+    border-color: #080808;
+    color: white;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 15px;
+}
+.jumbotron.jumbotron-no-top-radius {
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+.list-group > a:hover {
+    text-decoration: none;
+}
+.list-group-item:hover {
+    background-color: #428bca;
+    color: white;
+    text-decoration: none;
+}
+.col-md-5 {
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#content_intro .row.featurette {
+    margin-bottom: 50px;
+}
+
+#content_intro .row.featurette.last {
+    margin-bottom: 0px;
+}
+
+form i:hover {
+    cursor: pointer
+}
+
+#resultloading > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.media img{
+width:150px;
+height:150px;
+}
+
+.modal {
+    overflow-y: auto;
+}

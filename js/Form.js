@@ -1,4 +1,5 @@
 function InterviewForm() {
+	'use strict';
 	/**
 	 * Store 'this'
 	 */
@@ -51,6 +52,19 @@ function InterviewForm() {
 	}
 
 	/**
+	 * Initialize time just like the begining
+	 */
+	this.initializeTime = function() {
+		if( !$_time.is(':disabled') ) {
+			$_time
+				.val('')
+				.parent().normal();
+
+			$('#interviewTimeHelp').html('');
+		}
+	}
+
+	/**
 	 * Reset the value of user input
 	 *
 	 * Empty all the field input,
@@ -62,23 +76,44 @@ function InterviewForm() {
 		$_intervieweeEmail
 			.val('')
 			.normal();
+		$('#intervieweeHelp').html('');
+
 		$_interviewerEmail
 			.val('')
 			.normal();
+		$('#interviewerHelp').html('');
+
 		$_date
 			.val('')
-			.normal();
-		
+			.parent().normal();
+		$('#interviewDateHelp').html('');
+
 		_i.initializeTime();
 	}
 
-	this.initializeTime = function() {
-		if( !$_time.is(':disabled') ) {
-			$_time
-				.val('')
-				.normal();
-		}
+	/**
+	 * Create a state of the form just like the beginning 
+	 *
+	 * executed when "New Session" button is clicked
+	 *
+	 * reinitialize the button states
+	 * and reset to blank form
+	 */
+	this.reinitialize = function() {
+		$("#resultloading").show('fast');
+		$("#formarea").show('slow');
+		$("#resultarea").hide();
+		$("#resultmessage").hide('slow');
+		$("#createBtn").removeAttr("disabled");
+		$("#resetBtn").show().removeAttr("disabled");
+		
+		$("#newBtn").hide();
+		
+		if ($("#newBtn").val() === "true")
+			_i.initialize();
 	}
+
+	
 
 	/**
 	 * Generate today's date and the current time
@@ -112,7 +147,7 @@ function InterviewForm() {
 			return '00';
 
 		if ( num.length < 2 )
-			return ("0" + nums);
+			return ("0" + num);
 
 		return nums; 
 	}
@@ -127,25 +162,30 @@ function InterviewForm() {
 		var date = $_date.val();
 		var check;
 
+		// date must be specified
 		if (date === null || date === "") {
-			$_date.mark(false);
+			$_date.parent().mark(false);
+			$('#interviewDateHelp').html('Please submit your interview date');
 			return false;
 		}
 
 		var yearMonthDay = parseDate(date);
 
+		// check the 'first' validity of the input
+		// must match to the regex
 		if (yearMonthDay === null) {
-			$_date.mark(false);
+			$('#interviewDateHelp').html('Please submit a valid date');
+			$_date.parent().mark(false);
 			return false;
 		}
-
-
 
 		var now = new Date();
 		var inputYear = parseInt(yearMonthDay[1]);
 		var inputMonth = parseInt(yearMonthDay[2]);
 		var inputDate = parseInt(yearMonthDay[3]);
 
+		// check the 'second' validity of the date
+		// input date must be greater than today's time
 		if (inputYear < now.getFullYear()) {
 			check = false;
 		} else if (inputYear == now.getFullYear() && inputMonth < now.getMonth() ) {
@@ -156,7 +196,13 @@ function InterviewForm() {
 			check = true;
 		}
 
-		$_date.mark(check);
+		if (check) {
+			$('#interviewDateHelp').html('');
+		} else {
+			$('#interviewDateHelp').html('Your interview date has passed');
+		}
+
+		$_date.parent().mark(check);
 
 		return check;
 	}
@@ -191,37 +237,47 @@ function InterviewForm() {
 		var time = $_time.val();
 
 		if (time === 'Anytime') {
+			$('#interviewTimeHelp').html('');
 			return true;
 		}
 
 		var yearMonthDay = parseDate(date);
 		var hourMinute = parseTime(time);
 
-		// 
-		if ( hourMinute == null ) {
-			$_time.mark(false);
-			return false;
-		} 
 
 		// we should know the day first to verify the time
 		if ( yearMonthDay == null ) {
-			$_date.normal();
-			$_date.mark(false);
+			$_time.normal();
+			$_date.parent().mark(false);
+			$('#interviewDateHelp').html('Please input a valid date first');
 			return false;
 		}
+
+		// user must input the time 
+		// when not choosing 'Anytime' 
+		if ( hourMinute == null ) {
+			$_time.parent().mark(false);
+			$('#interviewTimeHelp').html('Please input a valid time');
+			return false;
+		} 
 		
 		// check the value
 		var now = new Date();
-		var input = new Date(yearMonthDay[1],yearMonthDay[2]-1,yearMonthDay[3],hourMinute[1],hourMinute[2]);
-		var check = false;
+		var input = new Date( yearMonthDay[1],
+													yearMonthDay[2]-1,
+													yearMonthDay[3],
+													hourMinute[1],
+													hourMinute[2]);
 
-		if (input.getTime() >= now.getTime()) {
-			check = true;
+		if (input.getTime() < now.getTime()) {
+			$_time.parent().mark(false);
+			$('#interviewTimeHelp').html('Your interview time has already passed');
+			return false;
 		}
 		
-		$_time.mark(check);
-
-		return check;
+		$_time.parent().mark(true);
+		$('#interviewTimeHelp').html('');
+		return true;
 	}
 
 	/**
@@ -266,15 +322,32 @@ function InterviewForm() {
 	 */
 	this.checkInterviewerEmail = function() {
 		var email = $_interviewerEmail.val();
-	 	var check = checkEmail(email);
 
-	 	if (email === $_intervieweeEmail.val() ) {
-	 		check = false;
+		if (email === "") {
+			$_interviewerEmail.mark(false);
+	 		$('#interviewerHelp').html("Please submit the interviewer's email");
+	 		return false;
+		}
+
+	 	if (!checkEmail(email)) {
+	 		// not valid syntax
+	 		$_interviewerEmail.mark(false);
+	 		$('#interviewerHelp').html("Invalid email");
+	 		return false;
 	 	}
 
-	 	$_interviewerEmail.mark(check);
+	 	if (email === $_intervieweeEmail.val() ) {
+	 		// same email as the other one
+	 		$_interviewerEmail.mark(false);
+	 		$('#interviewerHelp').html("This email cannot be the same as interviewee email");
+	 		return false;
+	 	}
 
-	 	return check;
+	 	// pass all checks
+	 	$_interviewerEmail.mark(true);
+	 	$('#interviewerHelp').html("");
+
+	 	return true;
 	}
 
 	/**
@@ -286,37 +359,32 @@ function InterviewForm() {
 	 */
 	this.checkIntervieweeEmail = function() {
 		var email = $_intervieweeEmail.val();
-		var check = checkEmail(email);
+
+		if (email === "") {
+			$_intervieweeEmail.mark(false);
+	 		$('#intervieweeHelp').html("Please submit the interviewer's email");
+	 		return false;
+		}
+
+		if (!checkEmail(email)) {
+			// invalid syntax
+			$_intervieweeEmail.mark(false);
+			$('#intervieweeHelp').html("Invalid email");
+			return false;
+		}
 
 		if (email === $_interviewerEmail.val() ) {
-	 		check = false;
+			// same email
+			$_intervieweeEmail.mark(false);
+			$('#intervieweeHelp').html("This email cannot be the same as interviewer's email");
+	 		return false;
 	 	}
 
-		$_intervieweeEmail.mark(check);
+	 	// pass all checks
+		$_intervieweeEmail.mark(true);
+		$('#intervieweeHelp').html("");
 
-		return check;
-	}
-
-	/**
-	 * Create a state of the form just like the beginning 
-	 *
-	 * executed when "New Session" button is clicked
-	 *
-	 * reinitialize the button states
-	 * and reset to blank form
-	 */
-	this.reinitialize = function() {
-		$("#resultloading").show('fast');
-		$("#formarea").show('slow');
-		$("#resultarea").hide();
-		$("#resultmessage").hide('slow');
-		$("#createBtn").removeAttr("disabled");
-		$("#resetBtn").show().removeAttr("disabled");
-		
-		$("#newBtn").hide();
-		
-		if ($("#newBtn").val() === "true")
-			_i.initialize();
+		return true;
 	}
 
 	/**
@@ -337,7 +405,11 @@ function InterviewForm() {
 		return check && success;
 	}
 
-
+	/**
+	 * Submit the form via ajax and wait for response
+	 *
+	 * Called when all the form values are valid
+	 */
 	var submitForm = function() {
 		// show loading .gif and close the form
 		// and disabling "Submit" button
@@ -354,6 +426,10 @@ function InterviewForm() {
 		$("#resetBtn").hide();
 	}
 
+	/**
+	 * Encode all the value as the paramater
+	 * then send it to web sever via ajax
+	 */
 	var jqueryFetchRequest = function() {
 		var interviewTitle = encodeURI($_title.val());
 		var interviewDescription = encodeURI($_description.val());
@@ -370,8 +446,8 @@ function InterviewForm() {
 		} else { 
 			rawTime = parseTime($_time.val());
 		}
-		var interviewDate = encodeURI(rawDate[1]+"-"+addZero(rawDate[2]-1)+"-"+addZero(rawDate[3])
-			+" "+addZero(rawTime[4])+":"+addZero(rawTime[5])+":"+"00");
+		var interviewDate = encodeURI(rawDate[1]+"-"+addZero(rawDate[2])+"-"+addZero(rawDate[3])
+			+" "+addZero(rawTime[1])+":"+addZero(rawTime[2])+":"+"00");
 
 		var parameter = 'title=' + interviewTitle
 			+ '&description=' + interviewDescription
@@ -388,31 +464,50 @@ function InterviewForm() {
 			success: jqueryShowResponse,
 			error: jqueryShowFailure
 		});
-		// $.post('api/REST.php',paramater,jqueryShowResponse,'json')
-		// 	.fail(jqueryShowFailure);
 	}
 
+	/**
+	 * Show response to the result area (#resultmessage)
+	 * that might be:
+	 * - interview session is created succesfully
+	 * - interview session cannot be created 
+	 */
 	var jqueryShowResponse = function(data) {
+		// hide the waiting menu
 		$('#resultloading').hide();
 		$("#newBtn").show();
+
+		// show the message
 		var area = $("#resultmessage");
+		var msg = '';
 		area.show();
 		if( data.code == 1) {
-				area.html("Your interview session is succesfully scheduled, please check you email");
+				area.html("Your interview session: <br>" 
+						+ "<strong>Title: </strong>" + $_title.val() + "<br>"
+						+ "<strong>Date: </strong>" + $_date.val() + "<br>"
+						+ "<strong>Time: </strong>" + $_time.val() + "<br><br>"
+						+ "is succesfully scheduled, please check you email");
 				$("#newBtn").val(true);
 		} else {
-				var msg = '';
+				
 				if(data['failure_reason']) {
 					msg = data['failure_reason'];
 				}
-				area.html("Something wrong with your request! \n" + msg);
+				area.html("Something wrong with your request! &#13;&#10;" + msg);
 				$("#newBtn").val(false);
 		}
 	}
 
+	/**
+	 * Show failure message when:
+	 * - cannot connect to web server
+	 * - requesting time is longer from expected
+	 */
 	var jqueryShowFailure = function() {
+		// hide the waiting menu
 		$("#resultloading").hide('fast');
 		
+		// show the error message menu
 		$("#resultmessage").show();
 		$("#resultmessage").html("Server Error: Please try again later!");
 		$("#newBtn").show();

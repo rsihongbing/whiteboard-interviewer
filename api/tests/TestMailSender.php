@@ -24,7 +24,7 @@ class TestMailSender extends UnitTestCase {
 				rsihongbing@gmail.com";
 		$time = date("Y-m-d H:i:s", strtotime("+1 day"));
 		$url = "http://cubist.cs.washington.edu/projects/13au/cse403/cse403g/dev/room.php?url=NL7zd7BNGBLTzb3UgxxUsBjYAc1xmWy0ywoBsQfZhQJHSCrZ0P&pid=KigU6HXY59Kt08Pfz8WFY4mxB50TUPzwYGgUd4I94jsTh80H7L";
-		$this->assertTrue(MailSender::notifyInterview($erEmail, $time, $url));
+		$this->assertTrue(MailSender::notifyInterview($erEmail, "ynamara@uw.edu", $time, $url));
 	}
 	
 	// Shameful copy-paste from the internet...

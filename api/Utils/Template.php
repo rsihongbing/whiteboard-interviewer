@@ -17,7 +17,7 @@ class Template {
 Hello,
 
 Thank you for using Whiteboard Interviewer.
-You have been scheduled for an interview on {date}.
+You have been scheduled for an interview with {email} on {date}.
 Below is your link to the interview room that we made just for you:
 {url}
 
