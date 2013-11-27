@@ -20,6 +20,8 @@ class MailSender {
 	 * Sends the interview sessions' URL to the users.
 	 * @param string $mailTo
 	 * 	must be a valid email address
+	 * @param string $mailFrom
+	 * 	must be a valid email address
 	 * @param string $interviewDate
 	 * 	must be a valid date
 	 * @param string $interviewURL
@@ -27,7 +29,7 @@ class MailSender {
 	 * @return boolean
 	 * 	true upon success, false otherwise.
 	 */
-	public static function notifyInterview($mailTo, $interviewDate, $interviewURL) {
+	public static function notifyInterview($mailTo, $mailFrom, $interviewDate, $interviewURL) {
 		// Convert SQL date to a more user-friendly format.
 		$interviewDay = date("l, F d, Y", strtotime($interviewDate));
 		$interviewTime = date("g:i:s a", strtotime($interviewDate));
@@ -39,10 +41,13 @@ class MailSender {
 		$replacePatterns = array();
 		$replacePatterns[0] = '/\{date\}/' ;
 		$replacePatterns[1] = '/\{url\}/' ;
+		$replacePatterns[2] = '/\{email\}/' ;
+		
 
 		$replacementValue = array();
 		$replacementValue[0] = $interviewDay . " at " . $interviewTime;
 		$replacementValue[1] = $interviewURL;
+		$replacementValue[2] = $mailFrom;
 
 		$message = preg_replace($replacePatterns, $replacementValue, $message);
 		

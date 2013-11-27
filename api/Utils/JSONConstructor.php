@@ -117,11 +117,11 @@ class JSONConstructor {
 	private static function notifyRecipients($erEmail, $erPwd, $eeEmail, $eePwd, $url, $date) {
 		// Sends email to interviewer.
 		$erURL = URLMapping::generateInterviewURL($url, $erPwd);
-		while (!MailSender::notifyInterview($erEmail, $date, $erURL));
+		while (!MailSender::notifyInterview($erEmail, $eeEmail, $date, $erURL));
 		
 		// Sends email to interviewee.
 		$eeURL = URLMapping::generateInterviewURL($url, $eePwd);
-		while (!MailSender::notifyInterview($eeEmail, $date, $eeURL));
+		while (!MailSender::notifyInterview($eeEmail, $erEmail, $date, $eeURL));
 	}
 	
 	/**
