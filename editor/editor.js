@@ -18,7 +18,6 @@ function initLangRef() {
     initEditor(language.langMode, language.langMime, "editor-container");
     focusSelect(language.langMime);
   });
-  langRef.set({langMode: "clike", langMime: "text/x-java"});
   return langRef;
 }
 
