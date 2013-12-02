@@ -1,4 +1,4 @@
-function initEditor(languageMode, languageMime, containerId){
+function initEditor(languageMode, languageMime, containerId, listener){
   var scriptSrc = "editor/codemirror/mode/" + languageMode + "/" + languageMode + ".js";
   $("#langScript").attr("src", scriptSrc);
   $.getScript(scriptSrc, function(){
@@ -7,14 +7,16 @@ function initEditor(languageMode, languageMime, containerId){
     var editorRef = new Firebase('https://whiteboard-interviewer.firebaseIO.com/editor/' + room);
     var codeMirror = CodeMirror(document.getElementById(containerId), {lineNumbers: true, mode: languageMime});
     var editor = Firepad.fromCodeMirror(editorRef, codeMirror);
-
-    $('#download').click(function(e){
-      var options = new Object();
-	  options.filename = 'whiteboard-interviewer-code.txt',
-	  options.content = editor.getText(),
-	  options.script = 'api/Utils/download.php'
-	  downloadFile(options);
-	});
+    
+	if(listener) {
+      $('#download').click(function(e){
+        var options = new Object();
+	    options.filename = 'whiteboard-interviewer-code.txt',
+	    options.content = editor.getText(),
+	    options.script = 'api/Utils/download.php'
+	    downloadFile(options);
+	  });
+	}
 
   });
 }
@@ -25,7 +27,7 @@ function initLangRef() {
   langRef.on('value', function(snapshot) {
     var language = snapshot.val();
     if(language != null) {
-      initEditor(language.langMode, language.langMime, "editor-container");
+      initEditor(language.langMode, language.langMime, "editor-container", false);
       focusSelect(language.langMime);
   	  }
   });
@@ -98,4 +100,4 @@ function downloadFile(options) {
 var langRef = initLangRef();
 initSelect();
 focusSelect("text/x-java");
-initEditor("clike", "text/x-java", "editor-container" );
+initEditor("clike", "text/x-java", "editor-container", true);
