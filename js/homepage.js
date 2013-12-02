@@ -9,6 +9,9 @@
 	// initialize the form
 	var form = new InterviewForm()
 	form.reinitialize();
+	
+	// reinitialize the form when 'Create Session' is clicked
+	$('#main-createBtn').click(form.reinitialize);
 
 	$("#joinButton").click(function(){ 
 		$("#joininterviewform").submit(); 
