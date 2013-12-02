@@ -15,8 +15,6 @@ if($x == 0)  header( 'Location: 404.html' );
         <title>Whiteboard Interviewer</title>
 
    	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <script src="js/download.js"></script>
         
         <!-- jQuery -->
         <script src="js/jquery.min.js"></script>
