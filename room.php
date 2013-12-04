@@ -14,7 +14,7 @@ if($x == 0)  header( 'Location: 404.html' );
 	
         <title>Whiteboard Interviewer</title>
 
-   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!-- jQuery -->
         <script src="js/jquery.min.js"></script>
@@ -29,8 +29,8 @@ if($x == 0)  header( 'Location: 404.html' );
         <link rel="stylesheet" href="editor/firepad.css" />
                 
         <!-- Video -->
-	<script src="http://simplewebrtc.com/latest.js"></script>
-	<script src="js/video.js"></script>
+	    <script src="http://simplewebrtc.com/latest.js"></script>
+	    <script src="js/video.js"></script>
     	
         <style>
 
@@ -41,6 +41,7 @@ if($x == 0)  header( 'Location: 404.html' );
         .video{ background-color:black; width:80%; height:40%; right:10%;}
         #editor-container{height:100%; top:0; left:0; width:70%; background-color:white;}
         #langPanel{z-index:3; top:0; right:30%; padding: 5px 5px 5px 15px; background-color:rgba(0,0,0,0.7); color: white; text-align:center; border-bottom-left-radius:30px;}
+        #downloadButton{z-index:4; bottom:0; right:30%; padding: 5px 5px 5px 15px; background-color:rgba(0,0,0,0.7); color: white; text-align:center; border-bottom-left-radius:30px;}
         #remote video{width:100%;}
         #sidebar{ top:0; right:0; height:100%; width:30%; overflow:hidden; background-color:black; color:white; text-align:center; }
 
@@ -51,8 +52,9 @@ if($x == 0)  header( 'Location: 404.html' );
 	<body>
 
                 <div id="editor-container"></div>
-
+				
                 <div id="langPanel">Language : <select id='languages'></select></div>
+                <div id="downloadButton"><input type="button" id="download" value="Download Text" /></div>
 
                 <div id="sidebar">
                     <div id="remote" class="video" style="bottom:40%;"></div>

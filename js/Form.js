@@ -109,7 +109,8 @@ function InterviewForm() {
 		
 		$("#newBtn").hide();
 		
-		if ($("#newBtn").val() === "true")
+		// when user receive error, don't reset the form
+		// if ($("#newBtn").val() === "true")
 			_i.initialize();
 	}
 
