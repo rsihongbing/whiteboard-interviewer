@@ -1,8 +1,8 @@
 /**
-	 * This file initialize the form and datetime clicker
-	 * in the index.html
-	 *
-	 */
+ * This file initialize the form and datetime clicker
+ * in the index.html
+ *
+ */
 (function() {
 	'use strict';	
 
@@ -13,9 +13,10 @@
 	// reinitialize the form when 'Create Session' is clicked
 	$('#main-createBtn').click(form.reinitialize);
 
-	$("#joinButton").click(function(){ 
-		$("#joininterviewform").submit(); 
-	});
+
+	// $("#joinButton").click(function(){ 
+	// 	$("#joininterviewform").submit(); 
+	// });
 
   // enable the date pick
 	$('#datepicker')
@@ -62,46 +63,7 @@
 		.focusout(form.checkTime);
 
 	// toggle for time pick
-	$('#timeFormToggle').click(function() {
-		if ( $('#interviewTime').is(':disabled') ) {
-			var dates = $('#interviewDate').val();
-			var yearMonthDate = dates.split('/');
-
-
-			$('#timepicker')
-				.datetimepicker({
-						autoclose: true,
-						maxView: 1,
-						startView: 1,
-						minuteStep: 5,
-						forceParse: false,
-						startDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2]),
-						endDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2],23,59)
-				})
-				.on('hide', form.checkTime);
-
-			$('#interviewTime')
-				.val('')
-				.prop('disabled',false);
-
-			$(this)
-				.removeClass('glyphicon-plus')
-				.addClass('glyphicon-minus');
-		} else {
-			form.initializeTime();
-
-			$('#timepicker')
-				.datetimepicker('remove');
-
-			$('#interviewTime')
-				.val('Anytime')
-				.prop('disabled',true);
-
-			$(this)
-				.removeClass('glyphicon-minus')
-				.addClass('glyphicon-plus');
-		}
-	});
+	$('#timeFormToggle').click(form.toggleTime);
 
 	// buttons event
 	$("#createBtn").click(form.submit);

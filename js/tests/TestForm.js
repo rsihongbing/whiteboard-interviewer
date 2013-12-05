@@ -1,6 +1,7 @@
 (function(){
-	
-
+	/**
+	 * Initialize the form field
+	 */
 	var $_title = $('#interviewTitle');
 	var $_description = $('#interviewDescription');
 	var $_interviewerEmail = $('#interviewerEmail');
@@ -8,12 +9,19 @@
 	var $_date = $('#interviewDate');
 	var $_time = $('#interviewTime');
 
+	/**
+	 * Do all the test
+	 */
 	function testAll() {
 		testInitialize();
 		testCheckInterviewerEmail();
 		testCheckIntervieweeEmail();
 	}
 
+	/**
+	 * Test initializing the form
+	 * where most of the fields are blank
+	 */
 	function testInitialize() {
 		$.fn.isNormal = function() {
 			return !$(this).hasClass('has-error') && !$(this).hasClass('has-success');
@@ -41,6 +49,9 @@
 		form.initialize();
 	}
 
+	/**
+	 * Do checking in interviewer email field
+	 */
 	function testCheckInterviewerEmail() {
 		var form = new InterviewForm();
 
@@ -80,6 +91,9 @@
 		
 	}
 
+	/**
+	 * Do checking in interviewee mail field
+	 */
 	function testCheckIntervieweeEmail() {
 		var form = new InterviewForm();
 		form.initialize();

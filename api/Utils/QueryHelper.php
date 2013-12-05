@@ -4,6 +4,10 @@ require_once 'InputValidator.php';
 
 class QueryHelper {
 
+	/**
+	 * Constructor
+	 * Initialize the DBConnectionHelper whereas opening the connection to our database
+	 */
 	public function __construct()
 	{
 		DBConnectionHelper::initialize();
@@ -118,10 +122,15 @@ class QueryHelper {
 	 * Validate the interview information
 	 * 
 	 * @param varchar(50) $url
+	 * 	uniquely identify the interview session
 	 * @param varchar(30) $interviewer_email
+	 *  email that correspondent to the interviewer
 	 * @param varchar(50) $interviewer_password
+	 *  uniquely identify a person as an interviewer of this session
 	 * @param varchar(30) $interviewee_email
+	 *  email that correspondent to the interviewee
 	 * @param varchar(50) $interviewee_password
+	 *  uniquely identify a person as an interviewee of this 
 	 * @param string $date optional
 	 *
 	 * @throws Exception if
@@ -172,9 +181,13 @@ class QueryHelper {
 
 	/**
 	 * @param varchar(25) $name
+	 *  given name of the person
 	 * @param varchar(30) $email
+	 *  email for the person
 	 * @param varchar(1) $gender
+	 *  gender of the user
 	 * @param varchar(15) $phone
+	 *  phone  number of the user
 	 *
 	 * @effect
 	 * 		add user to the database if same person has not exist in the database which is identified by the email
