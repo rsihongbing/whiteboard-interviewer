@@ -10,8 +10,6 @@
 
 	function testAll() {
 		testInitialize();
-		testInterviewDate();
-		testInterviewTime();
 		testCheckInterviewerEmail();
 		testCheckIntervieweeEmail();
 	}
@@ -30,7 +28,7 @@
 			equal($_intervieweeEmail.val(), '', "The interviewee's email must be empty");
 			equal($_interviewerEmail.val(), '', "The interviewer's email must be empty");
 			equal($_date.val(), '', "The date must be empty");
-			equal($_time.val(), '', "The time must be empty");
+			// equal($_time.val(), 'Anytime', "The time must be Anytime");
 		});
 		form.initialize();
 
@@ -41,8 +39,6 @@
 			ok($_time.isNormal(), "The time field must be normal");
 		});
 		form.initialize();
-
-		
 	}
 
 	function testCheckInterviewerEmail() {
