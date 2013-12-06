@@ -11,22 +11,6 @@
  * 2. POST[interviewer_email, interviewee_email, date_scheduled] => Creates a new interview
  * session between interviewer_email and interviewee_email. A couple of things to notice:
  * 
- * - interviewer_email and interviewee_email must exist in the database.
- * - interviewer_email and interviewee_email cannot be the same.
- * - date_scheduled must be in Y-m-d H:i:s format.
- * 
- * At minimun
- * 
- * 
- * TODO:
- * 1. Ensure that email addresses are valid, and less than 30 chars.
- * 2. Ensure the date is in the right format, and must be a future date.
- * 3. We need a way to standardize the date, in case there are timezone differences.
- * 4. Ensure that interview_title is less than 35 chars.
- * 5. Find a way to enforce permission on this API. Right now, anonymous users can simply call this
- * API arbitrarily.
- * 
- * 
  * @author ynamara
  */
 
@@ -35,8 +19,6 @@ require_once 'Utils/JSONConstructor.php';
 header("Content-type: application/json");
 
 $jsonFactory = new JSONConstructor();
-
-// TODO: We don't want to expose this API to public. Uncomment later if you know what to do.
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["url"])) {
 	echo $jsonFactory->getSessionInfo($_GET["url"]);

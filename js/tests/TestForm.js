@@ -1,6 +1,7 @@
 (function(){
-	
-
+	/**
+	 * Initialize the form field
+	 */
 	var $_title = $('#interviewTitle');
 	var $_description = $('#interviewDescription');
 	var $_interviewerEmail = $('#interviewerEmail');
@@ -8,14 +9,19 @@
 	var $_date = $('#interviewDate');
 	var $_time = $('#interviewTime');
 
+	/**
+	 * Do all the test
+	 */
 	function testAll() {
 		testInitialize();
-		testInterviewDate();
-		testInterviewTime();
 		testCheckInterviewerEmail();
 		testCheckIntervieweeEmail();
 	}
 
+	/**
+	 * Test initializing the form
+	 * where most of the fields are blank
+	 */
 	function testInitialize() {
 		$.fn.isNormal = function() {
 			return !$(this).hasClass('has-error') && !$(this).hasClass('has-success');
@@ -30,7 +36,7 @@
 			equal($_intervieweeEmail.val(), '', "The interviewee's email must be empty");
 			equal($_interviewerEmail.val(), '', "The interviewer's email must be empty");
 			equal($_date.val(), '', "The date must be empty");
-			equal($_time.val(), '', "The time must be empty");
+			// equal($_time.val(), 'Anytime', "The time must be Anytime");
 		});
 		form.initialize();
 
@@ -41,10 +47,11 @@
 			ok($_time.isNormal(), "The time field must be normal");
 		});
 		form.initialize();
-
-		
 	}
 
+	/**
+	 * Do checking in interviewer email field
+	 */
 	function testCheckInterviewerEmail() {
 		var form = new InterviewForm();
 
@@ -84,6 +91,9 @@
 		
 	}
 
+	/**
+	 * Do checking in interviewee mail field
+	 */
 	function testCheckIntervieweeEmail() {
 		var form = new InterviewForm();
 		form.initialize();

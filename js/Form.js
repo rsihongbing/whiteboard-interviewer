@@ -300,6 +300,54 @@ function InterviewForm() {
 	}
 
 	/**
+	 * Toggle the interview time fields
+	 *
+	 * @effect
+	 *  activate the field: user can type inside the field or choose from the calendar,
+	 *  deactivate the field: user cannot typr or use the calendar
+	 */
+	this.toggleTime = function() {
+		if ( $('#interviewTime').is(':disabled') ) {
+			var dates = $('#interviewDate').val();
+			var yearMonthDate = dates.split('/');
+
+
+			$('#timepicker')
+				.datetimepicker({
+						autoclose: true,
+						maxView: 1,
+						startView: 1,
+						minuteStep: 5,
+						forceParse: false,
+						startDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2]),
+						endDate: new Date(yearMonthDate[0],yearMonthDate[1]-1,yearMonthDate[2],23,59)
+				})
+				.on('hide', _i.checkTime);
+
+			$('#interviewTime')
+				.val('')
+				.prop('disabled',false);
+
+			$(_i)
+				.removeClass('glyphicon-plus')
+				.addClass('glyphicon-minus');
+		} else {
+			_i.initializeTime();
+
+			$('#timepicker')
+				.datetimepicker('remove');
+
+			$('#interviewTime')
+				.val('Anytime')
+				.prop('disabled',true);
+
+			$(_i)
+				.removeClass('glyphicon-minus')
+				.addClass('glyphicon-plus');
+		}
+	}
+
+	/**
 	 * Check the given email to be the desired regex
 	 *
 	 * @return boolean
@@ -514,4 +562,7 @@ function InterviewForm() {
 		$("#newBtn").show();
 		$("#newBtn").val(false);
 	}
+
+
 }	
+
